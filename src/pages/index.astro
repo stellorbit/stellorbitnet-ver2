@@ -32,7 +32,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
 			</div>
 			<div class="post-list">
 				{posts.map((post) => (
-					<a class="post-card" href={`/blog/${post.id}/`}>
+					<a class="post-card" href={`/posts/${post.id}/`}>
 						<p class="card-meta">{post.data.pubDate.toLocaleDateString('ja-JP')}</p>
 						<h2>{post.data.title}</h2>
 						<p>{post.data.description}</p>

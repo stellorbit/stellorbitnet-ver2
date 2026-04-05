@@ -18,7 +18,7 @@ tags:
 
 最近、Xで **「DAW比較表」なるものが話題になり、炎上していました。**
 
-![DAW比較表（引用：Xアカウント@T1K_HDKZLOVER）](/images/dawcomp-xquote.webp)
+![DAW比較表（引用：Xアカウント@T1K_HDKZLOVER）](/images/dawcomp_xquote.webp)
 
 DAWの選び方や、他人にどれを進めれば良いかというのは、初学者も上級者も難儀している部分です。
 

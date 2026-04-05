@@ -2,7 +2,7 @@
 title: 'Webサイトを作りたいけど面倒・・・なので、Hugo+Firebaseで「静的サイト」を作ってみた。'
 description: 'こんにちは、猛攻型ことねPです。'
 pubDate: 2026-03-29T01:56:00+09:00
-draft: false
+draft: true
 categories:
   - PC/IT
 tags:

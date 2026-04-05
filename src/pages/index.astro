@@ -1,18 +1,67 @@
 ---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE_DESCRIPTION } from '../consts';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const featuredPosts = posts.slice(0, 6);
 ---
 
-<html lang="ja">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} >
-    <title>Astro</title>
-  </head>
-  <body>
-	<a href="/">ホーム</a>
-    <a href="/about/">概要</a>
-	<a href="/privacy-policy/">プライバシーポリシー</a>
-    <h1>Stellorbit.net 新サイト鋭意制作中</h1>
-  </body>
-</html>
+<BaseLayout title="Home" description={SITE_DESCRIPTION}>
+	<div class="shell">
+		<section class="hero-panel">
+			<div class="hero-grid">
+				<div class="hero-copy">
+					<p class="eyebrow">Digital Notes and Essays</p>
+					<h1>読む価値が残る形で、検証結果を積み上げる。</h1>
+					<p>
+						PC、制作環境、Web、デジタルカルチャーを題材に、実体験ベースのレビューと考察を公開しています。
+					</p>
+					<div class="hero-actions">
+						<a class="button-link" href="/blog/">すべての記事を見る</a>
+						<a class="button-link--ghost" href="/about/">サイトについて</a>
+					</div>
+				</div>
+				<div class="stat-stack">
+					<div class="stat-card">
+						<strong>{posts.length}</strong>
+						<span>公開中の記事</span>
+					</div>
+					<div class="stat-card">
+						<strong>PC / Web / 制作</strong>
+						<span>実用性と個人の視点を軸にしたテーマ</span>
+					</div>
+					<div class="stat-card">
+						<strong>実体験ベース</strong>
+						<span>触って、試して、戻して、その結果を書く</span>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="content-panel" style="margin-top: 1.5rem;">
+			<div class="page-heading">
+				<p class="eyebrow">Latest Posts</p>
+				<h1>最新記事</h1>
+				<p class="page-lead">
+					トップページを記事一覧の入口として使う構成にしています。新しい順に読み進められます。
+				</p>
+			</div>
+			<div class="post-list">
+				{featuredPosts.map((post) => (
+					<a class="post-card" href={`/blog/${post.id}/`}>
+						<p class="card-meta">{post.data.pubDate.toLocaleDateString('ja-JP')}</p>
+						<h2>{post.data.title}</h2>
+						<p>{post.data.description}</p>
+						{post.data.tags.length > 0 && (
+							<ul class="tag-list">
+								{post.data.tags.slice(0, 3).map((tag) => <li>{tag}</li>)}
+							</ul>
+						)}
+					</a>
+				))}
+			</div>
+		</section>
+	</div>
+</BaseLayout>

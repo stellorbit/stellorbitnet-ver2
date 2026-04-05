@@ -1,7 +1,11 @@
 ---
 // src/pages/index.astro
 import { getCollection } from 'astro:content';
+<<<<<<< HEAD
 import BaseLayout from '../../layouts/BaseLayout.astro';
+=======
+import BaseLayout from '../layouts/BaseLayout.astro';
+>>>>>>> 0136ddfac91f9078b298f3eb1a3a850842975327
 
 const posts = await getCollection('blog');
 ---
@@ -11,10 +15,18 @@ const posts = await getCollection('blog');
   <ul>
     {posts.map((post) => (
       <li>
+<<<<<<< HEAD
         <a href={`/blog/${post.id}/`}>
+=======
+        <a href={`/blog/${post.slug}/`}>
+>>>>>>> 0136ddfac91f9078b298f3eb1a3a850842975327
           {post.data.title}
         </a>
       </li>
     ))}
   </ul>
+<<<<<<< HEAD
 </BaseLayout>
+=======
+</BaseLayout>
+>>>>>>> 0136ddfac91f9078b298f3eb1a3a850842975327

@@ -11,4 +11,8 @@ const blog = defineCollection({
   }),
 });
 
+<<<<<<< HEAD
 export const collections = { blog };
+=======
+export const collections = { blog };
+>>>>>>> 0136ddfac91f9078b298f3eb1a3a850842975327

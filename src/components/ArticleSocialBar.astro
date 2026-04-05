@@ -1,0 +1,125 @@
+---
+import { SOCIAL_FOLLOW_LINKS } from '../consts';
+
+interface Props {
+	title: string;
+	url: string;
+}
+
+const { title, url } = Astro.props;
+const copyText = `${title} ${url}`;
+
+const items = [
+	{ key: 'x', label: 'X', href: SOCIAL_FOLLOW_LINKS.x },
+	{ key: 'facebook', label: 'Facebook', href: SOCIAL_FOLLOW_LINKS.facebook },
+	{ key: 'instagram', label: 'Instagram', href: SOCIAL_FOLLOW_LINKS.instagram },
+	{ key: 'line', label: 'LINE', href: SOCIAL_FOLLOW_LINKS.line },
+	{ key: 'misskey', label: 'Misskey', href: SOCIAL_FOLLOW_LINKS.misskey },
+];
+---
+
+<section class="social-bar" aria-label="Share and Follow">
+	<div class="social-bar__header">
+		<h2>SNS</h2>
+		<p>フォロー導線と記事リンクのコピーです。</p>
+	</div>
+
+	<div class="social-bar__list">
+		{
+			items.map((item) =>
+				item.href ? (
+					<a class="social-pill" href={item.href} target="_blank" rel="noopener noreferrer">
+						{item.label}
+					</a>
+				) : (
+					<span class="social-pill social-pill--disabled" aria-disabled="true">
+						{item.label}
+					</span>
+				)
+			)
+		}
+
+		<button class="social-pill social-pill--copy" type="button" data-copy={copyText}>
+			URL+記事名をコピー
+		</button>
+	</div>
+</section>
+
+<script>
+	document.querySelectorAll('[data-copy]').forEach((button) => {
+		button.addEventListener('click', async () => {
+			const text = button.getAttribute('data-copy') ?? '';
+			if (!text) return;
+			try {
+				await navigator.clipboard.writeText(text);
+				const original = button.textContent;
+				button.textContent = 'コピーしました';
+				setTimeout(() => {
+					button.textContent = original;
+				}, 1600);
+			} catch {
+				button.textContent = 'コピー失敗';
+			}
+		});
+	});
+</script>
+
+<style>
+	.social-bar {
+		margin-top: 2.5rem;
+		padding: 1.5rem 0 0;
+		border-top: 1px solid var(--line);
+	}
+
+	.social-bar__header h2 {
+		font-size: 1.15rem;
+		margin-bottom: 0.35rem;
+	}
+
+	.social-bar__header p {
+		margin: 0 0 1rem;
+		color: var(--muted);
+	}
+
+	.social-bar__list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.65rem;
+	}
+
+	.social-pill {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.75rem 1rem;
+		border-radius: 999px;
+		border: 1px solid var(--line);
+		background: rgba(255, 255, 255, 0.72);
+		color: var(--ink-strong);
+		font-size: 0.95rem;
+		font-weight: 700;
+		text-decoration: none;
+		cursor: pointer;
+		transition:
+			transform 160ms ease,
+			border-color 160ms ease,
+			background-color 160ms ease;
+	}
+
+	.social-pill:hover {
+		transform: translateY(-1px);
+		border-color: rgba(176, 106, 67, 0.28);
+		background: rgba(255, 248, 241, 0.92);
+	}
+
+	.social-pill--copy {
+		background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+		color: var(--paper);
+		border: none;
+	}
+
+	.social-pill--disabled {
+		opacity: 0.45;
+		cursor: not-allowed;
+	}
+</style>

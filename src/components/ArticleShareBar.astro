@@ -1,0 +1,166 @@
+---
+interface Props {
+	title: string;
+	url: string;
+}
+
+const { title, url } = Astro.props;
+const encodedTitle = encodeURIComponent(title);
+const encodedUrl = encodeURIComponent(url);
+const shareText = `${title} ${url}`;
+
+const shareLinks = [
+	{
+		label: 'X',
+		href: `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`,
+	},
+	{
+		label: 'Facebook',
+		href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+	},
+	{
+		label: 'LINE',
+		href: `https://social-plugins.line.me/lineit/share?url=${encodedUrl}`,
+	},
+	{
+		label: 'Misskey',
+		href: `https://misskeyshare.link/share.html?text=${encodedTitle}&url=${encodedUrl}`,
+	},
+];
+---
+
+<section class="share-bar" aria-label="Share">
+	<div class="share-bar__header">
+		<h2>共有</h2>
+		<p>SNS共有と記事タイトル＋URLのコピーです。</p>
+	</div>
+
+	<div class="share-bar__list">
+		{
+			shareLinks.map((item) => (
+				<a
+					class="share-pill"
+					href={item.href}
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					{item.label}
+				</a>
+			))
+		}
+
+		<button class="share-pill" type="button" data-web-share={shareText} data-share-title={title} data-share-url={url}>
+			Instagram
+		</button>
+
+		<button class="share-pill share-pill--copy" type="button" data-copy={shareText}>
+			URL+記事名をコピー
+		</button>
+	</div>
+</section>
+
+<script>
+	const resetLabel = (button, label) => {
+		setTimeout(() => {
+			button.textContent = label;
+		}, 1600);
+	};
+
+	document.querySelectorAll('[data-copy]').forEach((button) => {
+		button.addEventListener('click', async () => {
+			const text = button.getAttribute('data-copy') ?? '';
+			const label = 'URL+記事名をコピー';
+			if (!text) return;
+			try {
+				await navigator.clipboard.writeText(text);
+				button.textContent = 'コピーしました';
+			} catch {
+				button.textContent = 'コピー失敗';
+			}
+			resetLabel(button, label);
+		});
+	});
+
+	document.querySelectorAll('[data-web-share]').forEach((button) => {
+		button.addEventListener('click', async () => {
+			const title = button.getAttribute('data-share-title') ?? '';
+			const url = button.getAttribute('data-share-url') ?? '';
+			const text = button.getAttribute('data-web-share') ?? '';
+			if (!url) return;
+
+			if (navigator.share) {
+				try {
+					await navigator.share({ title, text, url });
+					button.textContent = '共有しました';
+				} catch {
+					button.textContent = '共有を中止';
+				}
+				resetLabel(button, 'Instagram');
+				return;
+			}
+
+			try {
+				await navigator.clipboard.writeText(text);
+				button.textContent = 'コピーしました';
+			} catch {
+				button.textContent = '共有不可';
+			}
+			resetLabel(button, 'Instagram');
+		});
+	});
+</script>
+
+<style>
+	.share-bar {
+		margin-top: 2.5rem;
+		padding: 1.5rem 0 0;
+		border-top: 1px solid var(--line);
+	}
+
+	.share-bar__header h2 {
+		font-size: 1.15rem;
+		margin-bottom: 0.35rem;
+	}
+
+	.share-bar__header p {
+		margin: 0 0 1rem;
+		color: var(--muted);
+	}
+
+	.share-bar__list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.65rem;
+	}
+
+	.share-pill {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.75rem 1rem;
+		border-radius: 999px;
+		border: 1px solid var(--line);
+		background: rgba(255, 255, 255, 0.72);
+		color: var(--ink-strong);
+		font-size: 0.95rem;
+		font-weight: 700;
+		text-decoration: none;
+		cursor: pointer;
+		transition:
+			transform 160ms ease,
+			border-color 160ms ease,
+			background-color 160ms ease;
+	}
+
+	.share-pill:hover {
+		transform: translateY(-1px);
+		border-color: rgba(176, 106, 67, 0.28);
+		background: rgba(255, 248, 241, 0.92);
+	}
+
+	.share-pill--copy {
+		background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+		color: var(--paper);
+		border: none;
+	}
+</style>

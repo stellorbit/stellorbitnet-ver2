@@ -5,51 +5,33 @@ import { SITE_DESCRIPTION } from '../consts';
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-const featuredPosts = posts.slice(0, 6);
 ---
 
 <BaseLayout title="Home" description={SITE_DESCRIPTION}>
 	<div class="shell">
-		<section class="hero-panel">
-			<div class="hero-grid">
-				<div class="hero-copy">
-					<p class="eyebrow">Digital Notes and Essays</p>
-					<h1>読む価値が残る形で、検証結果を積み上げる。</h1>
-					<p>
-						PC、制作環境、Web、デジタルカルチャーを題材に、実体験ベースのレビューと考察を公開しています。
-					</p>
-					<div class="hero-actions">
-						<a class="button-link" href="/blog/">すべての記事を見る</a>
-						<a class="button-link--ghost" href="/about/">サイトについて</a>
-					</div>
-				</div>
-				<div class="stat-stack">
-					<div class="stat-card">
-						<strong>{posts.length}</strong>
-						<span>公開中の記事</span>
-					</div>
-					<div class="stat-card">
-						<strong>PC / Web / 制作</strong>
-						<span>実用性と個人の視点を軸にしたテーマ</span>
-					</div>
-					<div class="stat-card">
-						<strong>実体験ベース</strong>
-						<span>触って、試して、戻して、その結果を書く</span>
-					</div>
+		<section class="hero-panel hero-panel--compact">
+			<div class="hero-copy hero-copy--compact">
+				<p class="eyebrow">Notes and Reviews</p>
+				<h1>PC、制作環境、Webまわりの記録。</h1>
+				<p>
+					実体験ベースのレビュー、検証、長文メモをまとめています。トップページからそのまま記事を追える構成です。
+				</p>
+				<div class="hero-actions">
+					<a class="button-link--ghost" href="/about/">サイトについて</a>
 				</div>
 			</div>
 		</section>
 
 		<section class="content-panel" style="margin-top: 1.5rem;">
 			<div class="page-heading">
-				<p class="eyebrow">Latest Posts</p>
-				<h1>最新記事</h1>
+				<p class="eyebrow">Articles</p>
+				<h1>記事一覧</h1>
 				<p class="page-lead">
-					トップページを記事一覧の入口として使う構成にしています。新しい順に読み進められます。
+					公開済みの記事を新しい順に表示しています。
 				</p>
 			</div>
 			<div class="post-list">
-				{featuredPosts.map((post) => (
+				{posts.map((post) => (
 					<a class="post-card" href={`/blog/${post.id}/`}>
 						<p class="card-meta">{post.data.pubDate.toLocaleDateString('ja-JP')}</p>
 						<h2>{post.data.title}</h2>

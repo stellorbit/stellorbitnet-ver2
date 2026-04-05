@@ -1,0 +1,42 @@
+---
+const config = {
+	repo: 'stellorbit/stellorbitnet-ver2',
+	repoId: 'R_kgDOR59TeQ',
+	category: 'General',
+	categoryId: 'DIC_kwDOR59Tec4C6E6Y',
+};
+---
+
+<section class="comments-section" aria-label="Comments">
+	<h2>コメント</h2>
+	<script
+		src="https://giscus.app/client.js"
+		data-repo={config.repo}
+		data-repo-id={config.repoId}
+		data-category={config.category}
+		data-category-id={config.categoryId}
+		data-mapping="pathname"
+		data-strict="0"
+		data-reactions-enabled="1"
+		data-emit-metadata="0"
+		data-input-position="top"
+		data-theme="light"
+		data-lang="ja"
+		data-loading="lazy"
+		crossorigin="anonymous"
+		async
+	></script>
+</section>
+
+<style>
+	.comments-section {
+		margin-top: 2.5rem;
+		padding-top: 2rem;
+		border-top: 1px solid var(--line);
+	}
+
+	.comments-section h2 {
+		font-size: 1.4rem;
+		margin-bottom: 1rem;
+	}
+</style>

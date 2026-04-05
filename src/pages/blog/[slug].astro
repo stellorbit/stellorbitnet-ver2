@@ -6,11 +6,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
   return posts.map((post) => ({
-<<<<<<< HEAD
     params: { slug: post.id },
-=======
-    params: { slug: post.slug },
->>>>>>> 0136ddfac91f9078b298f3eb1a3a850842975327
     props: { post },
   }));
 }
@@ -22,12 +18,6 @@ const { post } = Astro.props;
   <article>
     <h1>{post.data.title}</h1>
     <p>{post.data.pubDate.toDateString()}</p>
-<<<<<<< HEAD
     <div set:html={post.body} />
   </article>
 </BaseLayout>
-=======
-    <div innerHTML={post.body} />
-  </article>
-</BaseLayout>
->>>>>>> 0136ddfac91f9078b298f3eb1a3a850842975327

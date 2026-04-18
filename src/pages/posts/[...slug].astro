@@ -11,9 +11,16 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content, headings } = await render(post); // ← headings を追加
+const { Content, headings } = await render(post);
 ---
 
-<BlogPost {...post.data} headings={headings}> <!-- ← headings を渡す -->
+<BlogPost
+  title={post.data.title}
+  description={post.data.description}
+  pubDate={post.data.pubDate}
+  updatedDate={post.data.updatedDate}
+  heroImage={post.data.heroImage}
+  headings={headings}
+>
   <Content />
 </BlogPost>

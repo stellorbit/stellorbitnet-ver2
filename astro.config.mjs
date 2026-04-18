@@ -7,8 +7,11 @@ import rehypeSlug from 'rehype-slug';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://stellorbit.net',
-	markdown: {
-		rehypePlugins: [rehypeSlug],
+  site: 'https://stellorbit.net',
+
+  markdown: {
+      rehypePlugins: [rehypeSlug],
 	},
+
+  integrations: [mdx()],
 });

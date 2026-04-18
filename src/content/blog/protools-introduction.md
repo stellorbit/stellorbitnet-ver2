@@ -1,6 +1,6 @@
 ---
 title: '【ProTools布教 第二章】ProTools初期導入入門 ～ インストールから初期設定まで ～'
-description: '前回の記事の続きです。'
+description: 'ProToolsを布教する者の責任として、初期導入の手順を指南します。'
 pubDate: 2026-03-31T09:03:40+09:00
 draft: false
 categories:

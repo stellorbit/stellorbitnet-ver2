@@ -1,6 +1,6 @@
 ---
 title: '【ProTools布教 第一章】DTMerにはいっぺんでいいから「ProTools」を触ってみてほしい。'
-description: 'どうも、猛攻型ことねPです。'
+description: '皆さんのProToolsに対する「イメージ」を私がぶち破ります。'
 pubDate: 2026-03-29T09:03:40+09:00
 draft: false
 categories:

@@ -13,5 +13,5 @@ export default defineConfig({
       rehypePlugins: [rehypeSlug],
 	},
 
-  integrations: [mdx()],
+  integrations: [mdx(), sitemap()],
 });

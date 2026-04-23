@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ja">
+<head>
+	<meta charset="utf-8">
+	<title>Astro記事の作成・公開フロー</title>
+	<style>
+		@page {
+			size: A4;
+			margin: 18mm;
+		}
+
+		:root {
+			color: #1f2933;
+			font-family: "Yu Gothic", "Meiryo", sans-serif;
+			font-size: 14px;
+			line-height: 1.75;
+		}
+
+		body {
+			margin: 0;
+		}
+
+		h1,
+		h2 {
+			color: #102a43;
+			line-height: 1.35;
+		}
+
+		h1 {
+			font-size: 26px;
+			margin: 0 0 20px;
+			padding-bottom: 10px;
+			border-bottom: 2px solid #bcccdc;
+		}
+
+		h2 {
+			font-size: 18px;
+			margin: 24px 0 8px;
+		}
+
+		p {
+			margin: 8px 0;
+		}
+
+		code,
+		pre {
+			font-family: Consolas, "Yu Gothic", monospace;
+		}
+
+		pre {
+			white-space: pre-wrap;
+			background: #f0f4f8;
+			border: 1px solid #d9e2ec;
+			border-radius: 6px;
+			padding: 10px 12px;
+			margin: 10px 0;
+		}
+
+		ul {
+			padding-left: 1.3em;
+		}
+	</style>
+</head>
+<body>
+	<h1>Astro記事の作成・公開フロー</h1>
+
+	<h2>基本方針</h2>
+	<p>Astro形式の記事は、本文・URL・メタデータ・画像を分けて管理します。</p>
+	<pre>src/articles/&lt;slug&gt;.astro        本文
+src/pages/posts/&lt;slug&gt;.astro     公開URL
+src/content/astro-posts.ts       タイトル、投稿日、公開状態、目次
+public/images/posts/&lt;slug&gt;/      記事画像</pre>
+
+	<h2>新規記事の作成</h2>
+	<pre>npm run new:post -- --slug example-post --title "記事タイトル" --description "記事説明" --date 2026-04-23 --category "カテゴリ" --tag "タグ"</pre>
+	<p>このコマンドで本文、公開ページ、記事画像フォルダ、メタデータを作成します。初期状態は <code>draft: true</code> です。</p>
+
+	<h2>本文を書く</h2>
+	<p>本文は <code>src/articles/&lt;slug&gt;.astro</code> に書きます。目次に出す見出しは <code>h2</code> または <code>h3</code> に <code>id</code> を付けます。</p>
+	<pre>&lt;h2 id="intro"&gt;本文&lt;/h2&gt;
+
+&lt;p&gt;本文を書きます。&lt;/p&gt;</pre>
+	<p>VS Codeでは <code>post-section</code>、<code>post-subsection</code>、<code>post-image</code> のスニペットを使えます。</p>
+
+	<h2>画像の置き場所</h2>
+	<p>記事画像は記事スラッグごとに <code>public/images/posts/&lt;slug&gt;/</code> へ置きます。ファイル名は記事内で意味が通れば十分です。</p>
+	<pre>&lt;figure&gt;
+	&lt;img src="/images/posts/&lt;slug&gt;/image.webp" alt="画像説明" loading="lazy" decoding="async" /&gt;
+	&lt;figcaption&gt;キャプション&lt;/figcaption&gt;
+&lt;/figure&gt;</pre>
+
+	<h2>サムネイルの設定</h2>
+	<p>記事上部に表示するサムネイルは、<code>BlogPost</code> の <code>heroImage</code> に渡します。本文中の画像は <code>public/images/posts/&lt;slug&gt;/</code> に置きますが、サムネイルは Astro の画像処理を使うため、<code>src/assets/post-thumbnails/</code> に置く運用にします。</p>
+	<pre>src/assets/post-thumbnails/&lt;slug&gt;.webp</pre>
+	<p>記事ページ <code>src/pages/posts/&lt;slug&gt;.astro</code> でサムネイルを import します。</p>
+	<pre>---
+import ArticleBody from '../../articles/example-post.astro';
+import thumbnail from '../../assets/post-thumbnails/example-post.webp';
+import { getAstroPost } from '../../content/astro-posts';
+import BlogPost from '../../layouts/BlogPost.astro';
+
+const post = getAstroPost('example-post');
+
+if (!post) {
+	throw new Error('Astro post metadata not found: example-post');
+}
+---
+
+&lt;BlogPost
+	title={post.title}
+	description={post.description}
+	pubDate={post.pubDate}
+	updatedDate={post.updatedDate}
+	heroImage={thumbnail}
+	headings={post.headings}
+&gt;
+	&lt;ArticleBody /&gt;
+&lt;/BlogPost&gt;</pre>
+	<p>サムネイルを使わない記事では、<code>thumbnail</code> の import と <code>heroImage={thumbnail}</code> を省略します。</p>
+
+	<h2>目次の自動同期</h2>
+	<p>記事本文の <code>h2</code> / <code>h3</code> から、<code>src/content/astro-posts.ts</code> の <code>headings</code> を自動生成できます。</p>
+	<pre>npm run sync:post-headings -- --slug example-post
+npm run sync:post-headings</pre>
+	<p><code>npm run check</code> と <code>npm run build</code> の前にも自動で同期されます。</p>
+
+	<h2>画像参照のチェック</h2>
+	<p>本文中の <code>/images/...</code> 参照が実ファイルとして存在するか確認できます。</p>
+	<pre>npm run check:images</pre>
+
+	<h2>公開前の確認</h2>
+	<pre>npm run prepare:posts
+npm run check
+npm run build</pre>
+	<p>問題なければ <code>src/content/astro-posts.ts</code> の対象記事から <code>draft: true</code> を外すか、<code>draft: false</code> に変更して公開します。</p>
+
+	<h2>PDF版の作成</h2>
+	<pre>npm run docs:pdf</pre>
+	<p>出力先は <code>docs/astro-post-workflow.pdf</code> です。</p>
+</body>
+</html>

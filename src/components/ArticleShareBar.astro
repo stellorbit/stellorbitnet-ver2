@@ -60,13 +60,13 @@ const shareLinks = [
 </section>
 
 <script>
-	const resetLabel = (button, label) => {
+	const resetLabel = (button: HTMLElement, label: string) => {
 		setTimeout(() => {
 			button.textContent = label;
 		}, 1600);
 	};
 
-	document.querySelectorAll('[data-copy]').forEach((button) => {
+	document.querySelectorAll<HTMLElement>('[data-copy]').forEach((button) => {
 		button.addEventListener('click', async () => {
 			const text = button.getAttribute('data-copy') ?? '';
 			const label = 'URL+記事名をコピー';
@@ -81,7 +81,7 @@ const shareLinks = [
 		});
 	});
 
-	document.querySelectorAll('[data-web-share]').forEach((button) => {
+	document.querySelectorAll<HTMLElement>('[data-web-share]').forEach((button) => {
 		button.addEventListener('click', async () => {
 			const title = button.getAttribute('data-share-title') ?? '';
 			const url = button.getAttribute('data-share-url') ?? '';

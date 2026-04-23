@@ -1,0 +1,21 @@
+---
+import ArticleBody from '../../articles/daw-for-beginner.astro';
+import { getAstroPost } from '../../content/astro-posts';
+import BlogPost from '../../layouts/BlogPost.astro';
+
+const post = getAstroPost('daw-for-beginner');
+
+if (!post) {
+	throw new Error('Astro post metadata not found: daw-for-beginner');
+}
+---
+
+<BlogPost
+	title={post.title}
+	description={post.description}
+	pubDate={post.pubDate}
+	updatedDate={post.updatedDate}
+	headings={post.headings}
+>
+	<ArticleBody />
+</BlogPost>

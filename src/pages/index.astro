@@ -1,10 +1,9 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { SITE_DESCRIPTION } from '../consts';
+import { getListedPosts } from '../lib/posts';
 
-const posts = (await getCollection('blog', ({ data }) => !data.draft))
-	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const posts = await getListedPosts();
 ---
 
 <BaseLayout title="Home" description={SITE_DESCRIPTION}>
@@ -32,13 +31,13 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
 			</div>
 			<div class="post-list">
 				{posts.map((post) => (
-					<a class="post-card" href={`/posts/${post.id}/`}>
-						<p class="card-meta">{post.data.pubDate.toLocaleDateString('ja-JP')}</p>
-						<h2>{post.data.title}</h2>
-						<p>{post.data.description}</p>
-						{post.data.tags.length > 0 && (
+					<a class="post-card" href={post.link}>
+						<p class="card-meta">{post.pubDate.toLocaleDateString('ja-JP')}</p>
+						<h2>{post.title}</h2>
+						<p>{post.description}</p>
+						{post.tags.length > 0 && (
 							<ul class="tag-list">
-								{post.data.tags.slice(0, 3).map((tag) => <li>{tag}</li>)}
+								{post.tags.slice(0, 3).map((tag) => <li>{tag}</li>)}
 							</ul>
 						)}
 					</a>

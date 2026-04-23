@@ -303,6 +303,34 @@ img {
 	height: auto;
 	border-radius: 18px;
 }
+.prose figure {
+	margin: 2rem 0;
+}
+.prose figure img {
+	display: block;
+	width: 100%;
+}
+.prose .article-figure {
+	max-width: 100%;
+}
+.prose .article-figure--mixer {
+	width: min(240px, 100%);
+}
+.prose .article-figure--scale {
+	width: min(240px, 100%);
+}
+.prose .article-figure--transport {
+	width: min(1000px, 100%);
+	max-width: 100vw;
+	margin-left: 50%;
+	transform: translateX(-50%);
+}
+.prose figcaption {
+	margin-top: 0.6rem;
+	color: var(--muted);
+	font-size: 0.92rem;
+	line-height: 1.6;
+}
 code {
 	padding: 0.18rem 0.4rem;
 	background-color: rgba(176, 106, 67, 0.12);

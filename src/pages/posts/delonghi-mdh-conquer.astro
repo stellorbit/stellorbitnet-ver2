@@ -1,0 +1,21 @@
+---
+import ArticleBody from '../../articles/delonghi-mdh-conquer.astro';
+import { getAstroPost } from '../../content/astro-posts';
+import BlogPost from '../../layouts/BlogPost.astro';
+
+const post = getAstroPost('delonghi-mdh-conquer');
+
+if (!post) {
+	throw new Error('Astro post metadata not found: delonghi-mdh-conquer');
+}
+---
+
+<BlogPost
+	title={post.title}
+	description={post.description}
+	pubDate={post.pubDate}
+	updatedDate={post.updatedDate}
+	headings={post.headings}
+>
+	<ArticleBody />
+</BlogPost>

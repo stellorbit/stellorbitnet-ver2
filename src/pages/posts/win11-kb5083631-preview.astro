@@ -1,0 +1,23 @@
+---
+import ArticleBody from '../../articles/win11-kb5083631-preview.astro';
+import { getAstroPost } from '../../content/astro-posts';
+import BlogPost from '../../layouts/BlogPost.astro';
+import thumbnail from '../../assets/post-thumbnails/win11-kb5083631-preview.webp';
+
+const post = getAstroPost('win11-kb5083631-preview');
+
+if (!post) {
+	throw new Error('Astro post metadata not found: win11-kb5083631-preview');
+}
+---
+
+<BlogPost
+	title={post.title}
+	description={post.description}
+	pubDate={post.pubDate}
+	updatedDate={post.updatedDate}
+	headings={post.headings}
+	heroImage={thumbnail}
+>
+	<ArticleBody />
+</BlogPost>

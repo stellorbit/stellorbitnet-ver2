@@ -9,8 +9,15 @@
     "dev": "astro dev",
     "build": "astro build",
     "check": "astro check",
+    "prebuild": "npm run prepare:posts",
+    "precheck": "npm run prepare:posts",
     "preview": "astro preview",
     "astro": "astro",
+    "new:post": "node ./scripts/new-astro-post.mjs",
+    "sync:post-headings": "node ./scripts/sync-astro-post-headings.mjs",
+    "check:images": "node ./scripts/check-image-references.mjs",
+    "prepare:posts": "npm run sync:post-headings && npm run check:images",
+    "docs:pdf": "node ./scripts/build-post-workflow-pdf.mjs",
     "deploy": "npm run build && node ./scripts/deploy-pages.mjs",
     "deploy:skip-build": "node ./scripts/deploy-pages.mjs"
   },
@@ -25,6 +32,8 @@
     "sharp": "^0.34.3"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.8",
+    "typescript": "^5.9.3",
     "wrangler": "^4.83.0"
   }
 }

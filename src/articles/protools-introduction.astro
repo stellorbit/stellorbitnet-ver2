@@ -1,0 +1,282 @@
+<h1 id="protoolsのインストール基本操作">ProToolsのインストール～基本操作</h1>
+<p><a href="/posts/protools-presentation/">前回の記事</a>の続きです。</p>
+<p>前回の記事を見て <strong>「ProTools触ってみようかな・・・」</strong> と思った方々に、<strong>1個謝罪しなければいけないことがあります。</strong></p>
+<p>前回の記事では <strong>「そんなに難しくないよ！」</strong> って言ってしまったんですが・・・
+<strong>実は2割くらい嘘です。</strong> すみません。</p>
+<p>というわけで、布教するならその責務として、<strong>インストールからプリセット作成・初期設定</strong>を解説したいと思います。</p>
+<p>多分これで変な事故とかは起こらなくなる・・・はず。</p>
+<p>それではサクサク進めていきます。</p>
+<h2 id="protoolsの下準備インストール">ProToolsの下準備～インストール</h2>
+<p>とりあえず<strong>ProToolsが手元にある前提でお話します。</strong></p>
+<p>購入～登録は人それぞれなので。</p>
+<h3 id="asioドライバの準備を推奨できればオーディオifを買おう">「ASIOドライバ」の準備を推奨。できればオーディオIFを買おう。</h3>
+<p>これは過去の「<a href="daw-for-beginner">初心者向けのDAWなんてねえよボケ</a>」的な記事でも言ってるんですが、Windowsユーザーの場合はできれば、<strong>オーディオインターフェイス（独自でドライバーが用意されているもの）</strong> を用意してください。</p>
+<p>Windowsでは、普通にブラウザやDiscord等を使うときとDAWや音声編集、一部動画編集ソフトを使うときで <strong>「オーディオを鳴らす仕組み」</strong> が違うんです。
+ProToolsは後者で基本的に動かすので、<strong>「ASIO」</strong> への対応をしなければなりません。</p>
+<p>一応普段遣いの <strong>「Windows Audio」</strong> でも動かすことは可能ですが、<strong>こっちのほうが厄介</strong>です。</p>
+<p>機材を買うか、それが無理ならフリーで対応できるので、それで事前準備をしておきましょう。</p>
+<h4 id="macosでは基本的にこの操作は不要">macOSでは基本的にこの操作は不要</h4>
+<p>macOSは<strong>内蔵のオーディオドライバ（CoreAudio）で全部動くようになっている</strong>ので、この処置は不要です。</p>
+<p>ただ、本体のジャックを使用中、<strong>何かの拍子で抜けるとエラーが発生する</strong>こともあるので、外付けを使用することでリスク回避が可能です。</p>
+<h3 id="aiに聞いた厳選3機種">AIに聞いた厳選3機種</h3>
+<p>というわけで、AIに聞いてみたところ、安値で3機種ほど出てきましたので表にまとめておきます。</p>
+<p>もちろんIFで<strong>2-3万</strong>ほど用意できるのが理想ですが、皆がそれをできるとは限らないので。</p>
+<p>これ書いてる自分だって<strong>6000円のアウトレット品使ってるんですから。</strong></p>
+<h4 id="pramazonリンクについて"><strong>【PR】Amazonリンクについて</strong></h4>
+<p>当サイトはAmazonアフィリエイト会員です。</p>
+<p>Amazon製品リンク先は<strong>Amazonアフィリエイト</strong>となっております。</p>
+<p>サウンドハウスは<strong>通常リンク</strong>となっております。</p>
+<h4 id="購入時の注意">購入時の注意</h4>
+<p>品薄になっている製品などは<strong>Amazonで価格を跳ね上げられてる</strong>ことがあるので、Amazonとサウンドハウスで<strong>価格を比較することを推奨</strong>します。</p>
+<p>コロナ禍の品薄のときによくあったのですが、現在も続いているようです。</p>
+<table>
+<thead>
+<tr>
+<th>機種</th>
+<th>対応ビット数・サンプルレート</th>
+<th>製品概要</th>
+<th>価格</th>
+<th>購入リンク</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ZOOM AMS-22</strong></td>
+<td>96kHz/24bit</td>
+<td>マイク入力×1のみ</td>
+<td>9,900円</td>
+<td><a href="https://amzn.to/4dYNOvU">Amazon</a> <a href="https://www.soundhouse.co.jp/products/detail/item/308819/">サウンドハウス</a></td>
+</tr>
+<tr>
+<td><strong>Behringer UMC202HD</strong></td>
+<td>192kHz/24bit</td>
+<td>マイク×2、MIDASプリアンプ</td>
+<td>11,800円</td>
+<td><a href="https://amzn.to/4bQWNwE">Amazon</a> <a href="https://www.soundhouse.co.jp/products/detail/item/212161/">サウンドハウス<br /></a>　※2026/3/31現在品薄</td>
+</tr>
+<tr>
+<td><strong>M-Audio M-Track Duo HD</strong></td>
+<td>192kHz/24bit</td>
+<td></td>
+<td>13,800円</td>
+<td><a href="https://amzn.to/4dSlZp2https:/">Amazon</a> サウンドハウス</td>
+</tr>
+</tbody>
+</table>
+<h4 id="機材を別個で用意するのが難しい場合">機材を別個で用意するのが難しい場合</h4>
+<p><strong>「そんな金ないよ・・・」</strong> と頭を抱えてる方へ。</p>
+<p>ご安心ください。ちゃんと<strong>内蔵オーディオに対する代替手段もあります。</strong></p>
+<p><a href="https://helpcenter.steinberg.de/hc/en-us/articles/17863730844946-Steinberg-built-in-ASIO-Driver-information-download">Steinberg Built-in ASIO Driver</a> Steinbergが社外品に対応したドライバーを用意してくれてます。</p>
+<p><a href="https://www.image-line.com/fl-studio/download">FL Studio 体験版</a> ※体験版を入れると汎用のFL Studio ASIOが入ります。FL本体が不要ならそれだけ消せますのでご安心を。</p>
+<p><a href="https://ja.asio4all.org/">ASIO4ALL</a> ※2026/3/28に新バージョンがリリースされています。</p>
+<h3 id="ilokavidアカウント登録ダウンロード">iLok・Avidアカウント登録・ダウンロード</h3>
+<p>ちーと面倒ですが、2つアカウントが必要です。さっさと作っちゃいましょう。</p>
+<h4 id="ilokアカウント作成">iLokアカウント作成</h4>
+<p>iLokアカウントを既に持ってる方は飛ばしてください。</p>
+<ol>
+<li>
+<p><a href="https://www.ilok.com/#!home">iLok.com</a>に飛びます！</p>
+<p><img src="/images/posts/protools-introduction/iloktop.webp" alt=""></p>
+</li>
+<li>
+<p>ここで<strong>iLok License Manager</strong>をダウンロードしておきましょう。</p>
+</li>
+<li>
+<p>上の <strong>「Create Free Account」</strong> で登録画面に飛びます。</p>
+</li>
+<li>
+<p><strong>ユーザーID、名・姓（英語）、メアド（再入力あり）、パスワード（再入力あり、自動生成推奨）等々</strong>を入力！</p>
+</li>
+<li>
+<p>「アカウント作成」→メール認証で登録完了！<strong>ログインしてみてしっかり作れてるか確認を！</strong>
+※下図は**日本語に翻訳してあります。**元ページは英語です。</p>
+</li>
+<li>
+<p><strong>ユーザーIDは今後使うので保管を！</strong></p>
+</li>
+</ol>
+<p><img src="/images/posts/protools-introduction/ilokreg.webp" alt=""></p>
+<h4 id="avidアカウント作成">Avidアカウント作成</h4>
+<ol>
+<li>まず<a href="https://www.avid.com">AvidのWebサイト</a>に飛びます！</li>
+<li>右上の <strong>「Log In」</strong> を押して、**「I'm new～」**を押します！</li>
+</ol>
+<p><img src="/images/posts/protools-introduction/avidreg.webp" alt="Avid登録画面"></p>
+<ol start="3">
+<li>上から<strong>名前・苗字（英語）・国、個人or事業（Individualが個人）、メアド、パス</strong>と入力！</li>
+</ol>
+<p>見切れてるけど <strong>「Create Avid Account」</strong> を押して、多分メール認証あると思うんで通したら登録完了！</p>
+<ol start="4">
+<li>
+<p>登録完了したら、<a href="https://my.avid.com/account">マイアカウント</a>ページに飛んで、ここをお気に入り登録！</p>
+<p><img src="/images/posts/protools-introduction/myac.webp" alt="ProTools マイアカウントページ"></p>
+</li>
+</ol>
+<h4 id="ilokアカウントをリンク">iLokアカウントをリンク</h4>
+<p>My Accountページに飛んだら、<strong>「Linked iLok Account」</strong> を探しましょう！</p>
+<p>初期状態では何も登録されていないと思うので、<strong>「Link this Account」</strong> で<strong>先ほど登録したIDか、持っているIDを使ってリンク。</strong></p>
+<p><img src="/images/posts/protools-introduction/linkilok.webp" alt=""></p>
+<p>登録が1回完了したら、あとは自動で紐づけやってくれたりするので楽です。</p>
+<h4 id="ilok-license-managerでクラウドセッション設定artist以上">iLok License Managerでクラウドセッション設定（Artist以上）</h4>
+<p>初期状態でグレーアウトしているクラウドセッションを右クリックして</p>
+<p><strong>「Open Your Cloud Session」</strong></p>
+<p>をクリックして、クラウドセッションを有効化しておきましょう。</p>
+<p>コンピューター紐付けよりも<strong>再インストールとかの時に詰みにくくなります。</strong></p>
+<p>⚠️注意：Introは<strong>コンピューターかiLok USBドングルのみ対応です。</strong></p>
+<p><img src="/images/posts/protools-introduction/ilokcloud.webp" alt=""></p>
+<h4 id="ここで分岐あり">ここで分岐あり</h4>
+<ol>
+<li>既に製品を持っている人は <strong>「Register Software With Code」</strong> でコード入力</li>
+<li><strong>Avid公式で契約か購入</strong>をした人、<strong>Introを使いたい</strong>人は <strong>「View My Products」</strong> からダウンロード</li>
+<li>体験版を試したい人は<a href="https://my.avid.com/get/pro-tools-ultimate-trial">このリンクへ</a> 飛んでダウンロード</li>
+</ol>
+<h4 id="protools-introのアクティベート">ProTools Introのアクティベート</h4>
+<p>Introは無料版なので、問答無用で所持している状態です。</p>
+<p>「Claim And Activate」で認証したら・・・</p>
+<p><img src="/images/posts/protools-introduction/intro.webp" alt=""></p>
+<p>以下のような画面になるかと思います。</p>
+<p>※持っているエディションによって表示されてるものは異なります。</p>
+<p>とりあえず<strong>ダウンロードで表示されてる奴は全部落としちゃいましょう。</strong></p>
+<p><img src="/images/posts/protools-introduction/ptdl.webp" alt=""></p>
+<p>あとはもう<strong>解凍してインストールすれば入ります。再起動は基本不要。</strong></p>
+<h4 id="初回起動の前は忘れずilokアクティベート">初回起動の前は忘れずiLokアクティベート</h4>
+<p>このフェーズは勝手にやってくれることもあるんですが、有料版と両方入ってると、<strong>せっかく買ったグレードが適用されずにIntroが起動する</strong>こともあるので、確認の意味も込めてちゃんとやっておきましょう。
+※下の図だとIntroアクティベートしてArtistに適用してますが、ちゃんと <strong>「買ったグレードや体験版のアクティベート」</strong> をしておきましょう。</p>
+<p>ちょこちょこ出てくる確認とかのメッセージは<strong>Don't show Again</strong>で表示されなくなります。</p>
+<p><img src="/images/posts/protools-introduction/introact.webp" alt=""></p>
+<p>お目当てのグレードを選んで右クリック→「Activate」 またはCtrl+Shift+A(Cmd+Shift+A)</p>
+<p><img src="/images/posts/protools-introduction/paidact.webp" alt=""></p>
+<p>ライセンスのアクティベート先を指定して、<strong>「Activate」</strong> をクリックすれば完了。</p>
+<h2 id="初回起動おすすめ設定">初回起動～おすすめ設定</h2>
+<p>ここからは<strong>ProTools Intro</strong>でお送りします。</p>
+<h3 id="注意">注意</h3>
+<p>「サンプルレート」は事前に<strong>48kHz</strong>に設定することをおすすめします。
+Windowsは「<a href="ms-settings:sound-devices">「すべてのサウンド デバイス」設定（クリックで設定画面に飛びます）</a>」</p>
+<p><img src="/images/posts/protools-introduction/winsrset.webp" alt=""></p>
+<p>macOSの場合は「<a href="https://support.apple.com/ja-jp/guide/audio-midi-setup/ams59f301fda/mac">Audio MIDI設定（Appleサポートが開きます）</a>」で設定が可能です。 ※Spotlight検索で入力、または「ユーティリティ」フォルダ内</p>
+<p>とりあえず、<strong>接続されているデバイスを全部48kHzにしておく</strong>と、後々の<strong>トラブルがグンと減る</strong>のでおすすめです。</p>
+<p>16ビットとか24ビットとかは設定できる上限で良いと思います。</p>
+<p>Apple Musicを使っている場合、<strong>「ロスレス」はだいたい48kHz/24bitか16bitくらいなので、フルスペックで聴ける</strong>ようになります。</p>
+<p>サンプルレートは、<strong>48kHzを超える設定（96とか192とか）にすると、PCの負荷が上がり、DAWが落ちたり、セッションが重くなる</strong>ので非推奨です。</p>
+<p>なにより<strong>無意味です。</strong></p>
+<h3 id="初回起動設定とセッション作成">初回起動設定とセッション作成</h3>
+<p>スプラッシュウィンドウが出てきて読み込みが後半に行くと、</p>
+<p><strong>「プレイバックエンジンの設定いるよ」</strong></p>
+<p>的なダイアログが出てくるので、従うと、以下のウィンドウが出てきます。</p>
+<p><img src="/images/posts/protools-introduction/ptpbe.webp" alt=""></p>
+<p>このウィンドウでは、<strong>「ASIO」と名前のついたものを選びましょう。</strong></p>
+<p>下の「H/Wバッファサイズ」は、目安として、</p>
+<ul>
+<li>録音に使うときは<strong>64-128サンプル</strong></li>
+<li>シンセなどをガリガリ使って曲作りをする場合は<strong>512-1024サンプル</strong></li>
+</ul>
+<p>※**自分のクソザコPCでの目安です。**ここ数年の高スペックなノートPCならもっと詰めてもいいかもしれません。</p>
+<p>そして設定が終わると、**「ダッシュボード」**が出てきます。</p>
+<p><img src="/images/posts/protools-introduction/ptdab.webp" alt=""></p>
+<p>ここでは設定例として、</p>
+<ul>
+<li>名前：firstsession</li>
+<li>保存場所：外付けHDD</li>
+<li>セッション構成：BWF(.WAV)、48kHz、32ビット浮動小数点数 ※I/O設定は無視</li>
+</ul>
+<p>で作成します。</p>
+<p>すると、以下の画面になり、無事セッション作成・・・かと思いきや、ここでProToolsの「クセ強」なところが出てきます。</p>
+<p><img src="/images/posts/protools-introduction/01pti.webp" alt=""></p>
+<h3 id="マスターがない作ろうそしてテンプレにしよう">マスターがない！！作ろう！そしてテンプレにしよう！</h3>
+<p>そう、こいつ初期状態だと、他のDAWなら確実にある <strong>「マスター」がありません。</strong></p>
+<p>あと、クリックトラック（メトロノーム）も<strong>事前に設定しないと出てきません。</strong></p>
+<p>ほなんだら作りましょう。そして<strong>プリセットにしましょう。</strong></p>
+<p>Win:<strong>Ctrl+Shift+N</strong> Mac:<strong>Cmd+Shift+N</strong></p>
+<p><img src="/images/posts/protools-introduction/ntmaster.webp" alt=""></p>
+<p>左から「Stereo,マスターフェーダー,Samples」で作成。</p>
+<p>クリックトラックはメニューから簡単に作れます。</p>
+<p><strong>「トラック」→「クリックトラック作成」</strong></p>
+<p><img src="/images/posts/protools-introduction/02click.webp" alt=""></p>
+<p>そしたら、これをテンプレート化します。</p>
+<p><strong>「ファイル」→「テンプレートとして保存」</strong></p>
+<p><img src="/images/posts/protools-introduction/03temp.webp" alt=""></p>
+<p>ウィンドウが開いたら好きなように保存。</p>
+<p>自分は「カテゴリ」から新しいカテゴリを作って、そこに格納しておくのが好みです。</p>
+<p>あと、<strong>外付けや別パーティションなんかにテンプレートを保存</strong>しておくと、再インストールしたときに楽です。</p>
+<p><img src="/images/posts/protools-introduction/04tmpm.webp" alt=""></p>
+<h4 id="次からダッシュボードで呼び出せる">次からダッシュボードで呼び出せる</h4>
+<p>テンプレートをインストールした場合→<strong>「新規」のテンプレートに追加</strong></p>
+<p>場所を選択して保存した場合→<strong>テンプレートファイルをダブルクリック or 「開く」→「保存場所」→保存先を指定</strong>
+あと、<strong>「開く」→「セッション」</strong> でも同様に開けます。 <strong>（Ctrl+O or Cmd+O）</strong></p>
+<p><img src="/images/posts/protools-introduction/dsbpr.webp" alt=""></p>
+<p>なんなら<strong>初期テンプレ消して自分のだけにする</strong>ってのもアリですね。</p>
+<h3 id="初期設定のおすすめ">初期設定のおすすめ</h3>
+<p>ついでに初期設定のおすすめを紹介します。</p>
+<p><strong>水色：必須級</strong>
+<strong>緑：お好きなように</strong></p>
+<p>で分けてます。</p>
+<h4 id="表示">表示</h4>
+<p>ここはプラグインメニューを <strong>「種類と製造元」</strong> で分けるのをおすすめします。</p>
+<p>メーカーで選ぶか、用途で選ぶかの2通りになるので、プラグインが選びやすくなります。</p>
+<p><strong>言語設定</strong>は正直<strong>英語</strong>にしたほうが格好良かったりするんですが、いざというときに迷うので。</p>
+<p><strong>UIテーマ</strong>はClassic/Darkの2種類からお好きなほうを。</p>
+<p>右の「色分け」のトラックカラーは個人的に設定している項目です。</p>
+<p><img src="/images/posts/protools-introduction/01appe.webp" alt=""></p>
+<h4 id="操作">操作</h4>
+<p><strong>自動バックアップ</strong>：数より頻度で設定。SSDだとストレージに負荷かかるかも？</p>
+<p><strong>ユーザーメディアと設定の保存場所</strong>：プリセットの音声ファイルの格納場所をサブストレージに設定。システムドライブが結構空く。
+※手動で移動するためにフォルダを開くか聞かれる</p>
+<p><strong>録音ボタン</strong>：マイク1本のソロ宅録なら <strong>「他のトラックを解除」</strong> がおすすめ。ニーズに応じて。</p>
+<p><strong>マウスホイールのスクロール</strong>：挙動が気に食わない時はオフ。</p>
+<p><img src="/images/posts/protools-introduction/01ope.webp" alt=""></p>
+<h4 id="編集">編集</h4>
+<p><strong>クリップゲインナッジ値</strong>：マウス操作関係無し。<strong>キーボード操作時の数値。</strong> キーボード操作主体の場合はお好みで。</p>
+<p><strong>メモリーロケーション自動ネーミング</strong>：再生中にメモリーロケーションを追加するとウィンドウが開かず「Location 1」とか付く。</p>
+<p><strong>ズーム時はグリッドを変更</strong>：・・・<strong>謎です。</strong></p>
+<p><img src="/images/posts/protools-introduction/03edit.webp" alt=""></p>
+<h4 id="ミキシング">ミキシング</h4>
+<p><strong>センドの初期値</strong>：リバーブとかディレイとかサイドチェインとかの時にどんだけ送るか。自分はうっすら程度に。</p>
+<p><strong>デフォルトEQ・ダイナミクス</strong>：気に入ったものを登録するよろし。SSL 4000とか持ってるならインサートにハナからぶち込む手もある。</p>
+<p><img src="/images/posts/protools-introduction/04mix.webp" alt=""></p>
+<h4 id="メータリング">メータリング</h4>
+<p><strong>メータータイプ</strong>：<strong>Studio以上なら</strong>VUメーターやK-System等色々使える。0dB=n LUFSの設定もできる。</p>
+<p><strong>表示</strong>：GRメーターの表示有無。</p>
+<p><img src="/images/posts/protools-introduction/05meter.webp" alt=""></p>
+<h4 id="プロセッシング">プロセッシング</h4>
+<p><strong>影響すると思っていた設定が何も影響しなかったので割愛。</strong></p>
+<h4 id="midi">MIDI</h4>
+<p><strong>新規セッションにクリックトラック作成</strong>：ここにチェック入れておけばクリックトラックは自動的に作られる。</p>
+<p><strong>MIDIクリップのダブルクリック挙動設定</strong>：「ドック式MIDIエディタ」は下にMIDIエディタが出てくる。「MIDIエディタ」を選ぶと別ウィンドウ。「楽譜エディタ」「MIDIイベントエディタ」も選べる。
+<strong>ノート表示</strong> ：MIDIエディタ上での「C（ド）」の基準が変わる。</p>
+<p><img src="/images/posts/protools-introduction/07midi.webp" alt=""></p>
+<h4 id="コラボレーション同期">コラボレーション・同期</h4>
+<p>自分はクラウドも外部機器も使ってないのでチェックを外してます。</p>
+<p>どれだけ意味があるかはわかりません。</p>
+<p><img src="/images/posts/protools-introduction/08cloud.webp" alt=""></p>
+<p><img src="/images/posts/protools-introduction/09sync.webp" alt=""></p>
+<p>**これはあくまで一例です。**初期設定は使いやすさで適宜調整を。</p>
+<h2 id="まとめ他にもtipsなどは色々youtubeの動画やサイト生成aiチャットなども活用を">まとめ：他にもTipsなどは色々。YouTubeの動画やサイト、生成AIチャットなども活用を。</h2>
+<p>さて、ここまで長々と解説しました。本当にお付き合いいただきありがとうございます。</p>
+<p>ただ、まだまだ便利な操作方法はありますし、なんならショートカットキーのカスタムもできます。</p>
+<p>基礎的・少し応用的な使い方は、日本語なら<a href="https://sleepfreaks-dtm.com/category/for-beginner-protools/">Protoolsの使い方 初心者編（大正義Sleepfreaks）</a>で結構カバーできます。</p>
+<p>これでも足りない場合は、<strong>YouTubeの動画やWebサイトを英語圏の情報のみに絞って検索</strong>したり、生成AIに聞いてみるなり色々とやりようはあります。</p>
+<p>生成AIはハルシネーションや、都合の良いものを並べるという問題もありますが、<strong>事前設定次第で抑止</strong>できたりします。</p>
+<h3 id="パーソナライズ設定例">パーソナライズ設定例</h3>
+<pre><code class="language-markdown">## 情報ソースの条件
+
+1. 調査を行う際の情報ソースは、企業、販売代理店、調査会社、関係省庁などのものを参考にしてください。後述するUGCプラットフォームも同様です。
+2. 時事問題は新聞社、Yahooやライブドアなどのニュースサイト、インプレスなどの総合サイト、アスキーやITmediaなどのPGCを主体に調べてください。
+3. X,Instagram,Reddit,YouTube,ニコニコ動画などのUGCプラットフォームにおける、一般ユーザーの作成したコンテンツやコメント欄からの意見が必要な場合は別途指示します。
+4. 「ツイッター速報」や「Share News Japan」を筆頭とした、見出し煽りの過剰な「似非PGC」も排除してください。
+5. 有料のソフトウェアの情報を収集する際、"crack" "free download"などの文言が含まれたサイトは必ず排除し、公式サイトや日本国内の販売代理店、小売店のサイトから情報を収集してください。
+
+## 思考、推論、出力時の条件
+
+1. 批判的思考・客観的思考をベースとし、忖度・肯定・共感・おべっか等の擦り寄る言動は排除してください。
+2. 感嘆符や絵文字などは不要です。変な前置きを置かず、回答に答えることを最優先にしてください。
+3. 分からないときは「分からない」と素直に言ってください。情報元が不明瞭な時は、その旨明記してください。
+</code></pre>
+<p>自分は複数のエンジンを使用できる<a href="https://www.perplexity.ai/">Perplexity</a>を主に使用しています。他にも<a href="https://manus.im/invitation/9MKHOQEJVYENFD5?utm_source=invitation&#x26;utm_medium=social&#x26;utm_campaign=copy_link">Manus AI（紹介リンク）</a>や<a href="https://www.genspark.ai/">Genspark</a>などの類似サービスもあります。</p>
+<p>これらの利点は、<strong>出力結果を比較できる</strong>点です。</p>
+<p>自分はCopilotのGPTとかがやりがちな<strong>すり寄る言動が嫌い</strong>なので、こういう設定になってます。</p>
+<p>ちなみに情報ソースの5番に注目していただきたいのですが、<strong>これ過去にやられました。</strong>
+プラグインのバージョンを聞いたら、あろうことか割れサイトから情報拾われたので<strong>フィードバック＋お叱り＋パーソナライズ</strong>のトリプルコンボをやりました。
+もちろんAI以外にも、古い情報や間違った情報が転がっています。</p>
+<p>自分の書いたこの記事だって、100%正しいとは限りません。</p>
+<p>それらに気をつけながら、技能・技術を自分のモノにしていくのはやっぱり楽しいですよ。</p>
+<p>後記：こういう解説系を自分がやると、こんな長い記事になってしまうのが悩みです。</p>

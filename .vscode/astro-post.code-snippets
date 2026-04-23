@@ -1,0 +1,33 @@
+{
+	"Article section": {
+		"scope": "astro",
+		"prefix": "post-section",
+		"body": [
+			"<h2 id=\"${1:section-id}\">${2:見出し}</h2>",
+			"",
+			"<p>${3:本文}</p>"
+		],
+		"description": "Add a post section with an h2 id for the table of contents."
+	},
+	"Article subsection": {
+		"scope": "astro",
+		"prefix": "post-subsection",
+		"body": [
+			"<h3 id=\"${1:subsection-id}\">${2:小見出し}</h3>",
+			"",
+			"<p>${3:本文}</p>"
+		],
+		"description": "Add a post subsection with an h3 id for the table of contents."
+	},
+	"Article image": {
+		"scope": "astro",
+		"prefix": "post-image",
+		"body": [
+			"<figure>",
+			"\t<img src=\"/images/posts/${TM_FILENAME_BASE}/${1:image.webp}\" alt=\"${2:画像説明}\" loading=\"lazy\" decoding=\"async\" />",
+			"\t<figcaption>${3:キャプション}</figcaption>",
+			"</figure>"
+		],
+		"description": "Add a post image from public/images/posts/<slug>/ without changing display size."
+	}
+}

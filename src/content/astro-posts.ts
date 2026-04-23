@@ -1,0 +1,172 @@
+export interface AstroPostMeta {
+	slug: string;
+	title: string;
+	description?: string;
+	pubDate: Date;
+	updatedDate?: Date;
+	tags: string[];
+	categories: string[];
+	draft?: boolean;
+	headings?: { depth: number; slug: string; text: string }[];
+}
+
+export const astroPosts: AstroPostMeta[] = [
+	{
+		slug: 'win11-kb5083631-preview',
+		title:
+			'【Windows11 リリースプレビュー】大幅な動作改善・機能強化を含む「KB5083631」リリース。Windowsの品質改善が早くも動き出す？',
+		description:
+			'Windows Insider Program参加者を対象に、「KB5083631」がリリース。エクスプローラー・設定ウィンドウ・FAT32の容量制限緩和など、幅広い改善と強化が盛り込まれている。',
+		pubDate: new Date('2026-04-23'),
+		tags: ['Windows', 'Windows11', 'Microsoft', 'Windows Update', 'PC'],
+		categories: ['PC/IT'],
+		headings: [
+			{ depth: 2, slug: "windows11-quality-improvement-kb5083631-release", text: "Windows11の品質改善が早くも動き出す？「KB5083631」リリース" },
+			{ depth: 2, slug: "preview-update-installation-and-notes", text: "プレビュー更新の取得方法と注意事項" },
+			{ depth: 2, slug: "main-improvements-in-kb5083631", text: "KB5083631の主な改善点" },
+			{ depth: 3, slug: "file-explorer-behavior-improvements", text: "エクスプローラーの挙動改善" },
+			{ depth: 3, slug: "settings-window-improvements", text: "設定ウィンドウの機能強化" },
+			{ depth: 3, slug: "ai-feature-improvements", text: "AI関連の機能強化" },
+			{ depth: 3, slug: "other-improvements", text: "その他の改善点" },
+			{ depth: 2, slug: "conclusion", text: "まとめ：機能改善によるMSの「誠意」はユーザーに届くのか？" },
+		],
+	},
+	{
+		slug: 'protools-presentation',
+		title: '【ProTools布教 第一章】DTMerにはいっぺんでいいから「ProTools」を触ってみてほしい。',
+		description: '皆さんのProToolsに対する「イメージ」を私がぶち破ります。',
+		pubDate: new Date('2026-03-29T09:03:40+09:00'),
+		tags: ['ProTools', '音楽制作', 'DTM', 'DAW'],
+		categories: ['音楽'],
+		headings: [
+			{ depth: 2, slug: "protoolsに対するイメージってどんなの", text: "ProToolsに対するイメージってどんなの？" },
+			{ depth: 2, slug: "protoolsはそんなに特殊ではない", text: "ProToolsはそんなに特殊ではない" },
+			{ depth: 3, slug: "理由1-他のdawと割と一緒な部分が多い", text: "理由1. 他のDAWと割と一緒な部分が多い" },
+			{ depth: 3, slug: "理由2-昔と違って気軽に買える使える", text: "理由2. 昔と違って気軽に買える・使える" },
+			{ depth: 3, slug: "理由3-操作性の融通が利くようになった", text: "理由3. 操作性の融通が利くようになった" },
+			{ depth: 3, slug: "他の理由あれこれ", text: "他の理由あれこれ" },
+			{ depth: 2, slug: "知られていないprotoolsのmidi隠れ機能", text: "知られていない？ProToolsのMIDI「隠れ機能」" },
+			{ depth: 3, slug: "スケールに合わせたノート移動", text: "スケールに合わせたノート移動" },
+			{ depth: 3, slug: "複製フォーカスビュー", text: "複製＋フォーカスビュー" },
+			{ depth: 3, slug: "midiノートのトリミング分割", text: "MIDIノートのトリミング・分割" },
+			{ depth: 2, slug: "個人的にハマった理由レガシーなデザインが一周回って良い", text: "個人的にハマった理由：レガシーなデザインが一周回って良い" },
+			{ depth: 2, slug: "おすすめのグレードと購入方法", text: "おすすめのグレードと購入方法" },
+			{ depth: 2, slug: "まとめ", text: "まとめ" },
+		],
+	},
+	{
+		slug: "backtowin11",
+		title: "Linuxを多種試し、メインとしてRocky LinuxとDebianを使った結果、Windows11に戻った。",
+		description: "現在のPCになる前はRyzen(Zen3)で組んでいた。いかんせん流用品が多く、経年劣化の懸念もあった。",
+		pubDate: new Date("2026-03-01T04:03:40+09:00"),
+		tags: ["Linux", "Windows", "PC"],
+		categories: ["PC/IT"],
+		headings: [
+			{ depth: 2, slug: "軽快さと自由を求めて行った先は地獄だった", text: "軽快さと自由を求めて行った先は地獄だった" },
+			{ depth: 3, slug: "linuxに移行しようとしたきっかけ", text: "Linuxに移行しようとしたきっかけ" },
+			{ depth: 3, slug: "もはやwindowsより悪質なlinuxの困った習慣", text: "もはやWindowsより悪質なLinuxの困った習慣" },
+			{ depth: 3, slug: "十数年ぶりに味わったフリーズそして使っていくうちに自然に不安定に", text: "十数年ぶりに味わった「フリーズ」、そして使っていくうちに自然に不安定に" },
+			{ depth: 3, slug: "次の選択それはlinuxに見切りをつけた決定打", text: "次の選択、それはLinuxに見切りをつけた決定打" },
+			{ depth: 3, slug: "精神を蝕み時間を浪費させたpipewireとflatpak", text: "精神を蝕み、時間を浪費させた「Pipewire」と「Flatpak」" },
+			{ depth: 3, slug: "自由のために財産を捨てるという馬鹿らしさ", text: "「自由」のために「財産」を捨てるという馬鹿らしさ" },
+			{ depth: 2, slug: "自由とは何なのか", text: "「自由」とは何なのか" },
+			{ depth: 3, slug: "人々が商用osやソフトを選ぶ理由", text: "人々が商用OSやソフトを選ぶ理由" },
+			{ depth: 2, slug: "結びと警鐘", text: "結びと警鐘" },
+			{ depth: 3, slug: "linuxを使おうと思っている人へ", text: "Linuxを使おうと思っている人へ" },
+			{ depth: 3, slug: "windowsをこき下ろしlinuxを持ち上げる人々へ", text: "Windowsをこき下ろし、Linuxを持ち上げる人々へ" },
+		],
+	},
+	{
+		slug: "daw-for-beginner",
+		title: "【2025改訂版】初心者向けのDAWなんて存在しない。",
+		description: "「初心者におすすめのDAWって何？」 という質問に、真っ向から答えます。",
+		pubDate: new Date("2025-12-15"),
+		tags: ["DAW", "音楽制作", "DTM", "歌ってみた", "MIX師", "作曲"],
+		categories: ["音楽"],
+		headings: [
+			{ depth: 2, slug: "皆が忘れている創作系ソフトの大前提", text: "皆が忘れている、創作系ソフトの「大前提」" },
+			{ depth: 3, slug: "価格面", text: "価格面" },
+			{ depth: 3, slug: "機能面", text: "機能面" },
+			{ depth: 3, slug: "情報の取得", text: "情報の取得" },
+			{ depth: 2, slug: "オーディオif付属のdawはただの機能制限版", text: "オーディオIF付属のDAWはただの「機能制限版」" },
+			{ depth: 2, slug: "情報の多さハードルの高さ", text: "「情報の多さ」＝「ハードルの高さ」" },
+			{ depth: 3, slug: "調べる方法がわからなければ答えにたどり着けない", text: "調べる方法がわからなければ答えにたどり着けない" },
+			{ depth: 3, slug: "aiチャットツールに聞けばソフトの種類は関係なくなる", text: "AIチャットツールに聞けばソフトの種類は関係なくなる" },
+			{ depth: 2, slug: "1-機能名用語の意味を知りたいとき", text: "1. 機能名（用語）の意味を知りたいとき" },
+			{ depth: 2, slug: "2-やりたいことから逆引きしたいとき", text: "2. やりたいことから逆引きしたいとき" },
+			{ depth: 2, slug: "3-画面上のボタンや操作で迷ったとき", text: "3. 画面上のボタンや操作で迷ったとき" },
+			{ depth: 2, slug: "4-設定やトラブルを解決したいとき", text: "4. 設定やトラブルを解決したいとき" },
+			{ depth: 3, slug: "-より良い回答を得るためのヒント", text: "💡 より良い回答を得るためのヒント" },
+			{ depth: 2, slug: "でどう選ぶのが正解なの", text: "で、どう選ぶのが正解なの？" },
+			{ depth: 3, slug: "選ぶ際のポイント", text: "選ぶ際のポイント" },
+			{ depth: 3, slug: "主要daw仕様表", text: "主要DAW仕様表" },
+			{ depth: 2, slug: "オーディオインターフェイスを第一優先に", text: "オーディオインターフェイスを第一優先に" },
+			{ depth: 2, slug: "おまけ主流αのdawの個人的レビュー", text: "おまけ：主流＋αのDAWの個人的レビュー" },
+			{ depth: 3, slug: "cubase14-pro", text: "Cubase（14 Pro）" },
+			{ depth: 3, slug: "studio-one5-artistpro-7", text: "Studio One（5 Artist,Pro 7）" },
+			{ depth: 3, slug: "protools20256-studio202512-artist", text: "ProTools(2025.6 Studio/2025.12 Artist)" },
+			{ depth: 3, slug: "fl-studio-1", text: "FL Studio" },
+		],
+	},
+	{
+		slug: "delonghi-mdh-conquer",
+		title: "【自腹レビュー】デロンギ　マルチダイナミックヒーター「MDHU12」との戦い。新品よりお得な買い方も。",
+		description: "クリスマス終わりの 2025 年 12 月、以前からすごく気になっていた暖房器具を導入しました。",
+		pubDate: new Date("2026-02-01T17:27:00+09:00"),
+		tags: ["暖房", "家電", "レビュー", "オイルヒーター・オイルレスヒーター"],
+		categories: ["レビュー"],
+		headings: [
+			{ depth: 2, slug: "2026-年光熱費との戦いに新兵器新凶器", text: "2026 年、光熱費との戦いに新兵器（新凶器？）" },
+			{ depth: 3, slug: "prレンタルした製品の-amazon-リンク", text: "【PR】レンタルした製品の Amazon リンク" },
+			{ depth: 2, slug: "delonghi-デロンギ-マルチダイナミックヒーター-mdhu12-bk-電気ヒーター-ゼロ風暖房-節電-直感操作クリックノブ-リモコン付き-表面温度約-60-節電-8-10-畳-ピュアホワイト--マットブラック-デロンギファミリー登録で-5-年保証", text: "De'Longhi (デロンギ) マルチダイナミックヒーター MDHU12-BK 電気ヒーター ゼロ風暖房 節電 直感操作クリックノブ リモコン付き 表面温度約 60℃ 節電 [8-10 畳] [ピュアホワイト × マットブラック] デロンギファミリー登録で 5 年保証" },
+			{ depth: 3, slug: "序章出会い", text: "序章：出会い" },
+			{ depth: 3, slug: "2024-25-シーズンの自室の暖房器具事情", text: "2024-25 シーズンの自室の暖房器具事情" },
+			{ depth: 3, slug: "第-2-章我が家の冷暖房効率は絶望的で変則的だった", text: "第 2 章：我が家の冷暖房効率は・・・絶望的で、変則的だった" },
+			{ depth: 3, slug: "ヒーターは窓際に置け置いても無駄な冷気の意外な発生源", text: "「ヒーターは窓際に置け」？置いても無駄な冷気の意外な発生源" },
+			{ depth: 3, slug: "第-3-章2025-26-シーズンついに-mdh-導入", text: "第 3 章：2025-26 シーズン、ついに MDH 導入" },
+			{ depth: 2, slug: "闘いの記録そしてレビュー", text: "闘いの記録、そしてレビュー" },
+			{ depth: 3, slug: "8-10-畳用でも力不足木造や軽量鉄骨はデカめのサイズを選ぶべし", text: "8-10 畳用でも力不足！？木造や軽量鉄骨はデカめのサイズを選ぶべし" },
+			{ depth: 3, slug: "契約電力に気をつけろ壁コン直は鉄則", text: "契約電力に気をつけろ。壁コン直は鉄則" },
+			{ depth: 3, slug: "暖かさを求めるな求めるなら補助暖房必須", text: "「暖かさ」を求めるな。求めるなら補助暖房必須" },
+			{ depth: 3, slug: "最適な用途は寒くない部屋をつくる一番威力を発揮する温度設定と場面", text: "最適な用途は「寒くない部屋」をつくる。一番「威力を発揮する」温度設定と場面" },
+			{ depth: 2, slug: "1-か月の闘いのまとめかなり癖が強すぎて最近の趣味が-mdh-とのバトルになった", text: "1 か月の闘いのまとめ：かなり癖が強すぎて、最近の趣味が MDH とのバトルになった。" },
+			{ depth: 2, slug: "革新的に見えるという幻想否進歩は感じる", text: "「革新的に見える」という幻想？否、「進歩」は感じる" },
+			{ depth: 3, slug: "ちょっと待ってください", text: "ちょっと待ってください。" },
+			{ depth: 2, slug: "teknos-パネルヒーター壁掛との-2way寒冷地仕様シーズ管-sp-003w", text: "TEKNOS パネルヒーター&壁掛との 2WAY(寒冷地仕様・シーズ管) SP-003W" },
+			{ depth: 2, slug: "delonghi-デロンギ-コンベクターヒーター-hxj60l12-電気ヒーター-窓際暖房-速暖-乾燥しにくい-燃料補充不要-チャイルドロック-安全設計-8-10-畳-グレー-デロンギファミリー登録で-5-年保証", text: "De'Longhi (デロンギ) コンベクターヒーター HXJ60L12 電気ヒーター 窓際暖房 速暖 乾燥しにくい 燃料補充不要 チャイルドロック 安全設計 [8-10 畳] [グレー] デロンギファミリー登録で 5 年保証" },
+			{ depth: 3, slug: "デロンギによる車輪の再発明とそこから生まれた進化", text: "デロンギによる「車輪の再発明」と、そこから生まれた「進化」" },
+			{ depth: 3, slug: "おまけオイルヒーターと比較したときの弱点", text: "おまけ：オイルヒーターと比較したときの「弱点」" },
+			{ depth: 2, slug: "デロンギ-mdh-は中古価格が異様に安いのでリユース市場は狙い目ただその理由もある", text: "デロンギ MDH は中古価格が異様に安いのでリユース市場は狙い目。ただその理由もある" },
+			{ depth: 3, slug: "中古相場で狙い目の-mdh2-機種", text: "中古相場で狙い目の MDH2 機種" },
+			{ depth: 2, slug: "デロンギ-マルチダイナミックヒーターソラーレ-最大-13-畳-ゼロ風暖房-オイルレスヒーター-ピュアホワイト-idh15-wg-デロンギファミリー登録で-5-年保証修理も原則-72-時間以内対応", text: "デロンギ マルチダイナミックヒーターソラーレ 最大 13 畳 ゼロ風暖房 オイルレスヒーター ピュアホワイト IDH15-WG 【デロンギファミリー登録で 5 年保証、修理も原則 72 時間以内対応】" },
+			{ depth: 3, slug: "wi-fi-モデルは個人的に非推奨", text: "Wi-Fi モデルは個人的に非推奨" },
+			{ depth: 3, slug: "中古の不安要素デロンギ-mdh-の温度表示画面に時限爆弾があるそして筐体も少しヤワ", text: "中古の不安要素：デロンギ MDH の温度表示画面に「時限爆弾」がある、そして筐体も少しヤワ？" },
+			{ depth: 2, slug: "本当にまとめ購入使用まで工夫の余地がある冬限定の娯楽品", text: "本当にまとめ：購入～使用まで工夫の余地がある冬限定の娯楽品" },
+		],
+	},
+	{
+		slug: "protools-introduction",
+		title: "【ProTools布教 第二章】ProTools初期導入入門 ～ インストールから初期設定まで ～",
+		description: "ProToolsを布教する者の責任として、初期導入の手順を指南します。",
+		pubDate: new Date("2026-03-31T09:03:40+09:00"),
+		tags: ["ProTools", "音楽制作", "DTM", "DAW"],
+		categories: ["音楽"],
+		headings: [
+			{ depth: 2, slug: "protoolsの下準備インストール", text: "ProToolsの下準備～インストール" },
+			{ depth: 3, slug: "asioドライバの準備を推奨できればオーディオifを買おう", text: "「ASIOドライバ」の準備を推奨。できればオーディオIFを買おう。" },
+			{ depth: 3, slug: "aiに聞いた厳選3機種", text: "AIに聞いた厳選3機種" },
+			{ depth: 3, slug: "ilokavidアカウント登録ダウンロード", text: "iLok・Avidアカウント登録・ダウンロード" },
+			{ depth: 2, slug: "初回起動おすすめ設定", text: "初回起動～おすすめ設定" },
+			{ depth: 3, slug: "注意", text: "注意" },
+			{ depth: 3, slug: "初回起動設定とセッション作成", text: "初回起動設定とセッション作成" },
+			{ depth: 3, slug: "マスターがない作ろうそしてテンプレにしよう", text: "マスターがない！！作ろう！そしてテンプレにしよう！" },
+			{ depth: 3, slug: "初期設定のおすすめ", text: "初期設定のおすすめ" },
+			{ depth: 2, slug: "まとめ他にもtipsなどは色々youtubeの動画やサイト生成aiチャットなども活用を", text: "まとめ：他にもTipsなどは色々。YouTubeの動画やサイト、生成AIチャットなども活用を。" },
+			{ depth: 3, slug: "パーソナライズ設定例", text: "パーソナライズ設定例" },
+		],
+	}
+];
+
+export function getAstroPost(slug: string) {
+	return astroPosts.find((post) => post.slug === slug);
+}

@@ -22,6 +22,10 @@ function parseArgs(argv) {
 	return args;
 }
 
+function isBlank(value) {
+	return value === undefined || String(value).trim() === '';
+}
+
 function splitList(value) {
 	if (!value) return [];
 	return String(value)
@@ -38,16 +42,40 @@ function formatArray(values) {
 	return `[${values.map(quote).join(', ')}]`;
 }
 
-async function promptMissing(args) {
+async function promptMissing(args, { interactive }) {
 	const rl = readline.createInterface({ input, output });
 	try {
-		const slug = args.slug ?? (await rl.question('slug: '));
-		const title = args.title ?? (await rl.question('title: '));
-		const description = args.description ?? (await rl.question('description: '));
-		const pubDate = args.date ?? (await rl.question('pubDate (YYYY-MM-DD or ISO): '));
-		const categories = args.category ?? (await rl.question('categories (comma separated): '));
-		const tags = args.tag ?? (await rl.question('tags (comma separated): '));
-		return { ...args, slug, title, description, date: pubDate, category: categories, tag: tags };
+		console.log('Create a new Astro post.');
+		console.log('Press Enter to keep optional fields empty.');
+		console.log('');
+
+		const slug = isBlank(args.slug) ? await rl.question('slug (lowercase letters, numbers, hyphens): ') : args.slug;
+		const title = isBlank(args.title) ? await rl.question('title: ') : args.title;
+		const description = isBlank(args.description) ? await rl.question('description: ') : args.description;
+		const pubDate = isBlank(args.date) ? await rl.question('pubDate (YYYY-MM-DD or ISO): ') : args.date;
+		const categories =
+			args.category ?? (interactive ? await rl.question('categories (comma separated, optional): ') : '');
+		const tags = args.tag ?? (interactive ? await rl.question('tags (comma separated, optional): ') : '');
+		const thumbnailAnswer =
+			args.thumbnail ? 'y' : interactive ? await rl.question('configure thumbnail import? (y/N): ') : 'n';
+		const publishAnswer =
+			args.publish || args.draft === 'false'
+				? 'y'
+				: interactive
+					? await rl.question('publish now? (y/N): ')
+					: 'n';
+
+		return {
+			...args,
+			slug,
+			title,
+			description,
+			date: pubDate,
+			category: categories,
+			tag: tags,
+			thumbnail: /^y(es)?$/i.test(String(thumbnailAnswer).trim()),
+			publish: /^y(es)?$/i.test(String(publishAnswer).trim()),
+		};
 	} finally {
 		rl.close();
 	}
@@ -83,13 +111,7 @@ function makeArticle({ slug, title }) {
 
 <p>${title} の本文を書き始めます。</p>
 
-<!-- 画像は public/images/posts/${slug}/ に置き、src は /images/posts/${slug}/filename.webp と書く -->
-<!--
-<figure>
-\t<img src="/images/posts/${slug}/image.webp" alt="画像説明" loading="lazy" decoding="async" />
-\t<figcaption>キャプション</figcaption>
-</figure>
--->
+<!-- 画像は public/images/posts/${slug}/ に置き、post-image スニペットで挿入します。 -->
 `;
 }
 
@@ -118,8 +140,38 @@ if (!post) {
 `;
 }
 
+function makePageWithThumbnail(slug) {
+	return `---
+import ArticleBody from '../../articles/${slug}.astro';
+import thumbnail from '../../assets/post-thumbnails/${slug}.webp';
+import { getAstroPost } from '../../content/astro-posts';
+import BlogPost from '../../layouts/BlogPost.astro';
+
+const post = getAstroPost('${slug}');
+
+if (!post) {
+\tthrow new Error('Astro post metadata not found: ${slug}');
+}
+---
+
+<BlogPost
+\ttitle={post.title}
+\tdescription={post.description}
+\tpubDate={post.pubDate}
+\tupdatedDate={post.updatedDate}
+\theroImage={thumbnail}
+\theadings={post.headings}
+>
+\t<ArticleBody />
+</BlogPost>
+`;
+}
+
 async function main() {
-	const args = await promptMissing(parseArgs(process.argv.slice(2)));
+	const initialArgs = parseArgs(process.argv.slice(2));
+	const args = await promptMissing(initialArgs, {
+		interactive: Boolean(initialArgs.interactive) || Object.keys(initialArgs).length === 0,
+	});
 	const slug = String(args.slug).trim();
 	if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
 		throw new Error('slug must use lowercase letters, numbers, and hyphens only.');
@@ -136,6 +188,7 @@ async function main() {
 	const articlePath = path.join(root, 'src', 'articles', `${slug}.astro`);
 	const pagePath = path.join(root, 'src', 'pages', 'posts', `${slug}.astro`);
 	const imageDir = path.join(root, 'public', 'images', 'posts', slug);
+	const thumbnailDir = path.join(root, 'src', 'assets', 'post-thumbnails');
 	const metaPath = path.join(root, 'src', 'content', 'astro-posts.ts');
 
 	await assertNotExists(articlePath);
@@ -146,23 +199,41 @@ async function main() {
 		throw new Error(`Metadata already exists for slug: ${slug}`);
 	}
 
-	await fs.mkdir(imageDir, { recursive: true });
-	await fs.writeFile(articlePath, makeArticle({ slug, title }));
-	await fs.writeFile(pagePath, makePage(slug));
-
 	const entry = makeMetaEntry({ ...args, slug, title, description, date, draft });
-	const updatedMeta = meta.replace(
-		/\n\];\n\nexport function getAstroPost/,
-		`,\n${entry}\n];\n\nexport function getAstroPost`
-	);
+	const updatedMeta = meta.replace(/\r?\n\];\r?\n\r?\nexport function getAstroPost/, (match) => {
+		const lineBreak = match.includes('\r\n') ? '\r\n' : '\n';
+		return `,${lineBreak}${entry}${lineBreak}];${lineBreak}${lineBreak}export function getAstroPost`;
+	});
+	if (updatedMeta === meta) {
+		throw new Error('Could not insert metadata into src/content/astro-posts.ts.');
+	}
+
+	if (args['dry-run']) {
+		console.log(`Dry run OK: ${slug}`);
+		console.log(`- src/articles/${slug}.astro`);
+		console.log(`- src/pages/posts/${slug}.astro`);
+		console.log(`- public/images/posts/${slug}/`);
+		console.log('- src/assets/post-thumbnails/');
+		console.log('- src/content/astro-posts.ts');
+		return;
+	}
+
+	await fs.mkdir(imageDir, { recursive: true });
+	await fs.mkdir(thumbnailDir, { recursive: true });
+	await fs.writeFile(articlePath, makeArticle({ slug, title }));
+	await fs.writeFile(pagePath, args.thumbnail ? makePageWithThumbnail(slug) : makePage(slug));
 	await fs.writeFile(metaPath, updatedMeta);
 
 	console.log(`Created Astro post: ${slug}`);
 	console.log(`- src/articles/${slug}.astro`);
 	console.log(`- src/pages/posts/${slug}.astro`);
 	console.log(`- public/images/posts/${slug}/`);
+	console.log('- src/assets/post-thumbnails/');
 	console.log('- src/content/astro-posts.ts');
 	console.log(draft ? 'Status: draft' : 'Status: published');
+	if (!args.thumbnail) {
+		console.log('Thumbnail: not configured. Add --thumbnail to generate a heroImage import.');
+	}
 }
 
 main().catch((error) => {

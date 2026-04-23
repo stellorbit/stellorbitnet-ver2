@@ -164,6 +164,20 @@ export const astroPosts: AstroPostMeta[] = [
 			{ depth: 2, slug: "まとめ他にもtipsなどは色々youtubeの動画やサイト生成aiチャットなども活用を", text: "まとめ：他にもTipsなどは色々。YouTubeの動画やサイト、生成AIチャットなども活用を。" },
 			{ depth: 3, slug: "パーソナライズ設定例", text: "パーソナライズ設定例" },
 		],
+	},
+	{
+		slug: "x-com-deprecate",
+		title: "\"X（旧Twitter）の「コミュニティ機能」5月6日に廃止。後継機能としてチャット機能に「グループチャット」を追加。\"",
+		description: "Xのプロダクト責任者が「コミュニティの廃止」と「グループチャットの追加」をポストで発表。実質的な猶予は2週間程度。",
+		pubDate: new Date("2026-04-23"),
+		tags: ["SNS", "X", "Twitter"],
+		categories: ["PC/IT"],
+		headings: [
+			{ depth: 2, slug: "intro", text: "Xのプロダクト責任者から発表された衝撃の内容。" },
+			{ depth: 2, slug: "nikitasaid", text: "2つの「大きな変更」" },
+			{ depth: 3, slug: "groupchat", text: "最大350人収容のグループチャット機能" },
+			{ depth: 3, slug: "com-deprecation", text: "「コミュニティ」機能の非推奨・廃止" },
+		],
 	}
 ];
 

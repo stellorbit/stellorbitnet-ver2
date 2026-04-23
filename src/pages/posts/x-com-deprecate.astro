@@ -1,0 +1,23 @@
+---
+import ArticleBody from '../../articles/x-com-deprecate.astro';
+import thumbnail from '../../assets/post-thumbnails/x-com-deprecate.webp';
+import { getAstroPost } from '../../content/astro-posts';
+import BlogPost from '../../layouts/BlogPost.astro';
+
+const post = getAstroPost('x-com-deprecate');
+
+if (!post) {
+	throw new Error('Astro post metadata not found: x-com-deprecate');
+}
+---
+
+<BlogPost
+	title={post.title}
+	description={post.description}
+	pubDate={post.pubDate}
+	updatedDate={post.updatedDate}
+	heroImage={thumbnail}
+	headings={post.headings}
+>
+	<ArticleBody />
+</BlogPost>

@@ -28,8 +28,11 @@ async function collectFiles(dir) {
 }
 
 function extractImagePaths(source) {
+	const scanSource = source
+		.replace(/<!--[\s\S]*?-->/g, '')
+		.replace(/\{\/\*[\s\S]*?\*\/\}/g, '');
 	const paths = new Set();
-	for (const match of source.matchAll(/(?:src=["']|]\()(?<path>\/images\/[^"')\s>]+)/g)) {
+	for (const match of scanSource.matchAll(/(?:src=["']|]\()(?<path>\/images\/[^"')\s>]+)/g)) {
 		paths.add(match.groups.path);
 	}
 	return [...paths];

@@ -16,10 +16,16 @@ public/images/posts/<slug>/      記事画像
 ## 新規記事の作成
 
 ```sh
-npm run new:post -- --slug example-post --title "記事タイトル" --description "記事説明" --date 2026-04-23 --category "カテゴリ" --tag "タグ"
+npm run new:post
 ```
 
-このコマンドで次の3つを作成します。
+対話形式で、スラッグ、タイトル、説明、投稿日、カテゴリ、タグ、サムネイル設定、公開状態を入力します。このコマンドで次の3つを作成します。
+
+明示的に対話形式で起動したい場合は、次のコマンドも使えます。
+
+```sh
+npm run new:post:interactive
+```
 
 ```text
 src/articles/<slug>.astro
@@ -27,7 +33,17 @@ src/pages/posts/<slug>.astro
 public/images/posts/<slug>/
 ```
 
-メタデータは `src/content/astro-posts.ts` に追加されます。初期状態は `draft: true` です。
+メタデータは `src/content/astro-posts.ts` に追加されます。初期状態は `draft: true` です。確認なしで作成したい場合は、従来通り引数指定も使えます。
+
+```sh
+npm run new:post -- --slug example-post --title "記事タイトル" --description "記事説明" --date 2026-04-23 --category "カテゴリ" --tag "タグ"
+```
+
+サムネイル import 付きのページ雛形を作る場合は `--thumbnail` を付けます。
+
+```sh
+npm run new:post -- --slug example-post --title "記事タイトル" --description "記事説明" --date 2026-04-23 --thumbnail
+```
 
 ## 本文を書く
 

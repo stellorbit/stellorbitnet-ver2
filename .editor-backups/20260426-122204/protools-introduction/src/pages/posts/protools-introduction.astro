@@ -1,0 +1,21 @@
+---
+import ArticleBody from '../../articles/protools-introduction.astro';
+import { getAstroPost } from '../../content/astro-posts';
+import BlogPost from '../../layouts/BlogPost.astro';
+
+const post = getAstroPost('protools-introduction');
+
+if (!post) {
+	throw new Error('Astro post metadata not found: protools-introduction');
+}
+---
+
+<BlogPost
+	title={post.title}
+	description={post.description}
+	pubDate={post.pubDate}
+	updatedDate={post.updatedDate}
+	headings={post.headings}
+>
+	<ArticleBody />
+</BlogPost>

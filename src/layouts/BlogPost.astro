@@ -59,7 +59,6 @@ const {
             <h1>{title}</h1>
             <p>{description}</p>
           </div>
-          <!-- ▼ 要約ボタン（目次の上） -->
           <div class="summary-container">
             <button id="summarize-btn">この記事を要約する</button>
             <div id="summary-box"></div>
@@ -72,11 +71,11 @@ const {
           <GiscusComments />
         </div>
       </article>
-      <script>
-        document.addEventListener('DOMContentLoaded', () => {
-          const btn = document.getElementById('summarize-btn');
-          const box = document.getElementById('summary-box');
+      <script client:load>
+        const btn = document.getElementById('summarize-btn');
+        const box = document.getElementById('summary-box');
 
+        if (btn && box) {
           btn.addEventListener('click', async () => {
             const articleText =
               document.querySelector('article')?.innerText ?? '';
@@ -98,7 +97,9 @@ const {
               box.textContent = '通信エラーが発生しました。';
             }
           });
-        });
+        } else {
+          console.warn('要約ボタンまたは summary-box が見つかりませんでした');
+        }
       </script>
     </main>
     <Footer />

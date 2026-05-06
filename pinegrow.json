@@ -1,1 +1,5 @@
-{"files":{},"open-pages":["dist/index.html"],"urls":{"dist/index.html":{"open-with-wrapper":false}}}
+{
+  "files": {},
+  "open-pages": ["dist/index.html"],
+  "urls": { "dist/index.html": { "open-with-wrapper": false } }
+}

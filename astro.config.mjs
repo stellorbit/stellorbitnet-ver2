@@ -10,8 +10,8 @@ export default defineConfig({
   site: 'https://stellorbit.net',
 
   markdown: {
-      rehypePlugins: [rehypeSlug],
-	},
+    rehypePlugins: [rehypeSlug],
+  },
 
   integrations: [mdx(), sitemap()],
 });

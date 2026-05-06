@@ -1,21 +1,37 @@
 {
-    "piny.project_settings": {
-        "open-pages": [
-            "pinyfakepage.html"
-        ],
-        "tw-external-config": {},
-        "source-folders": null,
-        "preview-url": "http://localhost:4321",
-        "ai-project-brief": null,
-        "urls": {
-            "pinyfakepage.html": {
-                "open-page-views": [
-                    {
-                        "w": 320,
-                        "h": 0
-                    }
-                ]
-            }
-        }
+  "piny.project_settings": {
+    "open-pages": ["pinyfakepage.html"],
+    "tw-external-config": {},
+    "source-folders": null,
+    "preview-url": "http://localhost:4321",
+    "ai-project-brief": null,
+    "urls": {
+      "pinyfakepage.html": {
+        "open-page-views": [
+          {
+            "w": 320,
+            "h": 0
+          }
+        ]
+      }
     }
+  },
+
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
+
+  "[astro]": {
+    "editor.defaultFormatter": "astro-build.astro-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

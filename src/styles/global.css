@@ -451,3 +451,26 @@ hr {
   border-left-color: #059669;
   color: #065f46;
 }
+
+.summary-container {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+#summarize-btn {
+  padding: 0.5rem 1rem;
+  background: #4b8df8;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#summary-box {
+  margin-top: 1rem;
+  white-space: pre-wrap;
+  line-height: 1.6;
+}
+

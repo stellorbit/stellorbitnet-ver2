@@ -51,23 +51,26 @@ function extractHeadings(article) {
 }
 
 function formatHeadings(headings, indent = '      ') {
-  if (headings.length === 0) return `${indent}headings: [],`;
-  const i1 = indent;
-  const i2 = indent + '  ';
-  return `${i1}headings: [
+  if (headings.length === 0) {
+    return `${indent}headings: [],`;
+  }
+
+  const itemIndent = `${indent}  `;
+  return `${indent}headings: [
 ${headings
   .map(
     (heading) =>
-      `${i2}{ depth: ${heading.depth}, slug: ${JSON.stringify(heading.slug)}, text: ${JSON.stringify(heading.text)} }`
+      `${itemIndent}{ depth: ${heading.depth}, slug: ${JSON.stringify(heading.slug)}, text: ${JSON.stringify(heading.text)} }`
   )
   .join(',\n')}
-${i1}],`;
+${indent}],`;
 }
 
 function findEntryRange(source, slug) {
   const slugMatch = new RegExp(
     String.raw`\{\s*[\r\n]+[\s]*slug:\s*['"]${escapeRegExp(slug)}['"]`
   ).exec(source);
+
   if (!slugMatch) return null;
 
   const start = slugMatch.index;
@@ -117,9 +120,9 @@ function findEntryRange(source, slug) {
 }
 
 function replaceHeadings(entry, headings) {
-  const indentMatch = entry.match(/^[ \t]*slug:/m);
-  const baseIndent = indentMatch
-    ? indentMatch[0].match(/^[ \t]*/)[0]
+  const slugLineMatch = entry.match(/^[ \t]*slug:/m);
+  const baseIndent = slugLineMatch
+    ? slugLineMatch[0].match(/^[ \t]*/)[0]
     : '      ';
   const replacement = formatHeadings(headings, baseIndent);
 
@@ -128,9 +131,21 @@ function replaceHeadings(entry, headings) {
     return entry.replace(headingsBlock, replacement);
   }
 
-  const insertAt = entry.lastIndexOf('}');
-  if (insertAt < 0) throw new Error('Could not find entry end.');
-  return `${entry.slice(0, insertAt)}  ${replacement}\n${entry.slice(insertAt)}`;
+  const closingBraceIndex = entry.lastIndexOf('}');
+  if (closingBraceIndex < 0) {
+    throw new Error('Could not find entry end.');
+  }
+
+  return `${entry.slice(0, closingBraceIndex)}  ${replacement}\n${entry.slice(closingBraceIndex)}`;
+}
+
+async function getArticleSlugs() {
+  const articlesDir = path.join(root, 'src', 'articles');
+  const entries = await fs.readdir(articlesDir, { withFileTypes: true });
+
+  return entries
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.astro'))
+    .map((entry) => entry.name.replace(/\.astro$/, ''));
 }
 
 async function main() {
@@ -138,21 +153,29 @@ async function main() {
   const metaPath = path.join(root, 'src', 'content', 'astro-posts.ts');
   let meta = await fs.readFile(metaPath, 'utf8');
 
-  const allSlugs = [...meta.matchAll(/slug:\s*['"]([^'"]+)['"]/g)].map(
-    (m) => m[1]
-  );
-  const targetSlugs = selectedSlugs ? [...selectedSlugs] : allSlugs;
+  const articleSlugs = await getArticleSlugs();
+  const targetSlugs = selectedSlugs ? [...selectedSlugs] : articleSlugs;
 
   for (const slug of targetSlugs) {
+    if (slug.length > 120) {
+      throw new Error(`Suspiciously long slug detected: ${slug}`);
+    }
+
     const articlePath = path.join(root, 'src', 'articles', `${slug}.astro`);
+
     try {
       const article = await fs.readFile(articlePath, 'utf8');
       const headings = extractHeadings(article);
       const range = findEntryRange(meta, slug);
-      if (!range) throw new Error(`Metadata not found: ${slug}`);
+
+      if (!range) {
+        throw new Error(`Metadata not found: ${slug}`);
+      }
+
       const entry = meta.slice(range.start, range.end);
       const updatedEntry = replaceHeadings(entry, headings);
       meta = `${meta.slice(0, range.start)}${updatedEntry}${meta.slice(range.end)}`;
+
       console.log(`Synced ${slug}: ${headings.length} headings`);
     } catch (error) {
       if (error?.code === 'ENOENT') continue;

@@ -26,76 +26,122 @@ function decodeEntities(value) {
 }
 
 function extractHeadings(article) {
-  return [
-    ...article.matchAll(/<h([23])\s+id="([^"]+)"[^>]*>([\s\S]*?)<\/h\1>/g),
-  ].map((match) => ({
-    depth: Number(match[1]),
-    slug: match[2],
-    text: decodeEntities(
-      match[3]
-        .replace(/<[^>]+>/g, '')
-        .replace(/\s+/g, ' ')
-        .trim()
-    ),
-  }));
+  return [...article.matchAll(/<h([23])\b([^>]*)>([\s\S]*?)<\/h\1>/g)].flatMap(
+    (match) => {
+      const depth = Number(match[1]);
+      const attrs = match[2];
+      const inner = match[3];
+      const idMatch = attrs.match(/\bid="([^"]+)"/);
+      if (!idMatch) return [];
+
+      return [
+        {
+          depth,
+          slug: idMatch[1],
+          text: decodeEntities(
+            inner
+              .replace(/<[^>]+>/g, '')
+              .replace(/\s+/g, ' ')
+              .trim()
+          ),
+        },
+      ];
+    }
+  );
 }
 
-function formatHeadings(headings) {
-  if (headings.length === 0) return '\t\theadings: [],';
-  return `\t\theadings: [
+function formatHeadings(headings, indent = '      ') {
+  if (headings.length === 0) return `${indent}headings: [],`;
+  const i1 = indent;
+  const i2 = indent + '  ';
+  return `${i1}headings: [
 ${headings
-  .map((heading) => {
-    return `\t\t\t{ depth: ${heading.depth}, slug: ${JSON.stringify(heading.slug)}, text: ${JSON.stringify(heading.text)} }`;
-  })
-  .join(',\n')},
-\t\t],`;
+  .map(
+    (heading) =>
+      `${i2}{ depth: ${heading.depth}, slug: ${JSON.stringify(heading.slug)}, text: ${JSON.stringify(heading.text)} }`
+  )
+  .join(',\n')}
+${i1}],`;
 }
 
 function findEntryRange(source, slug) {
   const slugMatch = new RegExp(
-    `\\n\\t\\{\\n\\t\\tslug:\\s*['"]${escapeRegExp(slug)}['"]`
+    String.raw`\{\s*[\r\n]+[\s]*slug:\s*['"]${escapeRegExp(slug)}['"]`
   ).exec(source);
   if (!slugMatch) return null;
-  const start = slugMatch.index + 1;
+
+  const start = slugMatch.index;
   let depth = 0;
-  for (let index = start; index < source.length; index += 1) {
-    const char = source[index];
-    if (char === '{') depth += 1;
-    if (char === '}') {
+  let inString = false;
+  let quote = '';
+  let escaped = false;
+
+  for (let i = start; i < source.length; i += 1) {
+    const ch = source[i];
+
+    if (inString) {
+      if (escaped) {
+        escaped = false;
+        continue;
+      }
+      if (ch === '\\') {
+        escaped = true;
+        continue;
+      }
+      if (ch === quote) {
+        inString = false;
+        quote = '';
+      }
+      continue;
+    }
+
+    if (ch === '"' || ch === "'") {
+      inString = true;
+      quote = ch;
+      continue;
+    }
+
+    if (ch === '{') depth += 1;
+    if (ch === '}') {
       depth -= 1;
       if (depth === 0) {
-        let end = index + 1;
+        let end = i + 1;
+        while (/\s/.test(source[end] ?? '')) end += 1;
         if (source[end] === ',') end += 1;
         return { start, end };
       }
     }
   }
+
   return null;
 }
 
 function replaceHeadings(entry, headings) {
-  const replacement = formatHeadings(headings);
-  if (/^\t\theadings:\s*\[/m.test(entry)) {
-    const start = entry.search(/^\t\theadings:\s*\[/m);
-    const endMatch = /\n\t\t\],?/.exec(entry.slice(start));
-    if (!endMatch) throw new Error('Could not find headings end.');
-    const end = start + endMatch.index + endMatch[0].length;
-    return `${entry.slice(0, start)}${replacement}${entry.slice(end)}`;
+  const indentMatch = entry.match(/^[ \t]*slug:/m);
+  const baseIndent = indentMatch
+    ? indentMatch[0].match(/^[ \t]*/)[0]
+    : '      ';
+  const replacement = formatHeadings(headings, baseIndent);
+
+  const headingsBlock = /^[ \t]*headings:\s*\[[\s\S]*?^[ \t]*\],?/m;
+  if (headingsBlock.test(entry)) {
+    return entry.replace(headingsBlock, replacement);
   }
-  const insertAt = entry.lastIndexOf('\n\t}');
-  return `${entry.slice(0, insertAt)}\n${replacement}${entry.slice(insertAt)}`;
+
+  const insertAt = entry.lastIndexOf('}');
+  if (insertAt < 0) throw new Error('Could not find entry end.');
+  return `${entry.slice(0, insertAt)}  ${replacement}\n${entry.slice(insertAt)}`;
 }
 
 async function main() {
   const selectedSlugs = parseSlugs(process.argv.slice(2));
   const metaPath = path.join(root, 'src', 'content', 'astro-posts.ts');
   let meta = await fs.readFile(metaPath, 'utf8');
-  const slugs = [...meta.matchAll(/\n\t\{\n\t\tslug:\s*['"]([^'"]+)['"]/g)].map(
-    (match) => match[1]
+
+  const allSlugs = [...meta.matchAll(/slug:\s*['"]([^'"]+)['"]/g)].map(
+    (m) => m[1]
   );
-  const targetSlugs = selectedSlugs
-    ? slugs.filter((slug) => selectedSlugs.has(slug))
-    : slugs;
+  const targetSlugs = selectedSlugs ? [...selectedSlugs] : allSlugs;
 
   for (const slug of targetSlugs) {
     const articlePath = path.join(root, 'src', 'articles', `${slug}.astro`);
@@ -109,7 +155,7 @@ async function main() {
       meta = `${meta.slice(0, range.start)}${updatedEntry}${meta.slice(range.end)}`;
       console.log(`Synced ${slug}: ${headings.length} headings`);
     } catch (error) {
-      if (error.code === 'ENOENT') continue;
+      if (error?.code === 'ENOENT') continue;
       throw error;
     }
   }

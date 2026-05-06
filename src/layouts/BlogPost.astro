@@ -59,10 +59,12 @@ const {
             <h1>{title}</h1>
             <p>{description}</p>
           </div>
+          // 要約ボタンのコンテナ
           <div class="summary-container">
             <button id="summarize-btn">この記事を要約する</button>
             <div id="summary-box"></div>
           </div>
+          // ここまで要約ボタンのコンテナ
           {headings.length > 0 && <TableOfContents headings={headings} />}
           <div class="prose">
             <slot />
@@ -71,11 +73,20 @@ const {
           <GiscusComments />
         </div>
       </article>
-      <script client:load>
-        const btn = document.getElementById('summarize-btn');
-        const box = document.getElementById('summary-box');
 
-        if (btn && box) {
+      // 記事要約スクリプト部分
+
+      <script>
+        // Astro v4 では script は自動的にクライアント側で実行される
+        document.addEventListener('DOMContentLoaded', () => {
+          const btn = document.getElementById('summarize-btn');
+          const box = document.getElementById('summary-box');
+
+          if (!btn || !box) {
+            console.warn('要約ボタンまたは summary-box が見つかりませんでした');
+            return;
+          }
+
           btn.addEventListener('click', async () => {
             const articleText =
               document.querySelector('article')?.innerText ?? '';
@@ -97,10 +108,10 @@ const {
               box.textContent = '通信エラーが発生しました。';
             }
           });
-        } else {
-          console.warn('要約ボタンまたは summary-box が見つかりませんでした');
-        }
+        });
       </script>
+
+      // ここまで記事要約スクリプト
     </main>
     <Footer />
   </body>

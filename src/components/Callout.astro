@@ -1,0 +1,87 @@
+---
+interface Props {
+    type?: 'note' | 'tip' | 'warning' | 'info';
+    title?: string;
+}
+
+const { type = 'note', title } = Astro.props;
+
+const config = {
+    note: { label: '補足', icon: '📝', color: 'var(--callout-note)' },
+    tip: { label: 'ヒント', icon: '💡', color: 'var(--callout-tip)' },
+    warning: { label: '注意', icon: '⚠️', color: 'var(--callout-warning)' },
+    info: { label: '情報', icon: 'ℹ️', color: 'var(--callout-info)' },
+};
+
+const { label, icon, color } = config[type];
+const displayTitle = title ?? label;
+---
+
+<aside class={`callout callout--${type}`}>
+    <p class="callout-title">
+        <span class="callout-icon" aria-hidden="true">{icon}</span>
+        {displayTitle}
+    </p>
+    <div class="callout-body">
+        <slot />
+    </div>
+</aside>
+
+<style>
+    :root {
+        --callout-note: #e8f0fb;
+        --callout-tip: #e6f4ea;
+        --callout-warning: #fef7e0;
+        --callout-info: #e8f4fd;
+
+        --callout-note-border: #4a90d9;
+        --callout-tip-border: #34a853;
+        --callout-warning-border: #f9ab00;
+        --callout-info-border: #1a73e8;
+    }
+
+    .callout {
+        border-left: 4px solid;
+        border-radius: 0 0.5rem 0.5rem 0;
+        padding: 1rem 1.25rem;
+        margin: 1.5rem 0;
+    }
+
+    .callout--note {
+        background: var(--callout-note);
+        border-color: var(--callout-note-border);
+    }
+    .callout--tip {
+        background: var(--callout-tip);
+        border-color: var(--callout-tip-border);
+    }
+    .callout--warning {
+        background: var(--callout-warning);
+        border-color: var(--callout-warning-border);
+    }
+    .callout--info {
+        background: var(--callout-info);
+        border-color: var(--callout-info-border);
+    }
+
+    .callout-title {
+        font-weight: 700;
+        font-size: 0.9rem;
+        margin: 0 0 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .callout-body {
+        font-size: 0.925rem;
+        line-height: 1.65;
+    }
+
+    .callout-body :global(p) {
+        margin: 0;
+    }
+    .callout-body :global(p + p) {
+        margin-top: 0.5rem;
+    }
+</style>

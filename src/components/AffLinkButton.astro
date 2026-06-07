@@ -1,0 +1,136 @@
+---
+interface Props {
+  href: string;
+  label: string;
+  color?: 'orange' | 'blue' | 'green' | 'red' | 'gray';
+}
+
+const { href, label, color = 'orange' } = Astro.props;
+---
+
+<a
+  class={`amazon-btn amazon-btn--${color}`}
+  href={href}
+  target="_blank"
+  rel="noopener noreferrer sponsored"
+>
+  <span class="amazon-btn__pr">PR</span>
+  <span class="amazon-btn__label">{label}</span>
+  <span class="amazon-btn__icon" aria-hidden="true">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+      <polyline points="15 3 21 3 21 9"></polyline>
+      <line x1="10" y1="14" x2="21" y2="3"></line>
+    </svg>
+  </span>
+</a>
+
+<style>
+  .amazon-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1.1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1;
+    border: 2px solid transparent;
+    transition:
+      background 180ms ease,
+      color 180ms ease,
+      border-color 180ms ease;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .amazon-btn__pr {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.15rem 0.35rem;
+    border-radius: 2px;
+    background: currentColor;
+    line-height: 1;
+    /* テキスト色を反転して背景色と対比させる */
+    filter: invert(1);
+    flex-shrink: 0;
+  }
+
+  .amazon-btn__icon {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    opacity: 0.8;
+  }
+
+  /* ─── Orange（デフォルト・Amazon風） ─── */
+  .amazon-btn--orange {
+    background: #ff9900;
+    color: #111;
+    border-color: #e68a00;
+  }
+  .amazon-btn--orange:hover {
+    background: #e68a00;
+    color: #000;
+    border-color: #cc7a00;
+  }
+
+  /* ─── Blue ─── */
+  .amazon-btn--blue {
+    background: #006494;
+    color: #fff;
+    border-color: #005580;
+  }
+  .amazon-btn--blue:hover {
+    background: #005580;
+    color: #fff;
+    border-color: #004466;
+  }
+
+  /* ─── Green ─── */
+  .amazon-btn--green {
+    background: #437a22;
+    color: #fff;
+    border-color: #2e5c10;
+  }
+  .amazon-btn--green:hover {
+    background: #2e5c10;
+    color: #fff;
+    border-color: #1e3f0a;
+  }
+
+  /* ─── Red ─── */
+  .amazon-btn--red {
+    background: #a12c7b;
+    color: #fff;
+    border-color: #7d1e5e;
+  }
+  .amazon-btn--red:hover {
+    background: #7d1e5e;
+    color: #fff;
+    border-color: #561740;
+  }
+
+  /* ─── Gray ─── */
+  .amazon-btn--gray {
+    background: #f3f0ec;
+    color: #28251d;
+    border-color: #d4d1ca;
+  }
+  .amazon-btn--gray:hover {
+    background: #dcd9d5;
+    color: #28251d;
+    border-color: #bab9b4;
+  }
+</style>

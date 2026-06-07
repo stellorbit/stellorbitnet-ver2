@@ -212,7 +212,26 @@ export const astroPosts: AstroPostMeta[] = [
       { depth: 3, slug: "vs-subscription", text: "サブスクとの違い、そしてFL Studioとの親和性" },
       { depth: 2, slug: "conclusion", text: "RTOはFL Studioとの親和性大。本格導入が待ち望まれる" }
     ],
-},
+  },
+	{
+		slug: "xbox-cloud-fh6",
+		title: "Xbox Cloud Gamingで低スペックでもForza Horizon 6を快適プレイ。この体験から思う今後のPCのあり方。",
+		description: "GPUが内蔵グラフィックしかないPCで「Xbox Cloud Gaming」を使用し、Forza Horizon 6をプレイしてみたところ、ほぼ違和感なくプレイが可能でした。そこから思う今後のPCの「形」を自分なりに占ってみます。",
+		pubDate: new Date("2026-06-07"),
+		tags: ["Xbox", "クラウド", "PRリンク有り"],
+		categories: ["PC/IT", "ゲーム"],
+		headings: [
+		  { depth: 2, slug: "intro", text: "高スペックPCでなくても最新タイトルが遊べる、「Xbox Cloud Gaming」から見るPCの未来" },
+		  { depth: 2, slug: "xboxcloudgaming", text: "Xbox Cloud Gamingとは？" },
+		  { depth: 2, slug: "experience", text: "サービスを利用するまでの流れ" },
+		  { depth: 3, slug: "setup", text: "サービス登録～プレイまで" },
+		  { depth: 2, slug: "performance", text: "感想：遅延や画質の乱れなく快適プレイできて驚愕" },
+		  { depth: 3, slug: "network", text: "ネットワーク環境について" },
+		  { depth: 2, slug: "review", text: "短期間で相当やり込んで、思ったこと。" },
+		  { depth: 3, slug: "cloudfuture", text: "「ゲームのクラウド化」は、それ以外にも波及する可能性" },
+		  { depth: 2, slug: "conclusion", text: "まとめ" }
+		],
+	}
 ];
 
 export function getAstroPost(slug: string) {

@@ -13,6 +13,7 @@
     "precheck": "npm run prepare:posts",
     "preview": "astro preview",
     "astro": "astro",
+    "cms": "node ./scripts/dev-cms.mjs",
     "new:post": "node ./scripts/new-astro-post.mjs",
     "new:post:interactive": "node ./scripts/new-astro-post.mjs --interactive",
     "sync:post-headings": "node ./scripts/sync-astro-post-headings.mjs",

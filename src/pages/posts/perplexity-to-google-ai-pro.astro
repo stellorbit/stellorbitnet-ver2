@@ -1,0 +1,23 @@
+---
+import ArticleBody from '../../articles/perplexity-to-google-ai-pro.astro';
+import thumbnail from '../../assets/post-thumbnails/perplexity-to-google-ai-pro.webp';
+import { getAstroPost } from '../../content/astro-posts';
+import BlogPost from '../../layouts/BlogPost.astro';
+
+const post = getAstroPost('perplexity-to-google-ai-pro');
+
+if (!post) {
+	throw new Error('Astro post metadata not found: perplexity-to-google-ai-pro');
+}
+---
+
+<BlogPost
+	title={post.title}
+	description={post.description}
+	pubDate={post.pubDate}
+	updatedDate={post.updatedDate}
+	heroImage={thumbnail}
+	headings={post.headings}
+>
+	<ArticleBody />
+</BlogPost>

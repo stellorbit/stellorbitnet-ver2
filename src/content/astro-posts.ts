@@ -231,6 +231,20 @@ export const astroPosts: AstroPostMeta[] = [
 		  { depth: 3, slug: "cloudfuture", text: "「ゲームのクラウド化」は、それ以外にも波及する可能性" },
 		  { depth: 2, slug: "conclusion", text: "まとめ" }
 		],
+	},
+	{
+		slug: "perplexity-to-google-ai-pro",
+		title: "冬に迫るPerplexityの更新。これを機会に「Google AI Pro」を使ってみる。",
+		description: "AIチャットツールとして長いこと使ってきた「Perplexity」。無料キャンペーンで手にしたアカウントがもうすぐ更新期限を迎えるので、この際ツールを１つに絞ろうと思い、「コスパの高さ」で白羽の矢が立ったのは「Google AI Pro」プラン。その中身の紹介と、色々触ったレビュー。",
+		pubDate: new Date("2026-08-04"),
+		tags: ["Gemini", "Google", "Antigravity", "YouTube"],
+		categories: ["PC/IT", "レビュー", "生成AI", "AIツール"],
+		draft: true,
+		headings: [
+		  { depth: 2, slug: "intro", text: "高機能LLMとの別れが近づく。" },
+		  { depth: 2, slug: "service", text: "あくまで「AIサービス単体」であるということ" },
+		  { depth: 2, slug: "service", text: "コスパ厨の最適解、「Google AI」プラン" }
+		],
 	}
 ];
 

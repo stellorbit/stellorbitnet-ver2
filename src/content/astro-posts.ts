@@ -239,7 +239,6 @@ export const astroPosts: AstroPostMeta[] = [
 		pubDate: new Date("2026-08-04"),
 		tags: ["Gemini", "Google", "Antigravity", "YouTube"],
 		categories: ["PC/IT", "レビュー", "生成AI", "AIツール"],
-		draft: true,
 		headings: [
 		  { depth: 2, slug: "intro", text: "高機能LLMとの別れが近づく。" },
 		  { depth: 2, slug: "service", text: "あくまで「AIサービス単体」であるということ" },

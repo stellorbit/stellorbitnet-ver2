@@ -28,18 +28,18 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
-    "@astrojs/mdx": "^6.0.2",
-    "@astrojs/rss": "^4.0.18",
+    "@astrojs/mdx": "^7.0.5",
+    "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.3",
-    "astro": "^6.4.4",
+    "astro": "^7.1.6",
     "pnpm": "^10.33.3",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-slug": "^6.0.0",
     "remark-toc": "^9.0.0",
-    "sharp": "^0.34.3"
+    "sharp": "^0.35.3"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.9",
+    "@astrojs/check": "^0.9.10",
     "@eslint/js": "^10.0.1",
     "@typescript-eslint/eslint-plugin": "^8.59.2",
     "@typescript-eslint/parser": "^8.59.2",
@@ -49,12 +49,13 @@
     "prettier": "^3.8.3",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.59.2",
-    "wrangler": "^4.83.0"
+    "wrangler": "^4.35.0"
   },
   "allowScripts": {
-    "esbuild@0.27.7": true,
-    "esbuild@0.27.3": true,
-    "sharp@0.34.5": true,
-    "workerd@1.20260603.1": true
+    "esbuild@0.28.1": true,
+    "esbuild@0.25.4": true,
+    "sharp@0.33.5": true,
+    "sharp@0.35.3": true,
+    "workerd@1.20260730.1": true
   }
 }

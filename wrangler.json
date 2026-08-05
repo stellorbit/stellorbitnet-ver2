@@ -1,5 +1,5 @@
 {
-  "name": "stellorbitnet-ver2",
+  "name": "stellorbitnet",
   "compatibility_date": "2026-08-05",
   "assets": {
     "directory": "./dist"

@@ -242,7 +242,12 @@ export const astroPosts: AstroPostMeta[] = [
 		headings: [
 		  { depth: 2, slug: "intro", text: "高機能LLMとの別れが近づく。" },
 		  { depth: 2, slug: "service", text: "あくまで「AIサービス単体」であるということ" },
-		  { depth: 2, slug: "service", text: "コスパ厨の最適解、「Google AI」プラン" }
+		  { depth: 2, slug: "service", text: "コスパ厨の最適解、「Google AI」プラン" },
+		  { depth: 2, slug: "first-imp", text: "初日レビュー：これは「アリ」だ。Googleのエコシステム恐るべし。" },
+		  { depth: 3, slug: "chat-memory", text: "チャット品質は「カスタム指示」や「メモリーのインポート」でガチガチに固める。" },
+		  { depth: 3, slug: "fineplay-angr", text: "早速素晴らしい働きをしてくれたのは「Antigravity IDE」" },
+		  { depth: 3, slug: "ytplite", text: "YouTube Premium Liteがついてくるのが地味に助かる。" },
+		  { depth: 2, slug: "summary", text: "まとめ：ただ、本番はここからです。" }
 		],
 	}
 ];

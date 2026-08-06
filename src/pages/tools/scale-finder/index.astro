@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ScaleFinder from '../../../components/music/ScaleFinder.astro';
+---
+
+<BaseLayout
+  title="音楽のスケール検索＆耳コピ逆引きツール"
+  description="耳コピを強力に支援する音楽スケール検索Webアプリ。拾った音を鍵盤やテキスト（C E G Bb / ドミソ等）に入力してスケールを逆引き特定。50種類以上のスケール、ギター指板表示、試聴音付き。"
+>
+  <div class="shell">
+    <section class="content-panel">
+      <div class="page-heading">
+        <p class="eyebrow">Web Application</p>
+        <h1>音楽のスケール検索＆耳コピ逆引きツール</h1>
+        <p class="page-lead">
+          楽曲の耳コピ（メロディ・コード分析）や作曲・DTMをサポートするブラウザ完結型Webツールです。<br />
+          拾った音からスケールを特定する「耳コピ逆引き」と、50種以上の音階を絞り込める「スケール検索」を搭載しています。
+        </p>
+      </div>
+
+      <ScaleFinder />
+    </section>
+  </div>
+</BaseLayout>

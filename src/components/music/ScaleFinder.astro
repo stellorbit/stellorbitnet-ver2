@@ -1,0 +1,1769 @@
+---
+---
+
+<div class="scale-app">
+  <!-- Mode Navigation Header -->
+  <div class="app-mode-tabs">
+    <button id="tab-reverse" class="mode-tab active" type="button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      耳コピ逆引き検索（音名・鍵盤指定）
+    </button>
+    <button id="tab-explore" class="mode-tab" type="button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+      スケール検索・参照（ドロップダウン）
+    </button>
+  </div>
+
+  <!-- SECTION 1: REVERSE LOOKUP MODE -->
+  <section id="panel-reverse" class="app-panel active">
+    <div class="card-box">
+      <div class="card-box__header">
+        <h2 class="card-box__title">
+          <span class="badge badge--accent">耳コピ支援</span> 拾った音からスケールを特定する
+        </h2>
+        <p class="card-box__desc">
+          耳で聴き取った音を「鍵盤をクリック」するか「テキスト欄に直接タイピング（例: C E G Bb / ド ミ ソ）」してください。適合するスケールを一覧表示します。
+        </p>
+      </div>
+
+      <div class="input-section">
+        <label for="reverse-text-input" class="form-label">
+          <strong>音名テキスト入力:</strong>
+          <span class="text-muted">(スペースやカンマ区切り。英語 `C D Eb` や和名 `ド ミ ソ` に対応)</span>
+        </label>
+        <div class="text-input-row">
+          <input
+            type="text"
+            id="reverse-text-input"
+            class="text-input"
+            placeholder="例: C E G Bb または ド ミ ソ シb"
+            autocomplete="off"
+          />
+          <button id="btn-clear-selection" class="btn btn--outline" type="button">選択解除</button>
+        </div>
+
+        <div class="quick-presets">
+          <span class="preset-label">クイック試行:</span>
+          <button class="btn-chip" data-preset="0,4,7" type="button">C メジャー (C E G)</button>
+          <button class="btn-chip" data-preset="0,3,7,10" type="button">Cm7 (C Eb G Bb)</button>
+          <button class="btn-chip" data-preset="0,4,7,10" type="button">C7 (C E G Bb)</button>
+          <button class="btn-chip" data-preset="9,0,2,4,7" type="button">Amペンタ (A C D E G)</button>
+        </div>
+      </div>
+
+      <!-- Piano Roll for Reverse Lookup -->
+      <div class="reverse-piano-container">
+        <p class="piano-title">鍵盤をクリックして音を選択 (トグル):</p>
+        <div class="piano-keyboard" id="reverse-piano">
+          <!-- JS generates octave 4 & 5 keys -->
+        </div>
+      </div>
+
+      <!-- Results Display -->
+      <div class="reverse-results-container">
+        <div class="results-header">
+          <h3>該当スケール候補 <span id="match-count-badge" class="count-tag">0件</span></h3>
+          <div class="accidental-toggle">
+            <span class="toggle-label">表記:</span>
+            <button id="btn-accidental-sharp" class="toggle-btn active" type="button">♯ (シャープ)</button>
+            <button id="btn-accidental-flat" class="toggle-btn" type="button">♭ (フラット)</button>
+          </div>
+        </div>
+
+        <div id="reverse-results-list" class="results-grid">
+          <div class="empty-state">
+            音を選択またはテキストに入力すると、一致するスケール候補がここに表示されます。
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: SCALE EXPLORER / SEARCH MODE -->
+  <section id="panel-explore" class="app-panel">
+    <div class="card-box">
+      <!-- Search & Controls Bar -->
+      <div class="explorer-controls">
+        <!-- Root Note Selector (Piano Roll Keyboard UI) -->
+        <div class="control-group">
+          <label class="form-label"><strong>ルート音 (主音) 選択 (鍵盤をクリック):</strong></label>
+          <div class="root-piano-container">
+            <div class="piano-keyboard piano-keyboard--root" id="root-buttons-container">
+              <!-- JS generates 1 octave piano keys -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Searchable Scale Dropdown -->
+        <div class="control-group control-group--flex">
+          <label for="scale-search-input" class="form-label"><strong>スケール検索・選択 (入力で絞り込み):</strong></label>
+          <div class="custom-dropdown" id="custom-scale-dropdown">
+            <div class="dropdown-trigger" id="dropdown-trigger">
+              <span id="selected-scale-display">C メジャー・スケール (長音階 / アイオニアン)</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <div class="dropdown-menu" id="dropdown-menu">
+              <div class="dropdown-search-box">
+                <input
+                  type="text"
+                  id="scale-search-input"
+                  placeholder="スケール名・タグで検索 (例: ドリアン, blues, 和風, 5音)..."
+                  autocomplete="off"
+                />
+              </div>
+              <div class="dropdown-options" id="dropdown-options-list">
+                <!-- JS renders options categorized -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scale Detailed Info Banner -->
+      <div class="scale-info-banner" id="scale-info-banner">
+        <div class="banner-main">
+          <span class="category-badge" id="scale-category-badge">基本スケール</span>
+          <h2 class="scale-title" id="scale-title-display">C Major Scale</h2>
+          <p class="scale-desc" id="scale-desc-display">ポピュラー音楽の基本となる明るく安定した基本スケール。</p>
+          <div class="scale-tags" id="scale-tags-display"></div>
+        </div>
+        <div class="banner-actions">
+          <button id="btn-play-scale" class="btn btn--primary btn--lg" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            スケールを再生
+          </button>
+          <div class="sound-settings">
+            <select id="synth-sound-select" class="select-input">
+              <option value="sine">温かいシンセ (Sine)</option>
+              <option value="triangle" selected>エレピ調 (Triangle)</option>
+              <option value="sawtooth">リードシンセ (Sawtooth)</option>
+              <option value="organ">オルガン風 (Organ)</option>
+            </select>
+            <div class="bpm-control">
+              <span>BPM:</span>
+              <input type="range" id="bpm-slider" min="60" max="220" value="120" />
+              <span id="bpm-val">120</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Piano Keyboard Visualizer -->
+      <div id="viz-piano-wrapper" class="viz-wrapper active">
+        <div class="piano-roll-container">
+          <h3 class="section-title">スケール構成音 (ピアノキーボード)</h3>
+          <div class="piano-keyboard piano-keyboard--large" id="explorer-piano">
+            <!-- JS renders 2 octaves -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Scale Degree & Formula Breakdown Table -->
+      <div class="formula-section">
+        <h3>構成音一覧</h3>
+        <div class="degree-chips-grid" id="degree-chips-container">
+          <!-- JS renders chips -->
+        </div>
+      </div>
+
+      <!-- Diatonic Chords Section -->
+      <div class="chords-section">
+        <div class="chords-section-header">
+          <div>
+            <h3>ダイアトニック・コード (Diatonic Chords)</h3>
+            <p class="section-lead">このスケールの上に成り立つコードの一覧です。クリックで試聴できます。</p>
+          </div>
+          <div class="chord-controls-wrap">
+            <div class="chord-type-toggle">
+              <button id="btn-chord-triad" class="toggle-btn active" type="button">3和音 (トライアード)</button>
+              <button id="btn-chord-seventh" class="toggle-btn" type="button">4和音 (セブンス)</button>
+            </div>
+            <button id="btn-export-midi" class="btn btn--sm btn--primary" type="button">
+              🎹 MIDI一括ダウンロード (.mid)
+            </button>
+          </div>
+        </div>
+        <div class="chords-grid" id="diatonic-chords-container">
+          <!-- JS renders chord cards -->
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  import {
+    SCALES,
+    NOTES_SHARP,
+    NOTES_FLAT,
+    CATEGORY_LABELS,
+    parseNoteInput,
+    getNoteName,
+    getScalePitches,
+    findMatchingScales,
+    getDiatonicChords,
+    type ScaleDef
+  } from '../../lib/music/scaleData';
+  import { generateDiatonicMidi, downloadMidiFile } from '../../lib/music/midiExporter';
+
+  // --- STATE ---
+  let activeTab: 'reverse' | 'explore' = 'reverse';
+  let useFlats = false;
+  let selectedReversePitches: Set<number> = new Set();
+  
+  let currentRootNote = 0; // C
+  let currentScaleId = 'major';
+  let chordType: 'triad' | 'seventh' = 'triad';
+
+  // Web Audio Synth
+  let audioCtx: AudioContext | null = null;
+  let isPlayingScale = false;
+
+  function getAudioContext(): AudioContext {
+    if (!audioCtx) {
+      const AudioCtxClass = window.AudioContext || (window as any).webkitAudioContext;
+      audioCtx = new AudioCtxClass();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+    return audioCtx;
+  }
+
+  // --- DOM ELEMENTS ---
+  const tabReverse = document.getElementById('tab-reverse')!;
+  const tabExplore = document.getElementById('tab-explore')!;
+  const panelReverse = document.getElementById('panel-reverse')!;
+  const panelExplore = document.getElementById('panel-explore')!;
+
+  const reverseTextInput = document.getElementById('reverse-text-input') as HTMLInputElement;
+  const btnClearSelection = document.getElementById('btn-clear-selection')!;
+  const reversePiano = document.getElementById('reverse-piano')!;
+  const reverseResultsList = document.getElementById('reverse-results-list')!;
+  const matchCountBadge = document.getElementById('match-count-badge')!;
+
+  const btnAccidentalSharp = document.getElementById('btn-accidental-sharp')!;
+  const btnAccidentalFlat = document.getElementById('btn-accidental-flat')!;
+
+  // Explorer DOMs
+  const rootButtonsContainer = document.getElementById('root-buttons-container')!;
+  const customScaleDropdown = document.getElementById('custom-scale-dropdown')!;
+  const dropdownTrigger = document.getElementById('dropdown-trigger')!;
+  const dropdownMenu = document.getElementById('dropdown-menu')!;
+  const selectedScaleDisplay = document.getElementById('selected-scale-display')!;
+  const scaleSearchInput = document.getElementById('scale-search-input') as HTMLInputElement;
+  const dropdownOptionsList = document.getElementById('dropdown-options-list')!;
+
+  const scaleCategoryBadge = document.getElementById('scale-category-badge')!;
+  const scaleTitleDisplay = document.getElementById('scale-title-display')!;
+  const scaleDescDisplay = document.getElementById('scale-desc-display')!;
+  const scaleTagsDisplay = document.getElementById('scale-tags-display')!;
+
+  const btnPlayScale = document.getElementById('btn-play-scale') as HTMLButtonElement;
+  const synthSoundSelect = document.getElementById('synth-sound-select') as HTMLSelectElement;
+  const bpmSlider = document.getElementById('bpm-slider') as HTMLInputElement;
+  const bpmVal = document.getElementById('bpm-val')!;
+
+  const explorerPiano = document.getElementById('explorer-piano')!;
+  const degreeChipsContainer = document.getElementById('degree-chips-container')!;
+  const diatonicChordsContainer = document.getElementById('diatonic-chords-container')!;
+
+  const btnChordTriad = document.getElementById('btn-chord-triad')!;
+  const btnChordSeventh = document.getElementById('btn-chord-seventh')!;
+  const btnExportMidi = document.getElementById('btn-export-midi')!;
+
+  // --- INITIALIZATION ---
+  function init() {
+    setupTabSwitching();
+    setupReverseMode();
+    setupExplorerMode();
+    setupAudioSynth();
+    renderRootButtons();
+    renderDropdownOptions();
+    updateExplorerUI();
+  }
+
+  // Tab Navigation
+  function setupTabSwitching() {
+    tabReverse.addEventListener('click', () => switchTab('reverse'));
+    tabExplore.addEventListener('click', () => switchTab('explore'));
+  }
+
+  function switchTab(tab: 'reverse' | 'explore') {
+    activeTab = tab;
+    if (tab === 'reverse') {
+      tabReverse.classList.add('active');
+      tabExplore.classList.remove('active');
+      panelReverse.classList.add('active');
+      panelExplore.classList.remove('active');
+    } else {
+      tabExplore.classList.add('active');
+      tabReverse.classList.remove('active');
+      panelExplore.classList.add('active');
+      panelReverse.classList.remove('active');
+    }
+  }
+
+  // --- REVERSE LOOKUP MODE IMPLEMENTATION ---
+  function setupReverseMode() {
+    // Build 2-octave piano for reverse lookup
+    renderReversePiano();
+
+    // Text Input Listener
+    reverseTextInput.addEventListener('input', () => {
+      const val = reverseTextInput.value;
+      const pitches = parseNoteInput(val);
+      selectedReversePitches = new Set(pitches);
+      updateReversePianoHighlight();
+      renderReverseResults();
+    });
+
+    // Clear Button
+    btnClearSelection.addEventListener('click', () => {
+      selectedReversePitches.clear();
+      reverseTextInput.value = '';
+      updateReversePianoHighlight();
+      renderReverseResults();
+    });
+
+    // Accidental Toggles
+    btnAccidentalSharp.addEventListener('click', () => {
+      useFlats = false;
+      btnAccidentalSharp.classList.add('active');
+      btnAccidentalFlat.classList.remove('active');
+      renderRootButtons();
+      renderDropdownOptions();
+      updateExplorerUI();
+      renderReverseResults();
+    });
+
+    btnAccidentalFlat.addEventListener('click', () => {
+      useFlats = true;
+      btnAccidentalFlat.classList.add('active');
+      btnAccidentalSharp.classList.remove('active');
+      renderRootButtons();
+      renderDropdownOptions();
+      updateExplorerUI();
+      renderReverseResults();
+    });
+
+    // Preset Buttons
+    document.querySelectorAll('.btn-chip').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const target = e.currentTarget as HTMLButtonElement;
+        const preset = target.dataset.preset;
+        if (preset) {
+          const pitches = preset.split(',').map(Number);
+          selectedReversePitches = new Set(pitches);
+          syncReverseTextFromSet();
+          updateReversePianoHighlight();
+          renderReverseResults();
+        }
+      });
+    });
+  }
+
+  function renderReversePiano() {
+    reversePiano.innerHTML = '';
+
+    const pianoTrack = document.createElement('div');
+    pianoTrack.className = 'real-piano-track real-piano-track--1octave';
+
+    const pitchMapping = [
+      { pitch: 0, isBlack: false, whiteIdx: 0 },
+      { pitch: 1, isBlack: true,  blackIdx: 1 },
+      { pitch: 2, isBlack: false, whiteIdx: 1 },
+      { pitch: 3, isBlack: true,  blackIdx: 2 },
+      { pitch: 4, isBlack: false, whiteIdx: 2 },
+      { pitch: 5, isBlack: false, whiteIdx: 3 },
+      { pitch: 6, isBlack: true,  blackIdx: 4 },
+      { pitch: 7, isBlack: false, whiteIdx: 4 },
+      { pitch: 8, isBlack: true,  blackIdx: 5 },
+      { pitch: 9, isBlack: false, whiteIdx: 5 },
+      { pitch: 10, isBlack: true, blackIdx: 6 },
+      { pitch: 11, isBlack: false, whiteIdx: 6 }
+    ];
+
+    // White keys first
+    pitchMapping.filter(k => !k.isBlack).forEach(k => {
+      const noteName = getNoteName(k.pitch, useFlats);
+      const isSelected = selectedReversePitches.has(k.pitch);
+
+      const keyEl = document.createElement('button');
+      keyEl.type = 'button';
+      keyEl.className = `piano-key-real white-key ${isSelected ? 'selected' : ''}`;
+      keyEl.dataset.pitch = String(k.pitch);
+
+      const label = document.createElement('span');
+      label.className = 'key-label';
+      label.textContent = noteName;
+      keyEl.appendChild(label);
+
+      keyEl.addEventListener('click', () => {
+        playNoteSound(k.pitch, 4);
+        if (selectedReversePitches.has(k.pitch)) {
+          selectedReversePitches.delete(k.pitch);
+        } else {
+          selectedReversePitches.add(k.pitch);
+        }
+        syncReverseTextFromSet();
+        updateReversePianoHighlight();
+        renderReverseResults();
+      });
+
+      pianoTrack.appendChild(keyEl);
+    });
+
+    // Black keys second
+    pitchMapping.filter(k => k.isBlack).forEach(k => {
+      const noteName = getNoteName(k.pitch, useFlats);
+      const isSelected = selectedReversePitches.has(k.pitch);
+
+      const keyEl = document.createElement('button');
+      keyEl.type = 'button';
+      keyEl.className = `piano-key-real black-key ${isSelected ? 'selected' : ''}`;
+      keyEl.dataset.pitch = String(k.pitch);
+      keyEl.style.left = `calc(44px * ${k.blackIdx} - 14px)`;
+
+      const label = document.createElement('span');
+      label.className = 'key-label';
+      label.textContent = noteName;
+      keyEl.appendChild(label);
+
+      keyEl.addEventListener('click', () => {
+        playNoteSound(k.pitch, 4);
+        if (selectedReversePitches.has(k.pitch)) {
+          selectedReversePitches.delete(k.pitch);
+        } else {
+          selectedReversePitches.add(k.pitch);
+        }
+        syncReverseTextFromSet();
+        updateReversePianoHighlight();
+        renderReverseResults();
+      });
+
+      pianoTrack.appendChild(keyEl);
+    });
+
+    reversePiano.appendChild(pianoTrack);
+  }
+
+  function updateReversePianoHighlight() {
+    const keys = reversePiano.querySelectorAll('.piano-key-real');
+    keys.forEach((keyEl) => {
+      const pitch = Number((keyEl as HTMLElement).dataset.pitch);
+      if (selectedReversePitches.has(pitch)) {
+        keyEl.classList.add('selected');
+      } else {
+        keyEl.classList.remove('selected');
+      }
+    });
+  }
+
+  function syncReverseTextFromSet() {
+    const sorted = Array.from(selectedReversePitches).sort((a, b) => a - b);
+    const names = sorted.map(p => getNoteName(p, useFlats));
+    reverseTextInput.value = names.join(' ');
+  }
+
+  function renderReverseResults() {
+    const pitches = Array.from(selectedReversePitches);
+    if (pitches.length === 0) {
+      matchCountBadge.textContent = '0件';
+      reverseResultsList.innerHTML = `
+        <div class="empty-state">
+          鍵盤をクリックするかテキスト欄に音名を入力してください。音を含むスケールを一覧表示します。
+        </div>
+      `;
+      return;
+    }
+
+    const matches = findMatchingScales(pitches, useFlats);
+    matchCountBadge.textContent = `${matches.length}件`;
+
+    if (matches.length === 0) {
+      reverseResultsList.innerHTML = `<div class="empty-state">一致するスケールが見つかりませんでした。</div>`;
+      return;
+    }
+
+    // Top 24 matching results
+    const topMatches = matches.slice(0, 24);
+    reverseResultsList.innerHTML = topMatches.map(m => {
+      const is100 = m.matchPercentage === 100;
+      const matchedNoteNames = pitches
+        .filter(p => !m.missingNotesInScale.includes(p))
+        .map(p => getNoteName(p, useFlats));
+      
+      const missingNoteNames = m.missingNotesInScale.map(p => getNoteName(p, useFlats));
+
+      return `
+        <div class="scale-result-card ${is100 ? 'scale-result-card--perfect' : ''}" data-root="${m.rootNote}" data-scale="${m.scale.id}">
+          <div class="card-top">
+            <span class="match-badge ${is100 ? 'match-badge--100' : ''}">${m.matchPercentage}% 一致</span>
+            <span class="cat-tag">${CATEGORY_LABELS[m.scale.category]}</span>
+          </div>
+          <h4 class="scale-result-title">${m.rootName} ${m.scale.nameJa}</h4>
+          <p class="scale-result-sub">${m.rootName} ${m.scale.nameEn}</p>
+          
+          <div class="notes-breakdown">
+            <div class="note-row">
+              <span class="row-label">含まれる選択音:</span>
+              <div class="tags-wrap">
+                ${matchedNoteNames.map(n => `<span class="note-chip note-chip--match">${n}</span>`).join('')}
+              </div>
+            </div>
+            ${missingNoteNames.length > 0 ? `
+              <div class="note-row">
+                <span class="row-label">含まれない音:</span>
+                <div class="tags-wrap">
+                  ${missingNoteNames.map(n => `<span class="note-chip note-chip--missing">${n}</span>`).join('')}
+                </div>
+              </div>
+            ` : ''}
+          </div>
+
+          <button class="btn btn--outline btn--sm btn-inspect-scale" type="button">
+            このスケールを詳細表示 ➔
+          </button>
+        </div>
+      `;
+    }).join('');
+
+    // Attach click events to inspect scale
+    reverseResultsList.querySelectorAll('.scale-result-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        const target = e.currentTarget as HTMLElement;
+        const root = Number(target.dataset.root);
+        const scaleId = target.dataset.scale;
+        if (scaleId) {
+          currentRootNote = root;
+          currentScaleId = scaleId;
+          updateExplorerUI();
+          switchTab('explore');
+        }
+      });
+    });
+  }
+
+  // --- EXPLORER MODE IMPLEMENTATION ---
+  function setupExplorerMode() {
+    // Custom Dropdown toggle
+    dropdownTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      customScaleDropdown.classList.toggle('open');
+      if (customScaleDropdown.classList.contains('open')) {
+        scaleSearchInput.focus();
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!customScaleDropdown.contains(e.target as Node)) {
+        customScaleDropdown.classList.remove('open');
+      }
+    });
+
+    scaleSearchInput.addEventListener('input', () => {
+      renderDropdownOptions();
+    });
+
+    bpmSlider.addEventListener('input', () => {
+      bpmVal.textContent = bpmSlider.value;
+    });
+
+    btnPlayScale.addEventListener('click', () => {
+      if (isPlayingScale) return;
+      playScaleSequence();
+    });
+
+    btnChordTriad.addEventListener('click', () => {
+      chordType = 'triad';
+      btnChordTriad.classList.add('active');
+      btnChordSeventh.classList.remove('active');
+      renderDiatonicChords();
+    });
+
+    btnChordSeventh.addEventListener('click', () => {
+      chordType = 'seventh';
+      btnChordSeventh.classList.add('active');
+      btnChordTriad.classList.remove('active');
+      renderDiatonicChords();
+    });
+
+    btnExportMidi.addEventListener('click', () => {
+      const scale = SCALES.find(s => s.id === currentScaleId) || SCALES[0];
+      const rootName = getNoteName(currentRootNote, useFlats);
+      const chords = getDiatonicChords(scale, currentRootNote, useFlats);
+      const bpm = Number(bpmSlider.value);
+
+      const midiBytes = generateDiatonicMidi(chords, chordType, bpm);
+      const shortScale = scale.id.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
+      const filename = `${rootName}_${shortScale}_${chordType === 'triad' ? '3Triad' : '4Seventh'}.mid`;
+      downloadMidiFile(midiBytes, filename);
+    });
+  }
+
+  function renderRootButtons() {
+    rootButtonsContainer.innerHTML = '';
+
+    const pianoTrack = document.createElement('div');
+    pianoTrack.className = 'real-piano-track real-piano-track--1octave';
+
+    const pitchMapping = [
+      { pitch: 0, isBlack: false, whiteIdx: 0 },
+      { pitch: 1, isBlack: true,  blackIdx: 1 },
+      { pitch: 2, isBlack: false, whiteIdx: 1 },
+      { pitch: 3, isBlack: true,  blackIdx: 2 },
+      { pitch: 4, isBlack: false, whiteIdx: 2 },
+      { pitch: 5, isBlack: false, whiteIdx: 3 },
+      { pitch: 6, isBlack: true,  blackIdx: 4 },
+      { pitch: 7, isBlack: false, whiteIdx: 4 },
+      { pitch: 8, isBlack: true,  blackIdx: 5 },
+      { pitch: 9, isBlack: false, whiteIdx: 5 },
+      { pitch: 10, isBlack: true, blackIdx: 6 },
+      { pitch: 11, isBlack: false, whiteIdx: 6 }
+    ];
+
+    // White keys first
+    pitchMapping.filter(k => !k.isBlack).forEach(k => {
+      const noteName = getNoteName(k.pitch, useFlats);
+      const isSelected = k.pitch === currentRootNote;
+
+      const keyEl = document.createElement('button');
+      keyEl.type = 'button';
+      keyEl.className = `piano-key-real white-key ${isSelected ? 'is-root active' : ''}`;
+      keyEl.setAttribute('aria-label', `Root note ${noteName}`);
+
+      const label = document.createElement('span');
+      label.className = 'key-label';
+      label.textContent = noteName;
+      keyEl.appendChild(label);
+
+      keyEl.addEventListener('click', () => {
+        playNoteSound(k.pitch, 4);
+        currentRootNote = k.pitch;
+        renderRootButtons();
+        updateExplorerUI();
+      });
+
+      pianoTrack.appendChild(keyEl);
+    });
+
+    // Black keys second
+    pitchMapping.filter(k => k.isBlack).forEach(k => {
+      const noteName = getNoteName(k.pitch, useFlats);
+      const isSelected = k.pitch === currentRootNote;
+
+      const keyEl = document.createElement('button');
+      keyEl.type = 'button';
+      keyEl.className = `piano-key-real black-key ${isSelected ? 'is-root active' : ''}`;
+      keyEl.style.left = `calc(44px * ${k.blackIdx} - 14px)`;
+      keyEl.setAttribute('aria-label', `Root note ${noteName}`);
+
+      const label = document.createElement('span');
+      label.className = 'key-label';
+      label.textContent = noteName;
+      keyEl.appendChild(label);
+
+      keyEl.addEventListener('click', () => {
+        playNoteSound(k.pitch, 4);
+        currentRootNote = k.pitch;
+        renderRootButtons();
+        updateExplorerUI();
+      });
+
+      pianoTrack.appendChild(keyEl);
+    });
+
+    rootButtonsContainer.appendChild(pianoTrack);
+  }
+
+  function renderDropdownOptions() {
+    const query = scaleSearchInput.value.trim().toLowerCase();
+    dropdownOptionsList.innerHTML = '';
+
+    const categories: Array<ScaleDef['category']> = ['diatonic', 'modes', 'pentatonic-blues', 'bebop-symmetric', 'exotic-world'];
+
+    categories.forEach(cat => {
+      const catScales = SCALES.filter(s => s.category === cat && (
+        !query ||
+        s.nameJa.toLowerCase().includes(query) ||
+        s.nameEn.toLowerCase().includes(query) ||
+        s.tags.some(t => t.toLowerCase().includes(query))
+      ));
+
+      if (catScales.length > 0) {
+        const catHeader = document.createElement('div');
+        catHeader.className = 'dropdown-cat-title';
+        catHeader.textContent = CATEGORY_LABELS[cat];
+        dropdownOptionsList.appendChild(catHeader);
+
+        catScales.forEach(s => {
+          const item = document.createElement('div');
+          item.className = `dropdown-option ${s.id === currentScaleId ? 'selected' : ''}`;
+          item.innerHTML = `
+            <span class="option-title">${s.nameJa}</span>
+            <span class="option-sub">${s.nameEn}</span>
+          `;
+          item.addEventListener('click', () => {
+            currentScaleId = s.id;
+            customScaleDropdown.classList.remove('open');
+            renderDropdownOptions();
+            updateExplorerUI();
+          });
+          dropdownOptionsList.appendChild(item);
+        });
+      }
+    });
+
+    if (dropdownOptionsList.children.length === 0) {
+      dropdownOptionsList.innerHTML = `<div class="dropdown-no-result">検索結果がありません</div>`;
+    }
+  }
+
+  function updateExplorerUI() {
+    const scale = SCALES.find(s => s.id === currentScaleId) || SCALES[0];
+    const rootName = getNoteName(currentRootNote, useFlats);
+
+    // Banner
+    selectedScaleDisplay.textContent = `${rootName} ${scale.nameJa}`;
+    scaleCategoryBadge.textContent = CATEGORY_LABELS[scale.category];
+    scaleTitleDisplay.textContent = `${rootName} ${scale.nameJa}`;
+    scaleDescDisplay.textContent = scale.description;
+    scaleTagsDisplay.innerHTML = scale.tags.map(t => `<span class="tag-pill">#${t}</span>`).join('');
+
+    renderExplorerPiano();
+    renderDegreeTable();
+    renderDiatonicChords();
+  }
+
+  function renderExplorerPiano() {
+    explorerPiano.innerHTML = '';
+
+    const scale = SCALES.find(s => s.id === currentScaleId) || SCALES[0];
+    const scalePitches = getScalePitches(scale, currentRootNote);
+    const pitchSet = new Set(scalePitches);
+
+    const pianoTrack = document.createElement('div');
+    pianoTrack.className = 'real-piano-track real-piano-track--2octaves';
+
+    const pitchMapping = [
+      { pitchInOct: 0, isBlack: false, whiteIdx: 0 },
+      { pitchInOct: 1, isBlack: true,  blackIdx: 1 },
+      { pitchInOct: 2, isBlack: false, whiteIdx: 1 },
+      { pitchInOct: 3, isBlack: true,  blackIdx: 2 },
+      { pitchInOct: 4, isBlack: false, whiteIdx: 2 },
+      { pitchInOct: 5, isBlack: false, whiteIdx: 3 },
+      { pitchInOct: 6, isBlack: true,  blackIdx: 4 },
+      { pitchInOct: 7, isBlack: false, whiteIdx: 4 },
+      { pitchInOct: 8, isBlack: true,  blackIdx: 5 },
+      { pitchInOct: 9, isBlack: false, whiteIdx: 5 },
+      { pitchInOct: 10, isBlack: true, blackIdx: 6 },
+      { pitchInOct: 11, isBlack: false, whiteIdx: 6 }
+    ];
+
+    for (let oct = 0; oct < 2; oct++) {
+      // White keys
+      pitchMapping.filter(k => !k.isBlack).forEach(k => {
+        const pitchClass = k.pitchInOct;
+        const noteName = getNoteName(pitchClass, useFlats);
+        const isInScale = pitchSet.has(pitchClass);
+        const isRoot = pitchClass === currentRootNote;
+
+        const keyEl = document.createElement('button');
+        keyEl.type = 'button';
+        keyEl.className = `piano-key-real white-key ${isInScale ? 'in-scale' : ''} ${isRoot ? 'is-root' : ''}`;
+
+        const label = document.createElement('span');
+        label.className = 'key-label';
+        label.textContent = noteName;
+        keyEl.appendChild(label);
+
+        keyEl.addEventListener('click', () => {
+          playNoteSound(pitchClass, oct + 4);
+        });
+
+        pianoTrack.appendChild(keyEl);
+      });
+
+      // Black keys
+      pitchMapping.filter(k => k.isBlack).forEach(k => {
+        const pitchClass = k.pitchInOct;
+        const noteName = getNoteName(pitchClass, useFlats);
+        const globalBlackIdx = oct * 7 + k.blackIdx!;
+        const isInScale = pitchSet.has(pitchClass);
+        const isRoot = pitchClass === currentRootNote;
+
+        const keyEl = document.createElement('button');
+        keyEl.type = 'button';
+        keyEl.className = `piano-key-real black-key ${isInScale ? 'in-scale' : ''} ${isRoot ? 'is-root' : ''}`;
+        keyEl.style.left = `calc(44px * ${globalBlackIdx} - 14px)`;
+
+        const label = document.createElement('span');
+        label.className = 'key-label';
+        label.textContent = noteName;
+        keyEl.appendChild(label);
+
+        keyEl.addEventListener('click', () => {
+          playNoteSound(pitchClass, oct + 4);
+        });
+
+        pianoTrack.appendChild(keyEl);
+      });
+    }
+
+    explorerPiano.appendChild(pianoTrack);
+  }
+
+  function renderDegreeTable() {
+    degreeChipsContainer.innerHTML = '';
+    const scale = SCALES.find(s => s.id === currentScaleId) || SCALES[0];
+    const scalePitches = getScalePitches(scale, currentRootNote);
+
+    scalePitches.forEach((p) => {
+      const name = getNoteName(p, useFlats);
+      const isRoot = p === currentRootNote;
+
+      const chip = document.createElement('div');
+      chip.className = `degree-chip ${isRoot ? 'is-root' : ''}`;
+      chip.innerHTML = `
+        <span class="note-val">${name}</span>
+        ${isRoot ? '<span class="root-badge">Root</span>' : ''}
+      `;
+      degreeChipsContainer.appendChild(chip);
+    });
+  }
+
+  function renderDiatonicChords() {
+    diatonicChordsContainer.innerHTML = '';
+    const scale = SCALES.find(s => s.id === currentScaleId) || SCALES[0];
+    const chords = getDiatonicChords(scale, currentRootNote, useFlats);
+
+    chords.forEach(c => {
+      const card = document.createElement('div');
+      card.className = 'chord-card';
+
+      const mainName = chordType === 'triad' ? c.triadName : c.seventhName;
+      const subName = chordType === 'triad' ? `セブンス: ${c.seventhName}` : `トライアード: ${c.triadName}`;
+      const notesToPlay = chordType === 'triad' ? c.triadNotes : c.seventhNotes;
+
+      card.innerHTML = `
+        <div class="chord-degree">${c.degreeRoman} (${chordType === 'triad' ? '3和音' : '4和音'})</div>
+        <div class="chord-names">
+          <strong class="triad-name">${mainName}</strong>
+          <span class="seventh-name">${subName}</span>
+        </div>
+        <div class="chord-card-actions">
+          <button class="btn btn--sm btn--outline btn-play-chord" type="button">
+            ▶ 試聴
+          </button>
+          <button class="btn btn--sm btn--outline btn-dl-chord-midi" type="button" title="このコードのMIDIを保存">
+            💾 MIDI
+          </button>
+        </div>
+      `;
+
+      card.querySelector('.btn-play-chord')!.addEventListener('click', () => {
+        playChordSound(notesToPlay);
+      });
+
+      card.querySelector('.btn-dl-chord-midi')!.addEventListener('click', () => {
+        const bpm = Number(bpmSlider.value);
+        const singleMidi = generateDiatonicMidi([c], chordType, bpm);
+        const cleanName = mainName.replace(/♭/g, 'b').replace(/♯/g, '#');
+        const filename = `${c.rootNoteName}_${c.degreeRoman}_${cleanName}.mid`;
+        downloadMidiFile(singleMidi, filename);
+      });
+
+      diatonicChordsContainer.appendChild(card);
+    });
+  }
+
+  // --- AUDIO SYNTH PLAYBACK ENGINE ---
+  function setupAudioSynth() {
+    // Resumes AudioContext on user interaction
+    document.addEventListener('click', () => {
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }, { once: true });
+  }
+
+  function playNoteSound(pitchClass: number, octave = 4) {
+    const ctx = getAudioContext();
+    const type = synthSoundSelect.value as OscillatorType | 'organ';
+    
+    // Frequency formula: A4 = 440Hz -> pitchClass 9, Octave 4
+    const midi = (octave + 1) * 12 + pitchClass;
+    const freq = 440 * Math.pow(2, (midi - 69) / 12);
+
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    if (type === 'organ') {
+      osc.type = 'sine';
+      // Harmonics for organ feel
+      const osc2 = ctx.createOscillator();
+      osc2.type = 'triangle';
+      osc2.frequency.setValueAtTime(freq * 2, now);
+      osc2.connect(gain);
+      osc2.start(now);
+      osc2.stop(now + 0.4);
+    } else {
+      osc.type = type as OscillatorType;
+    }
+
+    osc.frequency.setValueAtTime(freq, now);
+
+    // Envelope
+    gain.gain.setValueAtTime(0.01, now);
+    gain.gain.exponentialRampToValueAtTime(0.25, now + 0.03);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.5);
+  }
+
+  function playChordSound(pitchClasses: number[]) {
+    if (pitchClasses.length === 0) return;
+    const rootPitch = pitchClasses[0]; // Chord root is the 1st element
+
+    pitchClasses.forEach((p) => {
+      // Calculate semitone offset above chord root (0 to 11 semitones)
+      const offset = (p - rootPitch + 12) % 12;
+      // Absolute semitone index starting from Octave 4 Root
+      const absoluteSemitones = 4 * 12 + rootPitch + offset;
+      const octave = Math.floor(absoluteSemitones / 12);
+      const pitchClass = absoluteSemitones % 12;
+
+      playNoteSound(pitchClass, octave);
+    });
+  }
+
+  function playScaleSequence() {
+    isPlayingScale = true;
+    btnPlayScale.disabled = true;
+    const origText = btnPlayScale.innerHTML;
+    btnPlayScale.innerHTML = `再生中...`;
+
+    const scale = SCALES.find(s => s.id === currentScaleId) || SCALES[0];
+    const pitches = getScalePitches(scale, currentRootNote);
+    
+    // Sequence: Scale up + Root of next octave, then down
+    const seq = [...pitches, currentRootNote];
+    const bpm = Number(bpmSlider.value);
+    const intervalMs = (60 / bpm) * 1000 * 0.5; // 8th notes
+
+    seq.forEach((p, idx) => {
+      setTimeout(() => {
+        const octave = (idx === seq.length - 1) ? 5 : 4;
+        playNoteSound(p, octave);
+      }, idx * intervalMs);
+    });
+
+    setTimeout(() => {
+      isPlayingScale = false;
+      btnPlayScale.disabled = false;
+      btnPlayScale.innerHTML = origText;
+    }, seq.length * intervalMs + 200);
+  }
+
+  // Run on load
+  init();
+</script>
+
+<style>
+  .scale-app {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    color: var(--ink);
+  }
+
+  /* Mode Tabs */
+  .app-mode-tabs {
+    display: flex;
+    gap: 0.75rem;
+    border-bottom: 2px solid var(--line);
+    padding-bottom: 0.5rem;
+  }
+  .mode-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border: none;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--ink-soft);
+    font-size: 1.02rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .mode-tab:hover {
+    background: rgba(176, 106, 67, 0.08);
+    color: var(--ink-strong);
+  }
+  .mode-tab.active {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(176, 106, 67, 0.28);
+  }
+
+  /* Panels */
+  .app-panel {
+    display: none;
+  }
+  .app-panel.active {
+    display: block;
+  }
+
+  .card-box {
+    background: rgba(255, 253, 249, 0.92);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: var(--shadow-soft);
+  }
+  .card-box__header {
+    margin-bottom: 1.5rem;
+  }
+  .card-box__title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.4rem;
+    margin: 0 0 0.5rem;
+  }
+  .card-box__desc {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+
+  /* Badge */
+  .badge {
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+  .badge--accent {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  /* Reverse Input Section */
+  .input-section {
+    background: rgba(252, 248, 242, 0.6);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+  .form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.92rem;
+  }
+  .text-muted {
+    color: var(--muted);
+    font-size: 0.82rem;
+  }
+  .text-input-row {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+  .text-input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    font-size: 1.05rem;
+    background: #fff;
+    color: var(--ink-strong);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.03);
+  }
+  .text-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(176, 106, 67, 0.18);
+  }
+
+  .quick-presets {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .preset-label {
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-weight: 700;
+  }
+  .btn-chip {
+    padding: 0.3rem 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: #fff;
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn-chip:hover {
+    border-color: var(--accent);
+    color: var(--accent-deep);
+    background: rgba(176, 106, 67, 0.05);
+  }
+
+  /* Piano Roll Styles */
+  /* Real Piano Keyboard Track & Geometry (Dynamic JS elements need :global in Astro) */
+  :global(.real-piano-track) {
+    position: relative;
+    display: flex;
+    user-select: none;
+    padding: 0.25rem 0 0.5rem;
+    overflow-x: auto;
+  }
+  :global(.real-piano-track--1octave) {
+    width: 308px;
+  }
+  :global(.real-piano-track--2octaves) {
+    width: 616px;
+  }
+
+  :global(.piano-key-real) {
+    position: relative;
+    cursor: pointer;
+    box-sizing: border-box;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 0.5rem;
+    font-weight: 700;
+    transition: transform 0.08s ease, background 0.15s ease, box-shadow 0.15s ease;
+  }
+  :global(.piano-key-real:active) {
+    transform: translateY(2px);
+  }
+
+  :global(.piano-key-real.white-key) {
+    width: 44px;
+    height: 130px;
+    background: linear-gradient(180deg, #ffffff 0%, #f2eae0 100%);
+    border: 1px solid rgba(70, 50, 35, 0.3);
+    border-radius: 0 0 7px 7px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08), inset 0 -3px 5px rgba(0, 0, 0, 0.05);
+    z-index: 1;
+    color: var(--ink-strong);
+    font-size: 0.85rem;
+  }
+  :global(.piano-key-real.white-key:hover) {
+    background: linear-gradient(180deg, #ffffff 0%, #e6dcd0 100%);
+  }
+
+  :global(.piano-key-real.black-key) {
+    position: absolute;
+    top: 0;
+    width: 28px;
+    height: 78px;
+    background: linear-gradient(180deg, #3d3128 0%, #15100c 100%);
+    border: 1px solid #000;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.4);
+    z-index: 10;
+    color: #ffffff;
+    font-size: 0.72rem;
+  }
+  :global(.piano-key-real.black-key:hover) {
+    background: linear-gradient(180deg, #524237 0%, #241c16 100%);
+  }
+
+  /* Active & Highlight States */
+  :global(.piano-key-real.active),
+  :global(.piano-key-real.selected) {
+    background: var(--accent) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(176, 106, 67, 0.5), inset 0 0 8px rgba(0,0,0,0.2) !important;
+  }
+  :global(.piano-key-real.in-scale.white-key) {
+    background: linear-gradient(180deg, #f7e8dc 0%, #e6c8b3 100%) !important;
+    color: var(--accent-deep) !important;
+    border-color: var(--accent) !important;
+  }
+  :global(.piano-key-real.in-scale.black-key) {
+    background: linear-gradient(180deg, #b86b43 0%, #7d4023 100%) !important;
+    color: #ffffff !important;
+  }
+  :global(.piano-key-real.is-root) {
+    background: var(--accent) !important;
+    color: #ffffff !important;
+    border-color: var(--accent-deep) !important;
+    box-shadow: 0 0 12px rgba(176, 106, 67, 0.6) !important;
+  }
+
+  :global(.key-label) {
+    font-size: 0.78rem;
+    font-weight: 700;
+    pointer-events: none;
+  }
+
+  /* Results Grid */
+  .results-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  .results-header h3 {
+    margin: 0;
+    font-size: 1.15rem;
+  }
+  .count-tag {
+    font-size: 0.85rem;
+    background: rgba(176, 106, 67, 0.12);
+    color: var(--accent-deep);
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+  }
+  .accidental-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .toggle-btn {
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--line);
+    background: #fff;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    cursor: pointer;
+  }
+  .toggle-btn.active {
+    background: var(--ink-strong);
+    color: #fff;
+    border-color: var(--ink-strong);
+  }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+  .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--muted);
+    background: rgba(252, 248, 242, 0.4);
+    border: 1px dashed var(--line);
+    border-radius: 16px;
+  }
+
+  .scale-result-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .scale-result-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+    border-color: var(--accent);
+  }
+  .scale-result-card--perfect {
+    border-left: 5px solid var(--accent);
+    background: linear-gradient(135deg, #ffffff 0%, #fffbf7 100%);
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  .match-badge {
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    background: rgba(94, 74, 58, 0.1);
+    color: var(--ink-soft);
+  }
+  .match-badge--100 {
+    background: #2e7d32;
+    color: #fff;
+  }
+  .cat-tag {
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+  .scale-result-title {
+    margin: 0;
+    font-size: 1.15rem;
+    color: var(--ink-strong);
+  }
+  .scale-result-sub {
+    margin: 0 0 0.75rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  .notes-breakdown {
+    margin-bottom: 1rem;
+    font-size: 0.82rem;
+  }
+  .note-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.35rem;
+  }
+  .row-label {
+    color: var(--muted);
+    font-size: 0.78rem;
+    min-width: 85px;
+  }
+  .tags-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+  .note-chip {
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.78rem;
+  }
+  .note-chip--match {
+    background: rgba(46, 125, 50, 0.12);
+    color: #2e7d32;
+  }
+  .note-chip--missing {
+    background: rgba(198, 40, 40, 0.12);
+    color: #c62828;
+  }
+
+  /* Explorer Mode Controls */
+  .explorer-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+  /* Explorer Root Piano Keyboard */
+  .root-piano-container {
+    overflow-x: auto;
+    padding: 0.25rem 0;
+  }
+  .piano-keyboard--root {
+    display: flex;
+    position: relative;
+    user-select: none;
+    padding: 0.25rem 0 0.5rem;
+  }
+  .piano-key.root-key.active {
+    background: var(--accent) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 14px rgba(176, 106, 67, 0.45);
+    transform: translateY(2px);
+  }
+
+  /* Custom Dropdown */
+  .custom-dropdown {
+    position: relative;
+    width: 100%;
+  }
+  .dropdown-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem 1.25rem;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: var(--shadow-soft);
+  }
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    z-index: 50;
+    padding: 0.75rem;
+    max-height: 380px;
+    overflow-y: auto;
+  }
+  .custom-dropdown.open .dropdown-menu {
+    display: block;
+  }
+  .dropdown-search-box input {
+    width: 100%;
+    padding: 0.6rem 0.85rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    font-size: 0.92rem;
+    margin-bottom: 0.5rem;
+    box-sizing: border-box;
+  }
+  .dropdown-cat-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--muted);
+    padding: 0.5rem 0.5rem 0.25rem;
+    text-transform: uppercase;
+  }
+  .dropdown-option {
+    padding: 0.6rem 0.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+  }
+  .dropdown-option:hover {
+    background: rgba(176, 106, 67, 0.08);
+  }
+  .dropdown-option.selected {
+    background: rgba(176, 106, 67, 0.15);
+    font-weight: 700;
+  }
+  .option-title {
+    font-size: 0.95rem;
+    color: var(--ink-strong);
+  }
+  .option-sub {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  /* Info Banner */
+  .scale-info-banner {
+    background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(252,244,235,0.95));
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .scale-title {
+    margin: 0.4rem 0;
+    font-size: 1.5rem;
+  }
+  .scale-desc {
+    margin: 0 0 0.75rem;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+  .tag-pill {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    background: rgba(143, 126, 115, 0.12);
+    border-radius: 6px;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    margin-right: 0.35rem;
+  }
+
+  .banner-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-width: 240px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s ease;
+  }
+  .btn--primary {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(176, 106, 67, 0.3);
+  }
+  .btn--primary:hover {
+    background: var(--accent-deep);
+  }
+  .btn--outline {
+    background: #fff;
+    border: 1px solid var(--line);
+    color: var(--ink);
+  }
+  .btn--outline:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .btn--sm {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.82rem;
+  }
+
+  .sound-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .select-input {
+    padding: 0.4rem 0.6rem;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    font-size: 0.85rem;
+  }
+  .bpm-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+  }
+
+  /* Visualizers */
+  .viz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .viz-tabs {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .viz-tab {
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+    font-size: 0.88rem;
+    cursor: pointer;
+  }
+  .viz-tab.active {
+    background: var(--ink-strong);
+    color: #fff;
+  }
+  .viz-wrapper {
+    display: none;
+  }
+  .viz-wrapper.active {
+    display: block;
+  }
+
+  /* Fretboard CSS */
+  .fretboard-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .fretboard-container {
+    overflow-x: auto;
+    background: #2b231d;
+    padding: 1rem;
+    border-radius: 16px;
+    color: #fff;
+  }
+  .fretboard-table {
+    display: flex;
+    flex-direction: column;
+    min-width: 750px;
+  }
+  .fret-row {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+  }
+  .fret-row--header {
+    border-bottom: 2px solid rgba(255,255,255,0.3);
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .string-name {
+    width: 40px;
+    font-weight: 700;
+    font-size: 0.82rem;
+  }
+  .fret-num, .fret-cell {
+    flex: 1;
+    text-align: center;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid rgba(255,255,255,0.15);
+  }
+  .fret-cell--open {
+    border-right: 3px solid #d4af37;
+    background: rgba(0,0,0,0.2);
+  }
+  .fret-marker {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .fret-marker.is-root {
+    background: #d32f2f;
+    box-shadow: 0 0 8px rgba(211, 47, 47, 0.6);
+  }
+
+  /* Formula Breakdown */
+  .formula-section, .chords-section {
+    margin-top: 2rem;
+  }
+  .chords-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .chord-controls-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .chord-type-toggle {
+    display: flex;
+    gap: 0.4rem;
+  }
+  :global(.chord-card-actions) {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.25rem;
+  }
+  :global(.chord-card-actions .btn) {
+    flex: 1;
+    padding: 0.35rem 0.4rem;
+    font-size: 0.78rem;
+  }
+  .degree-chips-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+  :global(.degree-chip) {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 0.6rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 60px;
+  }
+  :global(.degree-chip.is-root) {
+    border-color: var(--accent);
+    background: rgba(176, 106, 67, 0.08);
+  }
+  :global(.degree-val) {
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-weight: 700;
+  }
+  :global(.note-val) {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ink-strong);
+  }
+  :global(.root-badge) {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--accent-deep);
+    margin-top: 0.2rem;
+  }
+
+  /* Chords Grid */
+  .chords-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-top: 0.75rem;
+  }
+  :global(.chord-card) {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.5rem;
+    box-shadow: var(--shadow-soft);
+  }
+  :global(.chord-degree) {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  :global(.triad-name) {
+    display: block;
+    font-size: 1.15rem;
+    color: var(--ink-strong);
+  }
+  :global(.seventh-name) {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  @media (max-width: 768px) {
+    .scale-info-banner {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .text-input-row {
+      flex-direction: column;
+    }
+    .piano-key--white {
+      width: 32px;
+      height: 120px;
+    }
+    .piano-key--black {
+      width: 22px;
+      height: 70px;
+      margin-left: -11px;
+      margin-right: -11px;
+    }
+  }
+</style>

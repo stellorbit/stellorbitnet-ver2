@@ -17,14 +17,12 @@ if (branch) {
   wranglerArgs.push('--branch', branch);
 }
 
-const child =
-  process.platform === 'win32'
-    ? spawn('cmd.exe', ['/d', '/s', '/c', 'npx', ...wranglerArgs], {
-        stdio: 'inherit',
-      })
-    : spawn('npx', wranglerArgs, {
-        stdio: 'inherit',
-      });
+const isWin = process.platform === 'win32';
+const pnpmCmd = isWin ? 'pnpm.cmd' : 'pnpm';
+
+const child = spawn(pnpmCmd, ['exec', ...wranglerArgs], {
+  stdio: 'inherit',
+});
 
 child.on('exit', (code) => {
   process.exit(code ?? 1);

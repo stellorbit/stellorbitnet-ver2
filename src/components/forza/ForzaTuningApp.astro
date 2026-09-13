@@ -1,0 +1,1541 @@
+---
+import { ALL_TARGET_CARS } from '../../data/forza/cars';
+import { calculateVersionStatus } from '../../lib/forza/version';
+import { SHAKEDOWN_GUIDE } from '../../lib/forza/tuningEngine';
+
+const versionStatus = calculateVersionStatus(ALL_TARGET_CARS);
+---
+
+<div class="fh-app" id="fh-tuning-app">
+  <!-- Version Status Header Banner -->
+  <header class="fh-header-panel">
+    <div class="fh-version-badge-row">
+      <div class="fh-version-chip">
+        <span class="pulse-dot"></span>
+        <span class="version-label">{versionStatus.versionString}</span>
+      </div>
+      <span class="fh-badge-phase">{versionStatus.phase} Phase</span>
+      <span class="fh-progress-text">実装進捗: <strong>{versionStatus.implementedCount} / {versionStatus.totalCount} 車種 ({versionStatus.progressPercent}%)</strong></span>
+    </div>
+
+    <div class="fh-progress-track">
+      <div class="fh-progress-fill" style={`width: ${Math.max(8, versionStatus.progressPercent)}%`}></div>
+    </div>
+
+    <div class="fh-milestone-row">
+      <div class="milestone-item">
+        <span class="m-label">国産車 (トヨタ・日産):</span>
+        <span class="m-val">トヨタ {versionStatus.domesticCompleted.toyota}/4 ・ 日産 {versionStatus.domesticCompleted.nissan}/4</span>
+      </div>
+      <div class="milestone-item">
+        <span class="m-label">輸入車 (BMW・メルセデス系):</span>
+        <span class="m-val">BMW {versionStatus.importCompleted.bmw}/2 ・ メルセデス {versionStatus.importCompleted.mercedes}/3</span>
+      </div>
+      <div class="milestone-next">
+        <span class="next-tag">Next Milestone:</span>
+        <span class="next-desc">{versionStatus.nextMilestone}</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mode Selector (Grip vs Drift) -->
+  <section class="fh-mode-section">
+    <div class="fh-mode-switch">
+      <button type="button" class="mode-toggle-btn active" id="btn-mode-grip" data-mode="grip">
+        <span class="mode-icon">🏁</span>
+        <div class="mode-info">
+          <strong class="mode-title">グリップ & サーキット</strong>
+          <span class="mode-sub">高いスタビリティと俊敏な回頭性を両立</span>
+        </div>
+      </button>
+      <button type="button" class="mode-toggle-btn" id="btn-mode-drift" data-mode="drift">
+        <span class="mode-icon">💨</span>
+        <div class="mode-info">
+          <strong class="mode-title">ドリフト</strong>
+          <span class="mode-sub">フロント切れ角・深いアングル維持と滑らかな振り返し</span>
+        </div>
+      </button>
+    </div>
+  </section>
+
+  <!-- Car Selector Grid -->
+  <section class="fh-cars-section">
+    <div class="fh-section-header">
+      <h2>🚗 対象車種を選択</h2>
+      <div class="fh-filter-chips">
+        <button class="filter-chip active" data-filter="all" type="button">すべて (12)</button>
+        <button class="filter-chip" data-filter="Toyota" type="button">トヨタ (4)</button>
+        <button class="filter-chip" data-filter="Nissan" type="button">日産 (4)</button>
+        <button class="filter-chip" data-filter="BMW" type="button">BMW (2)</button>
+        <button class="filter-chip" data-filter="Mercedes" type="button">メルセデス系 (3)</button>
+      </div>
+    </div>
+
+    <div class="fh-cars-grid" id="cars-grid">
+      {ALL_TARGET_CARS.map((car) => {
+        const isSelected = car.id === 'toyota-supra-rz-1998';
+        const hasData = !!car.data;
+        const statusLabel =
+          car.status === 'implemented'
+            ? '実機データ完備'
+            : car.status === 'in_progress'
+            ? '実機調査中'
+            : '今後実装予定';
+        const statusClass = `status--${car.status}`;
+
+        return (
+          <article
+            class={`car-card ${isSelected ? 'selected' : ''} ${hasData ? 'available' : 'locked'}`}
+            data-car-id={car.id}
+            data-manufacturer={car.manufacturer}
+            tabindex="0"
+          >
+            <div class="car-card-header">
+              <span class="car-badge">{car.manufacturer}</span>
+              <span class={`car-status-tag ${statusClass}`}>{statusLabel}</span>
+            </div>
+            <h3 class="car-name">{car.name}</h3>
+            <p class="car-fullname">{car.fullName}</p>
+
+            {car.data && (
+              <div class="car-specs-grid">
+                <div class="spec-cell">
+                  <span class="spec-name">駆動方式</span>
+                  <strong class="spec-val">{car.data.drivetrain}</strong>
+                </div>
+                <div class="spec-cell">
+                  <span class="spec-name">車両重量</span>
+                  <strong class="spec-val">{car.data.weightKg} kg</strong>
+                </div>
+                <div class="spec-cell">
+                  <span class="spec-name">重量配分</span>
+                  <strong class="spec-val">F{car.data.frontWeightRatio}% : R{100 - car.data.frontWeightRatio}%</strong>
+                </div>
+                <div class="spec-cell">
+                  <span class="spec-name">純正PI</span>
+                  <strong class="spec-val">{car.data.stockPI.class} {car.data.stockPI.pi}</strong>
+                </div>
+              </div>
+            )}
+            {!car.data && (
+              <div class="car-locked-overlay">
+                <span>開発ロードマップ対象</span>
+              </div>
+            )}
+          </article>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- Active Car Showcase & Tuning Workspace -->
+  <section class="fh-workspace" id="tuning-workspace">
+    <!-- Active Car Spec Banner -->
+    <div class="active-car-banner" id="active-car-banner">
+      <div class="banner-title-area">
+        <span class="banner-maker" id="disp-maker">Toyota</span>
+        <h2 class="banner-car-name" id="disp-car-name">スープラ RZ (1998)</h2>
+        <p class="banner-desc" id="disp-preset-desc">
+          高いスタビリティと俊敏な回頭性を両立。フロント重量配分53%に合わせた最適な前後ロール・ピッチ剛性バランス。
+        </p>
+      </div>
+      <div class="banner-quick-stats">
+        <div class="quick-stat">
+          <span class="stat-lbl">車重 (レース/ドリフト時)</span>
+          <strong class="stat-num" id="disp-weight">1,478 kg</strong>
+        </div>
+        <div class="quick-stat">
+          <span class="stat-lbl">PI値</span>
+          <strong class="stat-num stat-accent" id="disp-pi">B 549</strong>
+        </div>
+        <div class="quick-stat">
+          <span class="stat-lbl">推奨用途</span>
+          <strong class="stat-num" id="disp-mode-label">🏁 グリップ</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tuning Sheet Navigation Tabs (In-game style) -->
+    <div class="tuning-tabs-nav" id="tuning-tabs">
+      <button class="t-tab active" data-tab="tires" type="button">🛞 タイヤ空気圧</button>
+      <button class="t-tab" data-tab="gearing" type="button">⚙️ ギア比</button>
+      <button class="t-tab" data-tab="alignment" type="button">📐 アライメント</button>
+      <button class="t-tab" data-tab="arb" type="button">⚖️ スタビライザー</button>
+      <button class="t-tab" data-tab="springs" type="button">🌀 スプリング・車高</button>
+      <button class="t-tab" data-tab="damping" type="button">⏱️ ダンピング</button>
+      <button class="t-tab" data-tab="aero" type="button">✈️ エアロ</button>
+      <button class="t-tab" data-tab="brakes" type="button">🛑 ブレーキ</button>
+      <button class="t-tab" data-tab="diff" type="button">🔒 デフ</button>
+    </div>
+
+    <!-- Action Toolbar (Copy to clipboard, etc.) -->
+    <div class="tuning-action-bar">
+      <button class="action-btn action-btn--primary" id="btn-copy-all" type="button">
+        📋 全チューニング設定値をコピー
+      </button>
+      <button class="action-btn action-btn--outline" id="btn-reset-preset" type="button">
+        🔄 推奨初期値にリセット
+      </button>
+      <span class="copy-status" id="copy-status-msg"></span>
+    </div>
+
+    <!-- TAB PANELS -->
+    <div class="tuning-tab-content">
+      <!-- 1. タイヤ空気圧 -->
+      <div class="tuning-panel active" id="tab-panel-tires">
+        <div class="panel-desc-box">
+          <strong>タイヤ空気圧 (Tire Pressure):</strong> 調整範囲 1.0 〜 3.8 bar。グリップと発熱のレスポンスを決定します。
+        </div>
+        <div class="sliders-grid">
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="input-tire-front">フロントタイヤ空気圧</label>
+              <div class="val-display"><strong id="val-disp-tire-front">2.3</strong> <span class="val-unit">bar</span></div>
+            </div>
+            <div class="slider-row">
+              <span class="range-bound">1.0</span>
+              <input type="range" id="input-tire-front" min="1.0" max="3.8" step="0.1" value="2.3" />
+              <span class="range-bound">3.8</span>
+            </div>
+          </div>
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="input-tire-rear">リアタイヤ空気圧</label>
+              <div class="val-display"><strong id="val-disp-tire-rear">2.2</strong> <span class="val-unit">bar</span></div>
+            </div>
+            <div class="slider-row">
+              <span class="range-bound">1.0</span>
+              <input type="range" id="input-tire-rear" min="1.0" max="3.8" step="0.1" value="2.2" />
+              <span class="range-bound">3.8</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. ギア比 -->
+      <div class="tuning-panel" id="tab-panel-gearing">
+        <div class="panel-desc-box">
+          <strong>ギア比 (Gearing):</strong> ファイナル 2.20 〜 6.10 / 各段 0.48 〜 6.00。最高速度と加速トルクバンドを調整します。
+        </div>
+        <div class="sliders-grid">
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="input-gear-final">ファイナルドライブ (Final Drive)</label>
+              <div class="val-display"><strong id="val-disp-gear-final">3.34</strong></div>
+            </div>
+            <div class="slider-row">
+              <span class="range-bound">2.20</span>
+              <input type="range" id="input-gear-final" min="2.20" max="6.10" step="0.01" value="3.34" />
+              <span class="range-bound">6.10</span>
+            </div>
+          </div>
+        </div>
+        <div class="gears-grid" id="gears-container">
+          <!-- Dynamic Gear Sliders inserted via JS -->
+        </div>
+      </div>
+
+      <!-- 3. アライメント -->
+      <div class="tuning-panel" id="tab-panel-alignment">
+        <div class="panel-desc-box">
+          <strong>アライメント (Alignment):</strong> キャンバー ±5.0° / トー ±5.0° / キャスター 1.0 〜 7.0°。コーナリング中のタイヤ接地性と応答性を制御します。
+        </div>
+        <div class="sliders-grid">
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="input-camber-front">フロント キャンバー (ネガティブ)</label>
+              <div class="val-display"><strong id="val-disp-camber-front">-2.0</strong> <span class="val-unit">°</span></div>
+            </div>
+            <div class="slider-row">
+              <span class="range-bound">-5.0°</span>
+              <input type="range" id="input-camber-front" min="-5.0" max="5.0" step="0.1" value="-2.0" />
+              <span class="range-bound">+5.0°</span>
+            </div>
+          </div>
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="input-camber-rear">リア キャンバー (ネガティブ)</label>
+              <div class="val-display"><strong id="val-disp-camber-rear">-1.5</strong> <span class="val-unit">°</span></div>
+            </div>
+            <div class="slider-row">
+              <span class="range-bound">-5.0°</span>
+              <input type="range" id="input-camber-rear" min="-5.0" max="5.0" step="0.1" value="-1.5" />
+              <span class="range-bound">+5.0°</span>
+            </div>
+          </div>
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="input-toe-front">フロント トー角 (イン/アウト)</label>
+              <div class="val-display"><strong id="val-disp-toe-front">0.0</strong> <span class="val-unit">°</span></div>
+            </div>
+            <div class="slider-row">
+              <span class="range-bound">-5.0°</span>
+              <input type="range" id="input-toe-front" min="-5.0" max="5.0" step="0.1" value="0.0" />
+              <span class="range-bound">+5.0°</span>
+            </div>
+          </div>
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="input-toe-rear">リア トー角 (イン/アウト)</label>
+              <div class="val-display"><strong id="val-disp-toe-rear">0.0</strong> <span class="val-unit">°</span></div>
+            </div>
+            <div class="slider-row">
+              <span class="range-bound">-5.0°</span>
+              <input type="range" id="input-toe-rear" min="-5.0" max="5.0" step="0.1" value="0.0" />
+              <span class="range-bound">+5.0°</span>
+            </div>
+          </div>
+          <div class="slider-group full-width">
+            <div class="slider-header">
+              <label for="input-caster">フロント キャスター角</label>
+              <div class="val-display"><strong id="val-disp-caster">5.0</strong> <span class="val-unit">°</span></div>
+            </div>
+            <div class="slider-row">
+              <span class="range-bound">1.0°</span>
+              <input type="range" id="input-caster" min="1.0" max="7.0" step="0.1" value="5.0" />
+              <span class="range-bound">7.0°</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. スタビライザー -->
+      <div class="tuning-panel" id="tab-panel-arb">
+        <div class="panel-desc-box">
+          <strong>アンチロールバー (Anti-Roll Bars):</strong> 調整範囲 1.00 〜 65.00。左右のロール剛性とステアバランス（アンダー/オーバー）をコントロールします。
+        </div>
+        <div class="sliders-grid">
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="input-arb-front">フロント スタビライザー (ARB)</label>
+              <div class="val-display"><strong id="val-disp-arb-front">39.2</strong></div>
+            </div>
+            <div class="slider-row">
+              <span class="range-bound">1.00 (Soft)</span>
+              <input type="range" id="input-arb-front" min="1.0" max="65.0" step="0.1" value="39.2" />
+              <span class="range-bound">65.00 (Stiff)</span>
+            </div>
+          </div>
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="input-arb-rear">リア スタビライザー (ARB)</label>
+              <div class="val-display"><strong id="val-disp-arb-rear">28.8</strong></div>
+            </div>
+            <div class="slider-row">
+              <span class="range-bound">1.00 (Soft)</span>
+              <input type="range" id="input-arb-rear" min="1.0" max="65.0" step="0.1" value="28.8" />
+              <span class="range-bound">65.00 (Stiff)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. スプリング & 車高 -->
+      <div class="tuning-panel" id="tab-panel-springs">
+        <div class="panel-desc-box">
+          <strong>スプリング (Springs & Ride Height):</strong> 国内標準単位 <code>kgf/mm</code> & 車高 <code>cm</code>。車種固有の調整可能幅と離散ステップに完全対応しています。
+        </div>
+        <div class="sliders-grid">
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="input-spring-front">フロント スプリングレート</label>
+              <div class="val-display"><strong id="val-disp-spring-front">145.6</strong> <span class="val-unit">kgf/mm</span></div>
+            </div>
+            <div class="slider-row">
+              <span class="range-bound" id="bound-spring-f-min">59.9</span>
+              <input type="range" id="input-spring-front" min="59.9" max="299.6" step="0.1" value="145.6" />
+              <span class="range-bound" id="bound-spring-f-max">299.6</span>
+            </div>
+          </div>
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="input-spring-rear">リア スプリングレート</label>
+              <div class="val-display"><strong id="val-disp-spring-rear">143.0</strong> <span class="val-unit">kgf/mm</span></div>
+            </div>
+            <div class="slider-row">
+              <span class="range-bound" id="bound-spring-r-min">59.9</span>
+              <input type="range" id="input-spring-rear" min="59.9" max="299.6" step="0.1" value="143.0" />
+              <span class="range-bound" id="bound-spring-r-max">299.6</span>
+            </div>
+          </div>
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="input-height-front">フロント 最低地上高 (車高)</label>
+              <div class="val-display"><strong id="val-disp-height-front">15.5</strong> <span class="val-unit">cm</span></div>
+            </div>
+            <div class="slider-row">
+              <span class="range-bound" id="bound-height-f-min">14.8 (Low)</span>
+              <input type="range" id="input-height-front" min="14.8" max="18.2" step="0.1" value="15.5" />
+              <span class="range-bound" id="bound-height-f-max">18.2 (High)</span>
+            </div>
+          </div>
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="input-height-rear">リア 最低地上高 (車高)</label>
+              <div class="val-display"><strong id="val-disp-height-rear">15.5</strong> <span class="val-unit">cm</span></div>
+            </div>
+            <div class="slider-row">
+              <span class="range-bound" id="bound-height-r-min">14.8 (Low)</span>
+              <input type="range" id="input-height-rear" min="14.8" max="18.2" step="0.1" value="15.5" />
+              <span class="range-bound" id="bound-height-r-max">18.2 (High)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. ダンピング -->
+      <div class="tuning-panel" id="tab-panel-damping">
+        <div class="panel-desc-box">
+          <strong>ダンピング (Damping):</strong> 調整範囲 1.0 〜 20.0。サスペンションの伸縮スピードを抑える減衰力（バンプ／リバウンド）を制御します。
+        </div>
+        <div class="sliders-grid">
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="input-rebound-front">フロント リバウンド減衰力 (伸び側)</label>
+              <div class="val-display"><strong id="val-disp-rebound-front">12.1</strong></div>
+            </div>
+            <div class="slider-row">
+              <span class="range-bound">1.0 (Soft)</span>
+              <input type="range" id="input-rebound-front" min="1.0" max="20.0" step="0.1" value="12.1" />
+              <span class="range-bound">20.0 (Hard)</span>
+            </div>
+          </div>
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="input-rebound-rear">リア リバウンド減衰力 (伸び側)</label>
+              <div class="val-display"><strong id="val-disp-rebound-rear">11.3</strong></div>
+            </div>
+            <div class="slider-row">
+              <span class="range-bound">1.0 (Soft)</span>
+              <input type="range" id="input-rebound-rear" min="1.0" max="20.0" step="0.1" value="11.3" />
+              <span class="range-bound">20.0 (Hard)</span>
+            </div>
+          </div>
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="input-bump-front">フロント バンプ減衰力 (縮み側)</label>
+              <div class="val-display"><strong id="val-disp-bump-front">7.6</strong></div>
+            </div>
+            <div class="slider-row">
+              <span class="range-bound">1.0 (Soft)</span>
+              <input type="range" id="input-bump-front" min="1.0" max="20.0" step="0.1" value="7.6" />
+              <span class="range-bound">20.0 (Hard)</span>
+            </div>
+          </div>
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="input-bump-rear">リア バンプ減衰力 (縮み側)</label>
+              <div class="val-display"><strong id="val-disp-bump-rear">7.1</strong></div>
+            </div>
+            <div class="slider-row">
+              <span class="range-bound">1.0 (Soft)</span>
+              <input type="range" id="input-bump-rear" min="1.0" max="20.0" step="0.1" value="7.1" />
+              <span class="range-bound">20.0 (Hard)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. エアロ -->
+      <div class="tuning-panel" id="tab-panel-aero">
+        <div class="panel-desc-box" id="aero-notes-box">
+          <strong>エアロ・ダウンフォース (Aero Downforce):</strong> 調整式エアロパーツ装着時にアンロックされます。
+        </div>
+        <div class="sliders-grid" id="aero-sliders-container">
+          <div class="slider-group" id="aero-front-group">
+            <div class="slider-header">
+              <label for="input-aero-front">フロント ダウンフォース</label>
+              <div class="val-display"><strong id="val-disp-aero-front">98</strong> <span class="val-unit">kgf</span></div>
+            </div>
+            <div class="slider-row">
+              <span class="range-bound" id="bound-aero-f-min">73 (Corner)</span>
+              <input type="range" id="input-aero-front" min="73" max="122" step="1" value="98" />
+              <span class="range-bound" id="bound-aero-f-max">122 (Speed)</span>
+            </div>
+          </div>
+          <div class="slider-group" id="aero-rear-group">
+            <div class="slider-header">
+              <label for="input-aero-rear">リア ダウンフォース</label>
+              <div class="val-display"><strong id="val-disp-aero-rear">129</strong> <span class="val-unit">kgf</span></div>
+            </div>
+            <div class="slider-row">
+              <span class="range-bound" id="bound-aero-r-min">97 (Corner)</span>
+              <input type="range" id="input-aero-rear" min="97" max="161" step="1" value="129" />
+              <span class="range-bound" id="bound-aero-r-max">161 (Speed)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. ブレーキ -->
+      <div class="tuning-panel" id="tab-panel-brakes">
+        <div class="panel-desc-box">
+          <strong>ブレーキ (Braking):</strong> バランス 0% (リア) 〜 100% (フロント) / 制動力圧力 0% 〜 200%。
+        </div>
+        <div class="sliders-grid">
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="input-brake-balance">ブレーキバランス (前後配分)</label>
+              <div class="val-display"><strong id="val-disp-brake-balance">50</strong> <span class="val-unit">% (Even)</span></div>
+            </div>
+            <div class="slider-row">
+              <span class="range-bound">0% (Rear)</span>
+              <input type="range" id="input-brake-balance" min="0" max="100" step="1" value="50" />
+              <span class="range-bound">100% (Front)</span>
+            </div>
+          </div>
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="input-brake-pressure">ブレーキ制動力圧力</label>
+              <div class="val-display"><strong id="val-disp-brake-pressure">100</strong> <span class="val-unit">%</span></div>
+            </div>
+            <div class="slider-row">
+              <span class="range-bound">0% (Low)</span>
+              <input type="range" id="input-brake-pressure" min="0" max="200" step="1" value="100" />
+              <span class="range-bound">200% (High)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. デフ -->
+      <div class="tuning-panel" id="tab-panel-diff">
+        <div class="panel-desc-box">
+          <strong>デファレンシャル (Differential):</strong> 0% (オープン) 〜 100% (フルロック)。駆動輪の左右差動制限をコントロールします。
+        </div>
+        <div class="sliders-grid">
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="input-diff-accel">リア 加速時ロック率 (Accel)</label>
+              <div class="val-display"><strong id="val-disp-diff-accel">23</strong> <span class="val-unit">%</span></div>
+            </div>
+            <div class="slider-row">
+              <span class="range-bound">0% (Open)</span>
+              <input type="range" id="input-diff-accel" min="0" max="100" step="1" value="23" />
+              <span class="range-bound">100% (Locked)</span>
+            </div>
+          </div>
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="input-diff-decel">リア 減速時ロック率 (Decel)</label>
+              <div class="val-display"><strong id="val-disp-diff-decel">33</strong> <span class="val-unit">%</span></div>
+            </div>
+            <div class="slider-row">
+              <span class="range-bound">0% (Open)</span>
+              <input type="range" id="input-diff-decel" min="0" max="100" step="1" value="33" />
+              <span class="range-bound">100% (Locked)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Shake-down & Tuning Diagnostics Guide (Troubleshooting accordion) -->
+  <section class="fh-shakedown-section">
+    <div class="fh-section-header">
+      <h2>🛠️ 実機シェイクダウン & トラブルシューティング</h2>
+      <p class="section-lead">ゲーム内で実際に走行した際のステアフィールや挙動に応じた微調整ガイドです。</p>
+    </div>
+
+    <div class="shakedown-grid">
+      {SHAKEDOWN_GUIDE.map((guide) => (
+        <div class="shakedown-card">
+          <div class="card-phase-tag">{guide.category}</div>
+          <h4 class="card-issue">{guide.issue}</h4>
+          <p class="card-solution">{guide.solution}</p>
+          <div class="card-delta-box">
+            <span class="delta-label">推奨調整:</span>
+            <code class="delta-val">{guide.recommendedDelta}</code>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+</div>
+
+<!-- CLIENT LOGIC -->
+<script>
+  import { getCarById } from '../../data/forza/cars';
+  import type { TuningMode, TuningPreset } from '../../lib/forza/types';
+
+  let currentCarId = 'toyota-supra-rz-1998';
+  let currentMode: TuningMode = 'grip';
+
+  // DOM Elements
+  const btnGrip = document.getElementById('btn-mode-grip')!;
+  const btnDrift = document.getElementById('btn-mode-drift')!;
+  const carCards = document.querySelectorAll<HTMLElement>('.car-card');
+  const filterChips = document.querySelectorAll<HTMLElement>('.filter-chip');
+  const tabButtons = document.querySelectorAll<HTMLElement>('.t-tab');
+  const tabPanels = document.querySelectorAll<HTMLElement>('.tuning-panel');
+  const btnCopyAll = document.getElementById('btn-copy-all')!;
+  const btnReset = document.getElementById('btn-reset-preset')!;
+  const copyStatusMsg = document.getElementById('copy-status-msg')!;
+
+  // Value Display Elements
+  const dispMaker = document.getElementById('disp-maker')!;
+  const dispCarName = document.getElementById('disp-car-name')!;
+  const dispPresetDesc = document.getElementById('disp-preset-desc')!;
+  const dispWeight = document.getElementById('disp-weight')!;
+  const dispPI = document.getElementById('disp-pi')!;
+  const dispModeLabel = document.getElementById('disp-mode-label')!;
+
+  // Inputs
+  const inputTireF = document.getElementById('input-tire-front') as HTMLInputElement;
+  const inputTireR = document.getElementById('input-tire-rear') as HTMLInputElement;
+  const inputGearFinal = document.getElementById('input-gear-final') as HTMLInputElement;
+  const gearsContainer = document.getElementById('gears-container')!;
+  const inputCamberF = document.getElementById('input-camber-front') as HTMLInputElement;
+  const inputCamberR = document.getElementById('input-camber-rear') as HTMLInputElement;
+  const inputToeF = document.getElementById('input-toe-front') as HTMLInputElement;
+  const inputToeR = document.getElementById('input-toe-rear') as HTMLInputElement;
+  const inputCaster = document.getElementById('input-caster') as HTMLInputElement;
+  const inputArbF = document.getElementById('input-arb-front') as HTMLInputElement;
+  const inputArbR = document.getElementById('input-arb-rear') as HTMLInputElement;
+  const inputSpringF = document.getElementById('input-spring-front') as HTMLInputElement;
+  const inputSpringR = document.getElementById('input-spring-rear') as HTMLInputElement;
+  const inputHeightF = document.getElementById('input-height-front') as HTMLInputElement;
+  const inputHeightR = document.getElementById('input-height-rear') as HTMLInputElement;
+  const inputReboundF = document.getElementById('input-rebound-front') as HTMLInputElement;
+  const inputReboundR = document.getElementById('input-rebound-rear') as HTMLInputElement;
+  const inputBumpF = document.getElementById('input-bump-front') as HTMLInputElement;
+  const inputBumpR = document.getElementById('input-bump-rear') as HTMLInputElement;
+  const inputAeroF = document.getElementById('input-aero-front') as HTMLInputElement;
+  const inputAeroR = document.getElementById('input-aero-rear') as HTMLInputElement;
+  const inputBrakeBal = document.getElementById('input-brake-balance') as HTMLInputElement;
+  const inputBrakePress = document.getElementById('input-brake-pressure') as HTMLInputElement;
+  const inputDiffAccel = document.getElementById('input-diff-accel') as HTMLInputElement;
+  const inputDiffDecel = document.getElementById('input-diff-decel') as HTMLInputElement;
+
+  function updateTuningView() {
+    const car = getCarById(currentCarId);
+    if (!car) return;
+
+    const preset: TuningPreset = car.presets[currentMode];
+
+    // Banner texts
+    dispMaker.textContent = car.manufacturer;
+    dispCarName.textContent = car.fullName;
+    dispPresetDesc.textContent = preset.description;
+    dispModeLabel.textContent = currentMode === 'grip' ? '🏁 グリップ' : '💨 ドリフト';
+
+    const currentSpecs = currentMode === 'drift' ? car.driftSpecs : car.raceSpecs;
+    if (currentSpecs) {
+      dispWeight.textContent = `${currentSpecs.weightKg} kg`;
+      dispPI.textContent = `${currentSpecs.pi.class} ${currentSpecs.pi.pi}`;
+    } else {
+      dispWeight.textContent = `${car.weightKg} kg`;
+      dispPI.textContent = `${car.stockPI.class} ${car.stockPI.pi}`;
+    }
+
+    // Set Slider Bounds for Car-specific parameters
+    inputSpringF.min = String(car.springsLimit.front.min);
+    inputSpringF.max = String(car.springsLimit.front.max);
+    inputSpringR.min = String(car.springsLimit.rear.min);
+    inputSpringR.max = String(car.springsLimit.rear.max);
+    document.getElementById('bound-spring-f-min')!.textContent = String(car.springsLimit.front.min);
+    document.getElementById('bound-spring-f-max')!.textContent = String(car.springsLimit.front.max);
+    document.getElementById('bound-spring-r-min')!.textContent = String(car.springsLimit.rear.min);
+    document.getElementById('bound-spring-r-max')!.textContent = String(car.springsLimit.rear.max);
+
+    inputHeightF.min = String(car.rideHeightLimit.front.min);
+    inputHeightF.max = String(car.rideHeightLimit.front.max);
+    inputHeightR.min = String(car.rideHeightLimit.rear.min);
+    inputHeightR.max = String(car.rideHeightLimit.rear.max);
+    document.getElementById('bound-height-f-min')!.textContent = `${car.rideHeightLimit.front.min} (Low)`;
+    document.getElementById('bound-height-f-max')!.textContent = `${car.rideHeightLimit.front.max} (High)`;
+    document.getElementById('bound-height-r-min')!.textContent = `${car.rideHeightLimit.rear.min} (Low)`;
+    document.getElementById('bound-height-r-max')!.textContent = `${car.rideHeightLimit.rear.max} (High)`;
+
+    // Set Preset Values to Sliders
+    inputTireF.value = String(preset.tirePressure.front);
+    inputTireR.value = String(preset.tirePressure.rear);
+    inputGearFinal.value = String(preset.gearing.finalDrive);
+
+    // Dynamic Gear Sliders
+    renderGears(preset.gearing.gears);
+
+    inputCamberF.value = String(preset.alignment.camberFront);
+    inputCamberR.value = String(preset.alignment.camberRear);
+    inputToeF.value = String(preset.alignment.toeFront);
+    inputToeR.value = String(preset.alignment.toeRear);
+    inputCaster.value = String(preset.alignment.casterFront);
+
+    inputArbF.value = String(preset.arb.front);
+    inputArbR.value = String(preset.arb.rear);
+
+    inputSpringF.value = String(preset.springs.springFront);
+    inputSpringR.value = String(preset.springs.springRear);
+    inputHeightF.value = String(preset.springs.rideHeightFront);
+    inputHeightR.value = String(preset.springs.rideHeightRear);
+
+    inputReboundF.value = String(preset.damping.reboundFront);
+    inputReboundR.value = String(preset.damping.reboundRear);
+    inputBumpF.value = String(preset.damping.bumpFront);
+    inputBumpR.value = String(preset.damping.bumpRear);
+
+    if (preset.aero) {
+      if (inputAeroF && preset.aero.front !== undefined) inputAeroF.value = String(preset.aero.front);
+      if (inputAeroR && preset.aero.rear !== undefined) inputAeroR.value = String(preset.aero.rear);
+    }
+
+    inputBrakeBal.value = String(preset.brakes.balanceFront);
+    inputBrakePress.value = String(preset.brakes.pressure);
+
+    inputDiffAccel.value = String(preset.differential.rearAccel);
+    inputDiffDecel.value = String(preset.differential.rearDecel);
+
+    syncAllDisplays();
+  }
+
+  function renderGears(gears: number[]) {
+    gearsContainer.innerHTML = '';
+    gears.forEach((ratio, idx) => {
+      const gearNumber = idx + 1;
+      const gearDiv = document.createElement('div');
+      gearDiv.className = 'slider-group';
+      gearDiv.innerHTML = `
+        <div class="slider-header">
+          <label for="input-gear-${gearNumber}">${gearNumber}速 ギア比</label>
+          <div class="val-display"><strong id="val-disp-gear-${gearNumber}">${ratio.toFixed(2)}</strong></div>
+        </div>
+        <div class="slider-row">
+          <span class="range-bound">0.48</span>
+          <input type="range" id="input-gear-${gearNumber}" class="gear-slider" data-gear="${gearNumber}" min="0.48" max="6.00" step="0.01" value="${ratio}" />
+          <span class="range-bound">6.00</span>
+        </div>
+      `;
+      gearsContainer.appendChild(gearDiv);
+
+      const input = gearDiv.querySelector<HTMLInputElement>(`#input-gear-${gearNumber}`)!;
+      input.addEventListener('input', () => {
+        document.getElementById(`val-disp-gear-${gearNumber}`)!.textContent = Number(input.value).toFixed(2);
+      });
+    });
+  }
+
+  function syncAllDisplays() {
+    document.getElementById('val-disp-tire-front')!.textContent = Number(inputTireF.value).toFixed(1);
+    document.getElementById('val-disp-tire-rear')!.textContent = Number(inputTireR.value).toFixed(1);
+    document.getElementById('val-disp-gear-final')!.textContent = Number(inputGearFinal.value).toFixed(2);
+    document.getElementById('val-disp-camber-front')!.textContent = Number(inputCamberF.value).toFixed(1);
+    document.getElementById('val-disp-camber-rear')!.textContent = Number(inputCamberR.value).toFixed(1);
+    document.getElementById('val-disp-toe-front')!.textContent = Number(inputToeF.value).toFixed(1);
+    document.getElementById('val-disp-toe-rear')!.textContent = Number(inputToeR.value).toFixed(1);
+    document.getElementById('val-disp-caster')!.textContent = Number(inputCaster.value).toFixed(1);
+    document.getElementById('val-disp-arb-front')!.textContent = Number(inputArbF.value).toFixed(1);
+    document.getElementById('val-disp-arb-rear')!.textContent = Number(inputArbR.value).toFixed(1);
+    document.getElementById('val-disp-spring-front')!.textContent = Number(inputSpringF.value).toFixed(1);
+    document.getElementById('val-disp-spring-rear')!.textContent = Number(inputSpringR.value).toFixed(1);
+    document.getElementById('val-disp-height-front')!.textContent = Number(inputHeightF.value).toFixed(1);
+    document.getElementById('val-disp-height-rear')!.textContent = Number(inputHeightR.value).toFixed(1);
+    document.getElementById('val-disp-rebound-front')!.textContent = Number(inputReboundF.value).toFixed(1);
+    document.getElementById('val-disp-rebound-rear')!.textContent = Number(inputReboundR.value).toFixed(1);
+    document.getElementById('val-disp-bump-front')!.textContent = Number(inputBumpF.value).toFixed(1);
+    document.getElementById('val-disp-bump-rear')!.textContent = Number(inputBumpR.value).toFixed(1);
+    if (inputAeroF) document.getElementById('val-disp-aero-front')!.textContent = inputAeroF.value;
+    if (inputAeroR) document.getElementById('val-disp-aero-rear')!.textContent = inputAeroR.value;
+    document.getElementById('val-disp-brake-balance')!.textContent = inputBrakeBal.value;
+    document.getElementById('val-disp-brake-pressure')!.textContent = inputBrakePress.value;
+    document.getElementById('val-disp-diff-accel')!.textContent = inputDiffAccel.value;
+    document.getElementById('val-disp-diff-decel')!.textContent = inputDiffDecel.value;
+  }
+
+  // Bind live slider updates
+  const allInputs = [
+    inputTireF, inputTireR, inputGearFinal, inputCamberF, inputCamberR,
+    inputToeF, inputToeR, inputCaster, inputArbF, inputArbR,
+    inputSpringF, inputSpringR, inputHeightF, inputHeightR,
+    inputReboundF, inputReboundR, inputBumpF, inputBumpR,
+    inputAeroF, inputAeroR, inputBrakeBal, inputBrakePress,
+    inputDiffAccel, inputDiffDecel
+  ].filter(Boolean);
+
+  allInputs.forEach((input) => {
+    input.addEventListener('input', syncAllDisplays);
+  });
+
+  // Mode Switcher
+  btnGrip.addEventListener('click', () => {
+    currentMode = 'grip';
+    btnGrip.classList.add('active');
+    btnDrift.classList.remove('active');
+    updateTuningView();
+  });
+
+  btnDrift.addEventListener('click', () => {
+    currentMode = 'drift';
+    btnDrift.classList.add('active');
+    btnGrip.classList.remove('active');
+    updateTuningView();
+  });
+
+  // Car Selection
+  carCards.forEach((card) => {
+    card.addEventListener('click', () => {
+      const carId = card.dataset.carId!;
+      const car = getCarById(carId);
+      if (!car) {
+        alert('この車種は現在ロードマップ準備中です。実機データ調査完了後に順次追加されます。');
+        return;
+      }
+      currentCarId = carId;
+      carCards.forEach((c) => c.classList.remove('selected'));
+      card.classList.add('selected');
+      updateTuningView();
+      document.getElementById('tuning-workspace')?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  // Filter Chips
+  filterChips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      filterChips.forEach((c) => c.classList.remove('active'));
+      chip.classList.add('active');
+      const filter = chip.dataset.filter!;
+      carCards.forEach((card) => {
+        const maker = card.dataset.manufacturer;
+        if (filter === 'all' || maker === filter || (filter === 'Mercedes' && (maker === 'Mercedes' || maker === 'Mercedes-AMG'))) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  // Tabs Navigation
+  tabButtons.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.tab!;
+      tabButtons.forEach((t) => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      tabPanels.forEach((panel) => {
+        if (panel.id === `tab-panel-${target}`) {
+          panel.classList.add('active');
+        } else {
+          panel.classList.remove('active');
+        }
+      });
+    });
+  });
+
+  // Reset Button
+  btnReset.addEventListener('click', () => {
+    updateTuningView();
+    showToast('推奨初期値にリセットしました');
+  });
+
+  // Copy All Settings to Clipboard
+  btnCopyAll.addEventListener('click', async () => {
+    const car = getCarById(currentCarId);
+    if (!car) return;
+
+    const gearSliders = document.querySelectorAll<HTMLInputElement>('.gear-slider');
+    const gearsStr = Array.from(gearSliders).map((g, i) => `${i + 1}速: ${Number(g.value).toFixed(2)}`).join(' / ');
+
+    const text = `【Forza Horizon 6 チューニングシート】
+車種: ${car.fullName} (${car.manufacturer})
+用途: ${currentMode === 'grip' ? '🏁 グリップ・サーキット' : '💨 ドリフト'}
+------------------------------------
+■ タイヤ空気圧: 前 ${inputTireF.value} bar / 後 ${inputTireR.value} bar
+■ ギア比: ファイナル ${inputGearFinal.value} (${gearsStr})
+■ アライメント:
+  - キャンバー: 前 ${inputCamberF.value}° / 後 ${inputCamberR.value}°
+  - トー: 前 ${inputToeF.value}° / 後 ${inputToeR.value}°
+  - キャスター: 前 ${inputCaster.value}°
+■ スタビライザー: 前 ${inputArbF.value} / 後 ${inputArbR.value}
+■ スプリング: 前 ${inputSpringF.value} kgf/mm / 後 ${inputSpringR.value} kgf/mm
+■ 最低地上高: 前 ${inputHeightF.value} cm / 後 ${inputHeightR.value} cm
+■ ダンピング:
+  - リバウンド: 前 ${inputReboundF.value} / 後 ${inputReboundR.value}
+  - バンプ: 前 ${inputBumpF.value} / 後 ${inputBumpR.value}
+■ エアロ: 前 ${inputAeroF ? inputAeroF.value : '-'} kgf / 後 ${inputAeroR ? inputAeroR.value : '-'} kgf
+■ ブレーキ: バランス ${inputBrakeBal.value}% / 圧力 ${inputBrakePress.value}%
+■ デフ: 加速 ${inputDiffAccel.value}% / 減速 ${inputDiffDecel.value}%
+------------------------------------
+Generated by STELLORBIT.NET Tuning Assistant`;
+
+    try {
+      await navigator.clipboard.writeText(text);
+      showToast('✅ 全設定値をクリップボードにコピーしました！');
+    } catch {
+      showToast('❌ コピーに失敗しました');
+    }
+  });
+
+  function showToast(msg: string) {
+    copyStatusMsg.textContent = msg;
+    copyStatusMsg.style.opacity = '1';
+    setTimeout(() => {
+      copyStatusMsg.style.opacity = '0';
+    }, 3000);
+  }
+
+  // Initial Load
+  updateTuningView();
+</script>
+
+<style>
+  .fh-app {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    font-family: inherit;
+  }
+
+  /* Header & Version Status Banner */
+  .fh-header-panel {
+    background: linear-gradient(135deg, rgba(35, 27, 22, 0.95), rgba(58, 42, 33, 0.95));
+    border: 1px solid rgba(176, 106, 67, 0.3);
+    border-radius: 20px;
+    padding: 1.5rem 1.75rem;
+    color: #fffdf9;
+    box-shadow: 0 12px 30px rgba(35, 27, 22, 0.25);
+  }
+
+  .fh-version-badge-row {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+  }
+
+  .fh-version-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(176, 106, 67, 0.25);
+    border: 1px solid rgba(176, 106, 67, 0.6);
+    padding: 0.3rem 0.85rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #f7cbac;
+  }
+
+  .pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #50e3c2;
+    box-shadow: 0 0 10px #50e3c2;
+  }
+
+  .fh-badge-phase {
+    background: rgba(255, 255, 255, 0.12);
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .fh-progress-text {
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-left: auto;
+  }
+
+  .fh-progress-track {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+
+  .fh-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #b06a43, #f5a623);
+    border-radius: 999px;
+    transition: width 0.4s ease;
+  }
+
+  .fh-milestone-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.75);
+    flex-wrap: wrap;
+  }
+
+  .m-label {
+    color: rgba(255, 255, 255, 0.5);
+    margin-right: 0.35rem;
+  }
+
+  .milestone-next {
+    width: 100%;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.82rem;
+  }
+
+  .next-tag {
+    color: #f5a623;
+    font-weight: 700;
+    margin-right: 0.4rem;
+  }
+
+  /* Mode Switcher */
+  .fh-mode-switch {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .mode-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    background: #ffffff;
+    border: 2px solid var(--line);
+    border-radius: 16px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .mode-toggle-btn:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .mode-toggle-btn.active {
+    background: linear-gradient(135deg, rgba(176, 106, 67, 0.08), rgba(255, 255, 255, 0.95));
+    border-color: var(--accent);
+    box-shadow: 0 8px 24px rgba(176, 106, 67, 0.2);
+  }
+
+  .mode-icon {
+    font-size: 2.2rem;
+  }
+
+  .mode-title {
+    display: block;
+    font-size: 1.15rem;
+    color: var(--ink-strong);
+    margin-bottom: 0.2rem;
+  }
+
+  .mode-sub {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+  }
+
+  /* Car Selector */
+  .fh-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .fh-section-header h2 {
+    margin: 0;
+    font-size: 1.35rem;
+    color: var(--ink-strong);
+  }
+
+  .fh-filter-chips {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-chip {
+    padding: 0.4rem 0.8rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: #ffffff;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .filter-chip.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #ffffff;
+  }
+
+  .fh-cars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .car-card {
+    background: #ffffff;
+    border: 2px solid var(--line);
+    border-radius: 18px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-soft);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .car-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    box-shadow: var(--shadow);
+  }
+
+  .car-card.selected {
+    border-color: var(--accent);
+    background: linear-gradient(180deg, rgba(176, 106, 67, 0.05) 0%, #ffffff 100%);
+    box-shadow: 0 8px 24px rgba(176, 106, 67, 0.25);
+  }
+
+  .car-card.locked {
+    opacity: 0.75;
+    background: rgba(250, 246, 240, 0.7);
+  }
+
+  .car-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .car-badge {
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    background: rgba(176, 106, 67, 0.12);
+    color: var(--accent-deep);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .car-status-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+  }
+
+  .status--implemented {
+    background: rgba(46, 204, 113, 0.15);
+    color: #27ae60;
+  }
+
+  .status--in_progress {
+    background: rgba(241, 196, 15, 0.18);
+    color: #d35400;
+  }
+
+  .status--planned {
+    background: rgba(149, 165, 166, 0.18);
+    color: #7f8c8d;
+  }
+
+  .car-name {
+    margin: 0 0 0.2rem;
+    font-size: 1.15rem;
+    color: var(--ink-strong);
+  }
+
+  .car-fullname {
+    margin: 0 0 0.85rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .car-specs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    background: rgba(252, 248, 242, 0.8);
+    border-radius: 12px;
+    padding: 0.65rem 0.85rem;
+    margin-top: auto;
+  }
+
+  .spec-cell {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .spec-name {
+    font-size: 0.68rem;
+    color: var(--muted);
+  }
+
+  .spec-val {
+    font-size: 0.85rem;
+    color: var(--ink-strong);
+  }
+
+  .car-locked-overlay {
+    margin-top: auto;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 10px;
+    padding: 0.6rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-weight: 700;
+  }
+
+  /* Active Workspace */
+  .fh-workspace {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .active-car-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #2b221c, #4a3628);
+    border-radius: 18px;
+    padding: 1.75rem;
+    color: #ffffff;
+    margin-bottom: 1.75rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .banner-maker {
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    color: #f7cbac;
+    text-transform: uppercase;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .banner-car-name {
+    margin: 0 0 0.5rem;
+    font-size: 1.6rem;
+    color: #ffffff;
+  }
+
+  .banner-desc {
+    margin: 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    max-width: 600px;
+    line-height: 1.6;
+  }
+
+  .banner-quick-stats {
+    display: flex;
+    gap: 1.25rem;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 1rem 1.25rem;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .quick-stat {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stat-lbl {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .stat-num {
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  .stat-accent {
+    color: #f5a623;
+  }
+
+  /* Tuning Tabs Nav */
+  .tuning-tabs-nav {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    border-bottom: 2px solid var(--line);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .t-tab {
+    padding: 0.65rem 1.15rem;
+    background: rgba(252, 248, 242, 0.8);
+    border: 1px solid transparent;
+    border-radius: 12px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--ink-soft);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+  }
+
+  .t-tab:hover {
+    background: rgba(176, 106, 67, 0.1);
+    color: var(--ink-strong);
+  }
+
+  .t-tab.active {
+    background: var(--accent);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(176, 106, 67, 0.25);
+  }
+
+  /* Action Bar */
+  .tuning-action-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .action-btn {
+    padding: 0.65rem 1.25rem;
+    border-radius: 12px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .action-btn--primary {
+    background: var(--accent);
+    border: none;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(176, 106, 67, 0.25);
+  }
+
+  .action-btn--primary:hover {
+    background: var(--accent-deep);
+  }
+
+  .action-btn--outline {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    color: var(--ink-strong);
+  }
+
+  .action-btn--outline:hover {
+    border-color: var(--accent);
+  }
+
+  .copy-status {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #27ae60;
+    transition: opacity 0.3s ease;
+  }
+
+  /* Panels & Sliders */
+  .tuning-panel {
+    display: none;
+  }
+
+  .tuning-panel.active {
+    display: block;
+  }
+
+  .panel-desc-box {
+    background: rgba(176, 106, 67, 0.06);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 0.85rem 1.15rem;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    margin-bottom: 1.5rem;
+  }
+
+  .sliders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .gears-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+  }
+
+  .slider-group {
+    background: rgba(252, 248, 242, 0.6);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 1.15rem 1.35rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .slider-group.full-width {
+    grid-column: 1 / -1;
+  }
+
+  .slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .slider-header label {
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--ink-strong);
+  }
+
+  .val-display {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    padding: 0.25rem 0.65rem;
+    border-radius: 8px;
+    font-size: 1.05rem;
+    color: var(--accent-deep);
+  }
+
+  .val-unit {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .range-bound {
+    font-size: 0.75rem;
+    color: var(--muted);
+    min-width: 50px;
+    text-align: center;
+  }
+
+  input[type='range'] {
+    flex: 1;
+    height: 8px;
+    border-radius: 999px;
+    background: #e4d8cc;
+    outline: none;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+
+  /* Shakedown section */
+  .fh-shakedown-section {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .section-lead {
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  .shakedown-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+  }
+
+  .shakedown-card {
+    background: rgba(252, 248, 242, 0.8);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 1.35rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-phase-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+
+  .card-issue {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+    color: var(--ink-strong);
+  }
+
+  .card-solution {
+    margin: 0 0 1rem;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .card-delta-box {
+    background: #ffffff;
+    border: 1px dashed var(--line);
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.82rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .delta-label {
+    color: var(--muted);
+    font-weight: 700;
+  }
+
+  .delta-val {
+    color: var(--accent-deep);
+    font-weight: 700;
+  }
+
+  @media (max-width: 768px) {
+    .fh-mode-switch {
+      grid-template-columns: 1fr;
+    }
+    .active-car-banner {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .banner-quick-stats {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+</style>

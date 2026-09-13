@@ -1,11 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ScaleFinder from '../components/music/ScaleFinder.astro';
+import ForzaTuningApp from '../components/forza/ForzaTuningApp.astro';
 ---
 
 <BaseLayout
 	title="Tools - 作成ツール類"
-	description="音楽のスケール検索＆耳コピ逆引きツール（Webアプリ）、ChordLaunchpad、Win11Optimizerなどの各種自作ツール集。"
+	description="音楽のスケール検索＆耳コピ逆引きツール、Forza Horizon チューニングアシスタント、ChordLaunchpad、Win11Optimizerなどの各種自作ツール集。"
 >
 	<div class="shell">
 		<section class="content-panel">
@@ -33,8 +34,15 @@ import ScaleFinder from '../components/music/ScaleFinder.astro';
 			<!-- Tools Tab Navigation Bar -->
 			<div class="tools-tab-bar">
 				<button
-					id="tab-btn-scale"
+					id="tab-btn-forza"
 					class="tools-tab active"
+					type="button"
+				>
+					🚗 Forza Horizon チューニングアシスタント
+				</button>
+				<button
+					id="tab-btn-scale"
+					class="tools-tab"
 					type="button"
 				>
 					🎹 音楽スケール検索＆耳コピ逆引き (Webアプリ)
@@ -44,8 +52,17 @@ import ScaleFinder from '../components/music/ScaleFinder.astro';
 				</button>
 			</div>
 
-			<!-- Tab Content 1: Scale Finder Web App (Top / Primary Tab) -->
-			<div id="tools-panel-scale" class="tools-tab-panel active">
+			<!-- Tab Content 1: Forza Horizon Tuning Web App (Primary Tab) -->
+			<div id="tools-panel-forza" class="tools-tab-panel active">
+				<div class="tool-ai-credit">
+					<span class="ai-badge">AI Development</span>
+					<span>この「Forza Horizon チューニングアシスタント」は、<strong>Gemini 3.7 Flash</strong> を使用して作成・検証されています。</span>
+				</div>
+				<ForzaTuningApp />
+			</div>
+
+			<!-- Tab Content 2: Scale Finder Web App -->
+			<div id="tools-panel-scale" class="tools-tab-panel">
 				<div class="tool-ai-credit">
 					<span class="ai-badge">AI Development</span>
 					<span>この「音楽スケール検索＆耳コピ逆引きツール」は、<strong>Gemini 3.6 Flash</strong> を使用して作成されました。</span>
@@ -53,7 +70,7 @@ import ScaleFinder from '../components/music/ScaleFinder.astro';
 				<ScaleFinder />
 			</div>
 
-			<!-- Tab Content 2: Desktop Apps -->
+			<!-- Tab Content 3: Desktop Apps -->
 			<div id="tools-panel-other" class="tools-tab-panel">
 				<div class="other-tools-grid">
 					<!-- ChordLaunchpad -->
@@ -103,24 +120,23 @@ import ScaleFinder from '../components/music/ScaleFinder.astro';
 </BaseLayout>
 
 <script>
+	const tabForza = document.getElementById('tab-btn-forza')!;
 	const tabScale = document.getElementById('tab-btn-scale')!;
 	const tabOther = document.getElementById('tab-btn-other')!;
+	const panelForza = document.getElementById('tools-panel-forza')!;
 	const panelScale = document.getElementById('tools-panel-scale')!;
 	const panelOther = document.getElementById('tools-panel-other')!;
 
-	tabScale.addEventListener('click', () => {
-		tabScale.classList.add('active');
-		tabOther.classList.remove('active');
-		panelScale.classList.add('active');
-		panelOther.classList.remove('active');
-	});
+	function setActiveTab(tab: HTMLElement, panel: HTMLElement) {
+		[tabForza, tabScale, tabOther].forEach((t) => t.classList.remove('active'));
+		[panelForza, panelScale, panelOther].forEach((p) => p.classList.remove('active'));
+		tab.classList.add('active');
+		panel.classList.add('active');
+	}
 
-	tabOther.addEventListener('click', () => {
-		tabOther.classList.add('active');
-		tabScale.classList.remove('active');
-		panelOther.classList.add('active');
-		panelScale.classList.remove('active');
-	});
+	tabForza.addEventListener('click', () => setActiveTab(tabForza, panelForza));
+	tabScale.addEventListener('click', () => setActiveTab(tabScale, panelScale));
+	tabOther.addEventListener('click', () => setActiveTab(tabOther, panelOther));
 </script>
 
 <style>

@@ -249,6 +249,17 @@ export const astroPosts: AstroPostMeta[] = [
 		  { depth: 3, slug: "ytplite", text: "YouTube Premium Liteがついてくるのが地味に助かる。" },
 		  { depth: 2, slug: "summary", text: "まとめ：ただ、本番はここからです。" }
 		],
+	},
+	{
+		slug: "windows-uninstall-and-settings-with-ai",
+		title: "Windowsの余計なアプリをアンインストールするのに「Antigravity」などのAIエージェントはどれだけ効くのか？",
+		description: "Windows 11で余計なアプリをいちいち削除したり、テレメトリ設定やら固定キーやら変えるの面倒って方が多いと思います。そんなときに「Codex」や「Antigravity」などのエージェントは味方になってくれるのか検証！",
+		pubDate: new Date("2026-09-13"),
+		tags: ["Windows掃除","Windows11","設定","Antigravity","Codex","AIエージェント"],
+		categories: ["PC/IT","検証","AI活用"],
+		headings: [
+		  { depth: 2, slug: "intro", text: "Windowsのいろんなアプリやら設定やら、めんどくさいよね。" }
+		],
 	}
 ];
 

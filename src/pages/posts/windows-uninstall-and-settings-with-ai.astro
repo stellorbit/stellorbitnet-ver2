@@ -1,0 +1,23 @@
+---
+import ArticleBody from '../../articles/windows-uninstall-and-settings-with-ai.astro';
+import thumbnail from '../../assets/post-thumbnails/windows-uninstall-and-settings-with-ai.webp';
+import { getAstroPost } from '../../content/astro-posts';
+import BlogPost from '../../layouts/BlogPost.astro';
+
+const post = getAstroPost('windows-uninstall-and-settings-with-ai');
+
+if (!post) {
+	throw new Error('Astro post metadata not found: windows-uninstall-and-settings-with-ai');
+}
+---
+
+<BlogPost
+	heroImage={thumbnail}
+	title={post.title}
+	description={post.description}
+	pubDate={post.pubDate}
+	updatedDate={post.updatedDate}
+	headings={post.headings}
+>
+	<ArticleBody />
+</BlogPost>

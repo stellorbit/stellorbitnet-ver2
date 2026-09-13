@@ -276,6 +276,14 @@ p {
 }
 .prose p {
   margin-bottom: 2em;
+  color: var(--ink);
+}
+/* 万が一白抜けインラインスタイルが混入した場合の安全フォールバック */
+.prose [style*="rgb(226, 232, 240)"],
+.prose [style*="rgb(203, 213, 225)"],
+.prose [style*="#e2e8f0"],
+.prose [style*="#cbd5e1"] {
+  color: var(--ink) !important;
 }
 textarea {
   width: 100%;

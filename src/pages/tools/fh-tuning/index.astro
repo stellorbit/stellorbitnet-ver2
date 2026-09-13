@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ForzaTuningApp from '../../../components/forza/ForzaTuningApp.astro';
+---
+
+<BaseLayout
+  title="Forza Horizon チューニングアシスタント"
+  description="Forza Horizon 6 / シリーズ対応の車両チューニング支援Webアプリ。レース用・ドリフト用パーツ装着時の最適アライメント、スタビライザー、スプリング(kgf/mm)、減衰力、ギア比、デフ数値をシミュレーション・アシストします。"
+>
+  <div class="shell">
+    <section class="content-panel">
+      <div class="page-heading">
+        <p class="eyebrow">Web Application</p>
+        <h1>Forza Horizon チューニングアシスタント</h1>
+        <p class="page-lead">
+          Forza Horizon 6 の車両チューニングを強力にサポートするWebツールです。<br />
+          実機テストに基づく最適ジオメトリ・スプリングレート・デフ設定を「グリップ」「ドリフト」の用途別で即座に参照・調整できます。
+        </p>
+      </div>
+
+      <!-- AI Credit Banner -->
+      <div class="tool-ai-credit">
+        <span class="ai-badge">AI Development</span>
+        <span>この「Forza Horizon チューニングアシスタント」は、<strong>Gemini 3.7 Flash</strong> を使用して開発・データ検証されています。</span>
+      </div>
+
+      <ForzaTuningApp />
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .tool-ai-credit {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    background: rgba(176, 106, 67, 0.06);
+    border: 1px dashed var(--line);
+    border-radius: 12px;
+    padding: 0.65rem 1rem;
+    margin-bottom: 1.75rem;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    flex-wrap: wrap;
+  }
+
+  .ai-badge {
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    background: var(--accent);
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+</style>

@@ -38,9 +38,9 @@ export function calculateVersionStatus(customCars?: CarCatalogEntry[]): VersionS
 
   const isAllCompleted = implementedCount >= totalCount;
 
-  let phase: 'Alpha' | 'Beta' | 'Release' = 'Alpha';
-  let versionString = 'Alpha Ver 0.1';
-  let nextMilestone = 'Alpha Ver 0.2: 同一メーカーの追加車種実装';
+  let phase: 'Alpha' | 'Beta' | 'Release';
+  let versionString: string;
+  let nextMilestone: string;
 
   if (isAllCompleted) {
     phase = 'Release';

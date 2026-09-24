@@ -260,6 +260,30 @@ export const astroPosts: AstroPostMeta[] = [
 		headings: [
 		  { depth: 2, slug: "intro", text: "Windowsのいろんなアプリやら設定やら、めんどくさいよね。" }
 		],
+	},
+	{
+		slug: "forza-horizon-6-ban",
+		title: "【雑記】だから僕はForza Horizon 6をやめた。 ～ 痛車BAN騒動と改善しない不具合",
+		description: "2026年9月、大人気AAAタイトルのレーシングゲーム「Forza Horizon 6」にて、痛車リバリーを作成しているユーザーを中心に大量にBANされる自体が発生した。その光景を見て、自分は見切りをつけることにした。放置されている不具合、Xboxクラウドの規制、それに伴う負担増…そして今後の危険性。「FH6から撤退する」という選択を取った理由を解説していく。",
+		pubDate: new Date("2026-09-24"),
+		tags: ["Forza Horizon 6", "Xbox Cloud Gaming", "痛車"],
+		categories: ["PC/IT", "ゲーム"],
+		headings: [
+		  { depth: 2, slug: "intro", text: "人気タイトルで大騒動。そのきっかけ" },
+		  { depth: 2, slug: "summary", text: "まずは騒動の詳細を簡潔に要約" },
+		  { depth: 3, slug: "device-ban", text: "痛車のデザインをしていたユーザーが「デバイスBAN」に。" },
+		  { depth: 3, slug: "photo-mode-ban", text: "痛車デザイナーのみならず、「フォトモードで痛車が写っているユーザー」まで対象に？" },
+		  { depth: 3, slug: "unshared-livery-censorship", text: "運営側によって「未公開・未完成」のリバリーまで”検閲”された報告も" },
+		  { depth: 3, slug: "steam-review-drop", text: "Steamレビューに異変。「非常に好評」から「賛否両論」へ２段階落ち。" },
+		  { depth: 2, slug: "cloud-gaming-experience", text: "クラウドゲーミングで「身近に遊べるAAAタイトル」だったFH6" },
+		  { depth: 2, slug: "unfixed-bugs", text: "改善されない不具合、作られる疎外感" },
+		  { depth: 3, slug: "unit-bug", text: "設定で触っても反映されない「単位バグ」" },
+		  { depth: 3, slug: "convoy-invite-issue", text: "コンボイで招待を貰っても入れない、公開にしてもらうと弊害も" },
+		  { depth: 2, slug: "15-hours-limit", text: "衝撃の「月１５時間制限」というクラウドユーザーを失望させた発表" },
+		  { depth: 3, slug: "reason-for-limit", text: "月１５時間の理由を個人的に推測してみる" },
+		  { depth: 2, slug: "neglect-of-users", text: "最後の一押し：４ヵ月にわたって繰り広げられた「ユーザー軽視」の集大成" },
+		  { depth: 2, slug: "conclusion", text: "まとめ：発売初期から今回までの所感" }
+		],
 	}
 ];
 

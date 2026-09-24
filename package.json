@@ -25,7 +25,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "test:cms": "node ./scripts/verify-cms-playwright.mjs"
   },
   "packageManager": "pnpm@10.34.5",
   "dependencies": {
@@ -46,6 +47,7 @@
     "eslint": "^10.3.0",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.6.0",
+    "playwright": "^1.63.0",
     "prettier": "^3.8.3",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.59.2",

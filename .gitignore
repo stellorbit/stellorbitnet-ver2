@@ -25,4 +25,5 @@ pnpm-debug.log*
 
 # local dev cms tools
 scripts/dev-cms.*
+scripts/screenshots/
 

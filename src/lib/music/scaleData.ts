@@ -307,7 +307,7 @@ export function parseNoteInput(inputStr: string): number[] {
 
   // Split by common delimiters
   const tokens = inputStr
-    .replace(/[,\/\+]/g, ' ')
+    .replace(/[,+/]/g, ' ')
     .trim()
     .split(/\s+/);
 
@@ -475,9 +475,9 @@ export function getDiatonicChords(scale: ScaleDef, rootNote: number, useFlats: b
     const semi5 = (p5 - r + 12) % 12;
     const semi7 = (p7 - r + 12) % 12;
 
-    let triadSuffix = '';
-    let seventhSuffix = '';
-    let quality = 'Major';
+    let triadSuffix: string;
+    let seventhSuffix: string;
+    let quality: string;
 
     if (semi3 === 4 && semi5 === 7) {
       // Major triad
@@ -515,6 +515,7 @@ export function getDiatonicChords(scale: ScaleDef, rootNote: number, useFlats: b
     } else {
       triadSuffix = '';
       seventhSuffix = '7';
+      quality = 'Other';
     }
 
     chords.push({

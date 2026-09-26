@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-
 # Astro Starter Kit: Blog
 
 ```sh
@@ -52,17 +50,13 @@ All commands are run from the root of the project, from a terminal:
 | `npm run dev`             | Starts local dev server at `localhost:4321`      |
 | `npm run build`           | Build your production site to `./dist/`          |
 | `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+| `pnpm run cms`            | Starts browser-based CMS at `localhost:8322`     |
+| `pnpm run cms:app`        | Launches standalone desktop GUI CMS (0s start)   |
+| `pnpm run cms:app:rebuild`| Rebuilds the desktop GUI binary (Cargo)          |
+| `pnpm run cms:app:build`  | Builds standalone desktop GUI CMS installer/exe  |
 
 ## Credit
 
-# This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
 
 # stellorbitnet-ver2
-
-> > > > > > > d09416ce87b25a52f849d3e91e7064afe1062dce

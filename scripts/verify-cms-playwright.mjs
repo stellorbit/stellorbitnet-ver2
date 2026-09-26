@@ -159,16 +159,20 @@ async function main() {
   await page.waitForTimeout(2000);
 
   // 挿入された最新画像が正常にロードされているか（naturalWidth > 0）を検証
-  const lastImg = page.locator('.wysiwyg-canvas figure img').last();
+  const lastImg = page.locator('.wysiwyg-canvas img[src*="clipboard-test"]').last();
+  await lastImg.waitFor({ state: 'attached', timeout: 5000 });
   const imgSrc = await lastImg.getAttribute('src');
   console.log(' - ペーストされた画像のsrc:', imgSrc);
   if (!imgSrc || !imgSrc.includes('/images/posts/')) {
     throw new Error(`画像srcが期待されるパスではありません: ${imgSrc}`);
   }
 
-  const isImgLoaded = await lastImg.evaluate((img) => {
-    return img.complete && img.naturalWidth > 0;
-  });
+  let isImgLoaded = false;
+  for (let i = 0; i < 20; i++) {
+    isImgLoaded = await lastImg.evaluate((img) => img.complete && img.naturalWidth > 0);
+    if (isImgLoaded) break;
+    await page.waitForTimeout(250);
+  }
   console.log(' - 画像の読み込み成功判定 (complete & naturalWidth > 0):', isImgLoaded ? '✅ 正常表示' : '❌ リンク切れ');
   if (!isImgLoaded) {
     throw new Error('ペーストした画像が正常にブラウザ上で表示されていません（404 または破損）');
@@ -193,6 +197,20 @@ async function main() {
   if (isOverflowing) {
     throw new Error('エディタキャンバス内でコンテンツが横にはみ出しています');
   }
+  // 検証9: 見出し・段落ショートカットキー (Ctrl+2, Ctrl+0) の動作テスト
+  console.log('検証9 [見出し・段落ショートカットキーのテスト]...');
+  await page.locator('#wysiwyg-canvas p').first().click();
+  await page.keyboard.press('Control+2');
+  await page.waitForTimeout(400);
+  const hasH2 = await page.locator('#wysiwyg-canvas h2').count();
+  console.log(' - Ctrl+2 で H2 に変換されたか:', hasH2 > 0 ? '✅ 成功' : '❌ 失敗');
+  if (hasH2 === 0) throw new Error('Ctrl+2 による見出し2変換が動作していません');
+
+  await page.keyboard.press('Control+0');
+  await page.waitForTimeout(400);
+  const formatVal = await page.locator('#tb-format-select').inputValue();
+  console.log(' - Ctrl+0 で段落 (p) に戻ったか:', formatVal === 'p' ? '✅ 成功' : '❌ 失敗');
+  if (formatVal !== 'p') throw new Error('Ctrl+0 による段落変換が動作していません');
 
   // スクリーンショット2: 執筆エディタ画面 (ブログカード + X埋め込み配置後)
   const screenshot2Artifact = path.join(ARTIFACT_DIR, 'cms_editor_embed_test.png');

@@ -5,7 +5,7 @@ import ScaleFinder from '../components/music/ScaleFinder.astro';
 
 <BaseLayout
 	title="Tools - 作成ツール類"
-	description="音楽のスケール検索＆耳コピ逆引きツール（Webアプリ）、ChordLaunchpad、Win11Optimizerなどの各種自作ツール集。"
+	description="音楽のスケール検索＆耳コピ逆引きツール（Webアプリ）、ChordLaunchpadなどの各種自作ツール集。"
 >
 	<div class="shell">
 		<section class="content-panel">
@@ -26,7 +26,7 @@ import ScaleFinder from '../components/music/ScaleFinder.astro';
 				<p>
 					当サイトで提供しているWebアプリケーションおよび掲載ツールの一部は、生成AI（AIコーディングアシスタント等）を活用して開発・検証を行いビルドされたものです。<br
 					/>
-					詳細は各Webアプリのページ、およびデスクトップアプリのGitHubリポジトリに記載してあります。
+					詳細は各ツールの特設ページ、およびGitHubリポジトリに記載してあります。
 				</p>
 			</div>
 
@@ -40,7 +40,7 @@ import ScaleFinder from '../components/music/ScaleFinder.astro';
 					🎹 音楽スケール検索＆耳コピ逆引き (Webアプリ)
 				</button>
 				<button id="tab-btn-other" class="tools-tab" type="button">
-					🖥️ デスクトップアプリ (ChordLaunchpad / Win11Optimizer)
+					🖥️ デスクトップアプリ (ChordLaunchpad)
 				</button>
 			</div>
 
@@ -58,41 +58,25 @@ import ScaleFinder from '../components/music/ScaleFinder.astro';
 				<div class="other-tools-grid">
 					<!-- ChordLaunchpad -->
 					<article class="tool-card">
-						<div class="card-tag">Desktop App</div>
-						<h2>ChordLaunchpad</h2>
+						<div class="card-tag">Desktop App (Windows)</div>
+						<h2>ChordLaunchpad Ver 2026.09</h2>
 						<p>
-							コード進行を入力し、テンプレート分析・リアルタイム試聴・MIDIファイルの書き出しまでワンストップで扱えるデスクトップアプリケーションです。
+							コード名・ディグリー・数字コマンドでの高速テキスト入力、ビジュアルタイムライン、3音色リアルタイム試聴、DAWへの直接MIDIドラッグ＆ドロップまでワンストップでこなせるコード進行作成支援デスクトップアプリです。（.NET 10 / WinUI 3）
 						</p>
-						<div class="card-footer">
+						<div class="card-footer card-actions">
 							<a
-								href="https://github.com/stellorbit/ChordLaunchpad"
-								target="_blank"
-								rel="noopener noreferrer"
-								class="tool-btn tool-btn--outline"
+								href="/tools/chordlaunchpad"
+								class="tool-btn tool-btn--primary"
 							>
-								GitHub リポジトリを見る ↗
+								特設サイトを見る →
 							</a>
-						</div>
-					</article>
-
-					<!-- Win11Optimizer -->
-					<article class="tool-card">
-						<div class="card-tag">System Utility</div>
-						<h2>Win11Optimizer Ver.2026.04</h2>
-						<p>
-							Windows 11
-							のプライバシー・UI設定を調整できるチューニングツールです。<br
-							/>
-							最新バージョンでは機能を厳選し、パフォーマンス向上・テレメトリー無効化・クラウド連携抑制に特化しています。
-						</p>
-						<div class="card-footer">
 							<a
-								href="https://github.com/stellorbit/Win11Optimizer"
+								href="https://github.com/stellorbit/ChordLaunchpad-Ver.2.0"
 								target="_blank"
 								rel="noopener noreferrer"
 								class="tool-btn tool-btn--outline"
 							>
-								GitHub リポジトリを見る ↗
+								GitHub ↗
 							</a>
 						</div>
 					</article>
@@ -288,6 +272,13 @@ import ScaleFinder from '../components/music/ScaleFinder.astro';
 
 	.card-footer {
 		margin-top: auto;
+	}
+
+	.card-actions {
+		display: flex;
+		gap: 0.75rem;
+		flex-wrap: wrap;
+		align-items: center;
 	}
 
 	.tool-btn {

@@ -1,0 +1,1420 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+	title="ChordLaunchpad - コード進行作成支援デスクトップアプリ"
+	description="Windows向け多機能コード進行作成支援ソフト。ディグリー・数字コマンドでの高速テキスト入力、ビジュアルタイムライン、3音色リアルタイム試聴、DAWへの直接MIDIドラッグ＆ドロップ対応。（.NET 10 / WinUI 3）"
+>
+	<div class="shell">
+		<!-- Breadcrumbs -->
+		<nav class="breadcrumb-nav" aria-label="パンくずリスト">
+			<ol class="breadcrumb-list">
+				<li><a href="/">Home</a></li>
+				<li class="separator">/</li>
+				<li><a href="/tools">作成ツール類</a></li>
+				<li class="separator">/</li>
+				<li aria-current="page">ChordLaunchpad</li>
+			</ol>
+		</nav>
+
+		<!-- Hero Section -->
+		<section class="lp-hero-panel">
+			<div class="hero-header-badges">
+				<span class="lp-badge lp-badge--primary"
+					>Desktop Application</span
+				>
+				<span class="lp-badge lp-badge--soft"
+					>Windows 10 / 11 (x64)</span
+				>
+				<span class="lp-badge lp-badge--tech">.NET 10 & WinUI 3</span>
+				<span class="lp-badge lp-badge--accent">Ver 2026.09 最新版</span
+				>
+			</div>
+
+			<h1 class="lp-title">ChordLaunchpad</h1>
+			<p class="lp-version-sub">Ver 2026.09</p>
+			<p class="lp-tagline">
+				初めての一歩から、アイデアの展開まで。Windows向け多機能コード進行アシスタント
+			</p>
+
+			<p class="lp-lead">
+				コード進行の入力、ディグリーネーム（ローマ数字）の2種だけではありません。<br
+				/>
+				数字(アラビア数字）と短縮コマンドの組み合わせによる入力にも対応し、入力の煩わしさを軽減。<br
+				/>
+				拍や小節構造を反映したビジュアルタイムライン、3種の内蔵シンセによる即時プレビューで事前確認。<br
+				/>
+				出来上がったら、そのままDAW（Fender Studio, Cubase, Pro Tools, Ableton
+				Live, FL Studio等）へ直接ドラッグ＆ドロップ。 シームレスな制作ワークフローを提供します。
+			</p>
+
+			<div class="lp-cta-group">
+				<a
+					href="https://github.com/stellorbit/ChordLaunchpad-Ver.2.0/releases/latest"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="lp-btn lp-btn--primary"
+				>
+					<svg
+						class="btn-icon"
+						width="20"
+						height="20"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+						></path>
+						<polyline points="7 10 12 15 17 10"></polyline>
+						<line x1="12" y1="15" x2="12" y2="3"></line>
+					</svg>
+					最新版をダウンロード (Releases)
+				</a>
+				<a
+					href="https://apps.microsoft.com/detail/9MXX63FMGK4S?referrer=appbadge&mode=full"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="ms-store-btn"
+					aria-label="Microsoft Store から入手"
+				>
+					<img
+						src="https://get.microsoft.com/images/ja%20dark.svg"
+						alt="Microsoft Store から入手"
+						width="168"
+						height="56"
+						class="ms-store-badge-img"
+					/>
+				</a>
+				<a
+					href="https://github.com/stellorbit/ChordLaunchpad-Ver.2.0"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="lp-btn lp-btn--outline"
+				>
+					<svg
+						class="btn-icon"
+						width="20"
+						height="20"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<path
+							d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+						></path>
+					</svg>
+					GitHub リポジトリを見る ↗
+				</a>
+			</div>
+			<p class="lp-subnote">
+				※ Windows 10 / 11 (64-bit) 対応 /
+				ランタイム同梱（事前インストール不要） / オープンソース
+			</p>
+
+			<!-- Screenshot Showcase -->
+			<div class="lp-screenshot-wrapper">
+				<div class="lp-window-frame">
+					<div class="window-bar">
+						<span class="window-dot dot-red"></span>
+						<span class="window-dot dot-yellow"></span>
+						<span class="window-dot dot-green"></span>
+						<span class="window-title"
+							>ChordLaunchpad Ver 2026.09 - WinUI 3</span
+						>
+					</div>
+					<img
+						src="/images/chordlaunchpad-preview.png"
+						alt="ChordLaunchpad Ver 2026.09 メイン画面のスクリーンショット"
+						class="lp-screenshot-img"
+						loading="eager"
+						width="1200"
+						height="780"
+					/>
+				</div>
+				<p class="screenshot-caption">
+					▲ ChordLaunchpad Ver 2026.09
+					メイン画面：入力テキストとタイムラインのアクティブフォーカス枠視覚化、ダイアトニックコードパレット、BPM・Tapボタン、シンセ試聴セレクター
+				</p>
+			</div>
+		</section>
+
+		<!-- Release Highlights for Ver 2026.09 -->
+		<section class="lp-section">
+			<div class="release-note-box">
+				<div class="release-note-header">
+					<span class="release-tag">What's New</span>
+					<h2>最新バージョン Ver 2026.09 の主な進化点</h2>
+				</div>
+				<div class="release-features-grid">
+					<div class="release-feature-item">
+						<h4>🔒 セキュリティ堅牢化・脆弱性対策</h4>
+						<p>
+							パストラバーサル防止対策、テキスト入力サニタイズ（最大4,000文字制限・DoS対策）、Atomic書き込みによるプロジェクトファイル破損防止を徹底実装。
+						</p>
+					</div>
+					<div class="release-feature-item">
+						<h4>⚡ タイムライン自動フォーカス＆枠ハイライト</h4>
+						<p>
+							<code>Ctrl+Enter</code> 反映後にフォーカスが自動でタイムラインへ遷移。アクティブエリア枠が視覚化され、キーボードだけで即座に試聴可能に。
+						</p>
+					</div>
+					<div class="release-feature-item">
+						<h4>🎵 BPM UI刷新＆Tapテンポ機能</h4>
+						<p>
+							BPM入力ボックスを刷新し、「Tap」ボタンおよび [T]
+							キーでのタップテンポ機能を安定化。[Enter] / [Esc]
+							で即確定できます。
+						</p>
+					</div>
+					<div class="release-feature-item">
+						<h4>📝 連続入力記法（4536 / 4-5-3-6）対応</h4>
+						<p>
+							<code>4536</code> や <code>4-5-3-6</code> などの一括連続入力に対応し、規定音価を「1小節」に統一。キー変更時の再パースも正確に追従します。
+						</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Features Grid Section -->
+		<section class="lp-section">
+			<div class="section-heading">
+				<p class="eyebrow">Key Features</p>
+				<h2>制作が止まらない。ChordLaunchpadの主要機能</h2>
+				<p class="section-lead">
+					「次のコードどうしよう」「あの進行の響きをすぐ試したい」という瞬間を、キーボードから手を離さずにワンストップで解決します。
+				</p>
+			</div>
+
+			<div class="features-grid">
+				<!-- Feature 1 -->
+				<article class="feature-card">
+					<div class="feature-icon-box">⌨️</div>
+					<h3>多彩で直感的なコード入力・記法パース</h3>
+					<p>
+						ディグリーネーム（<code>I V vi IV</code> / <code
+							>IVmaj7 V7 vim7 I</code
+						>）、アラビア数字短縮コマンド（<code
+							>4mas 3svn 6mis 1svn</code
+						> / <code>4536</code>）、分数コード（<code>C/E</code>, <code
+							>G/B</code
+						>）、借用和音（<code>bVI</code>, <code>bVII</code
+						>）まで柔軟に解析。調性を変更しても自動的にコードネームが適切なキーへトランスポーズされます。
+					</p>
+					<div class="feature-example-box">
+						<span class="example-label">入力例</span>
+						<code>4mas 3svn 6mis 1svn</code>
+						<span class="example-arrow">➔</span>
+						<code>Fmaj7 E7 Am7 C7</code>
+					</div>
+				</article>
+
+				<!-- Feature 2 -->
+				<article class="feature-card">
+					<div class="feature-icon-box">📊</div>
+					<h3>ビジュアルタイムライン＆拍・小節構造</h3>
+					<p>
+						小節線（<code>|</code>）、タイ・音価延長（<code>-</code
+						>）、拍数指定（<code>(2)/8</code
+						>）に対応。小節と拍数に応じた美しいブロック型タイムラインで、進行全体の構成を一目で把握できます。選択コードの長さ変更や転回形（Inversion）の微調整も思いのままです。
+					</p>
+					<div class="feature-example-box">
+						<span class="example-label">リズム例</span>
+						<code>F | Em7b5 A7 | Dm7 G7</code>
+					</div>
+				</article>
+
+				<!-- Feature 3 -->
+				<article class="feature-card">
+					<div class="feature-icon-box">🎹</div>
+					<h3>3種の内蔵音源＆ソフトリミッター</h3>
+					<p>
+						Piano（万能アタック＆減衰）、Pad（豊かな持続音・広がり）、Organ（クリアな輪郭）の3音色を標準搭載。MIDIキーボード不要でSpaceキー1つで即座に試聴可能。密集テンション和音でも音割れしない安全なソフトリミッターを装備しています。
+					</p>
+					<div class="feature-tags">
+						<span class="feature-tag">Piano</span>
+						<span class="feature-tag">Pad</span>
+						<span class="feature-tag">Organ</span>
+						<span class="feature-tag">Soft Limiter</span>
+					</div>
+				</article>
+
+				<!-- Feature 4 -->
+				<article class="feature-card">
+					<div class="feature-icon-box">🚀</div>
+					<h3>DAWへダイレクトMIDIドラッグ＆ドロップ</h3>
+					<p>
+						タイムライン上のコード進行をマウスで掴み、そのままDAW（Studio
+						One, Cubase, Pro Tools, Ableton Live, FL Studio,
+						Logic等）のトラックへ直接ドラッグ＆ドロップするだけでMIDIクリップとして展開できます。標準MIDIファイル（.mid,
+						Type 0）保存にも対応。
+					</p>
+					<div class="feature-example-box">
+						<span class="example-label">連携</span>
+						<span>タイムラインからDAWトラックへD&D！</span>
+					</div>
+				</article>
+
+				<!-- Feature 5 -->
+				<article class="feature-card">
+					<div class="feature-icon-box">📚</div>
+					<h3>50種以上の組み込みテンプレート＆自作管理</h3>
+					<p>
+						王道進行、小室進行、カノン進行、ジャズ・ツーファイブワン（II-V-I）、R&B・ネオソウル、City
+						Pop、ロックなど定番進行を網羅。自作進行のテンプレート登録、ダイアトニック和音一覧や機能和音に基づいた次コードサジェストも搭載。
+					</p>
+					<div class="feature-tags">
+						<span class="feature-tag">王道進行</span>
+						<span class="feature-tag">小室進行</span>
+						<span class="feature-tag">カノン</span>
+						<span class="feature-tag">II-V-I</span>
+						<span class="feature-tag">City Pop</span>
+					</div>
+				</article>
+
+				<!-- Feature 6 -->
+				<article class="feature-card">
+					<div class="feature-icon-box">🛡️</div>
+					<h3>自動保存＆世代別バックアップ管理</h3>
+					<p>
+						指定間隔（既定5分）ごとに連番付きで自動バックアップを安全に退避保存。Atomicファイル置換書き込みにより、停電や不意の強制終了でも大切なプロジェクトファイルの破損を防ぎます。
+					</p>
+					<div class="feature-example-box">
+						<span class="example-label">安心設計</span>
+						<span>AutoSave / 世代別バックアップ / 日英UI切替</span>
+					</div>
+				</article>
+			</div>
+		</section>
+
+
+
+		<!-- Command & Shortcut Reference Table Section -->
+		<section class="lp-section">
+			<div class="section-heading">
+				<p class="eyebrow">Quick Reference</p>
+				<h2>入力コマンド＆ショートカット早見表</h2>
+				<p class="section-lead">
+					ChordLaunchpadの記法とキー操作をマスターすれば、マウス操作を最小限に抑えた爆速スケッチが可能です。
+				</p>
+			</div>
+
+			<div class="reference-tables-grid">
+				<!-- Suffix Table -->
+				<div class="ref-card">
+					<div class="ref-card-header">
+						<span class="ref-icon">⚡</span>
+						<h3>アラビア数字入力接尾辞</h3>
+					</div>
+					<p class="ref-desc">
+						スケールの度数（1〜7）の後ろに付けることで和音変化を指定できます。
+					</p>
+					<div class="table-scroll-container">
+						<table class="ref-table">
+							<thead>
+								<tr>
+									<th>接尾辞</th>
+									<th>コード種別</th>
+									<th>入力例（C調）</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>m</code></td>
+									<td>minor</td>
+									<td><code>6m</code> → Am</td>
+								</tr>
+								<tr>
+									<td><code>mas</code> / <code>M7</code></td>
+									<td>major 7th</td>
+									<td><code>1mas</code> → Cmaj7</td>
+								</tr>
+								<tr>
+									<td><code>mis</code> / <code>m7</code></td>
+									<td>minor 7th</td>
+									<td><code>2mis</code> → Dm7</td>
+								</tr>
+								<tr>
+									<td><code>svn</code> / <code>7</code></td>
+									<td>7th (dominant)</td>
+									<td><code>5svn</code> → G7</td>
+								</tr>
+								<tr>
+									<td><code>hdm</code> / <code>m75</code></td>
+									<td>half diminished</td>
+									<td><code>7hdm</code> → Bm7b5</td>
+								</tr>
+								<tr>
+									<td><code>suf</code> / <code>sus4</code></td
+									>
+									<td>sus4</td>
+									<td><code>5suf</code> → Gsus4</td>
+								</tr>
+								<tr>
+									<td><code>sut</code> / <code>sus2</code></td
+									>
+									<td>sus2</td>
+									<td><code>1sut</code> → Csus2</td>
+								</tr>
+								<tr>
+									<td><code>adn</code> / <code>add9</code></td
+									>
+									<td>add9</td>
+									<td><code>1adn</code> → Cadd9</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<!-- Shortcuts Table -->
+				<div class="ref-card">
+					<div class="ref-card-header">
+						<span class="ref-icon">⌨️</span>
+						<h3>主要キーボードショートカット</h3>
+					</div>
+					<p class="ref-desc">
+						DAWライクなズームや直感的な操作が可能です。
+					</p>
+					<div class="table-scroll-container">
+						<table class="ref-table">
+							<thead>
+								<tr>
+									<th>キー</th>
+									<th>動作</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><kbd>Ctrl</kbd> + <kbd>Enter</kbd></td>
+									<td
+										>入力欄のコードを解析してタイムラインへ反映（自動フォーカス）</td
+									>
+								</tr>
+								<tr>
+									<td><kbd>Space</kbd></td>
+									<td
+										>タイムライン再生 /
+										停止（試聴プレビュー）</td
+									>
+								</tr>
+								<tr>
+									<td><kbd>T</kbd></td>
+									<td>タップテンポ計測（BPM設定）</td>
+								</tr>
+								<tr>
+									<td><kbd>Ctrl</kbd> + <kbd>E</kbd></td>
+									<td>MIDIファイルの書き出し</td>
+								</tr>
+								<tr>
+									<td
+										><kbd>Alt</kbd> + <kbd>←</kbd> / <kbd
+											>→</kbd
+										></td
+									>
+									<td>選択コードの長さ変更</td>
+								</tr>
+								<tr>
+									<td
+										><kbd>Alt</kbd> + <kbd>↑</kbd> / <kbd
+											>↓</kbd
+										></td
+									>
+									<td>選択コードの転回形（Inversion）変更</td>
+								</tr>
+								<tr>
+									<td
+										><kbd>R</kbd> / <kbd>T</kbd> または <kbd
+											>G</kbd
+										> / <kbd>H</kbd></td
+									>
+									<td
+										>水平ズームイン /
+										ズームアウト（DAWスタイル対応）</td
+									>
+								</tr>
+								<tr>
+									<td><kbd>Ctrl</kbd> + <kbd>S</kbd></td>
+									<td
+										>プロジェクトを保存（Atomic安全書き込み）</td
+									>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Integrated Spec & Download Section -->
+		<section class="lp-section">
+			<div class="section-heading">
+				<p class="eyebrow">Specifications & Download</p>
+				<h2>動作環境・ダウンロード案内</h2>
+				<p class="section-lead">
+					.NET 10 ランタイムを同梱した自己完結型パッケージのため、追加の環境構築なしですぐにご利用いただけます。
+				</p>
+			</div>
+
+			<!-- Spec Table Card -->
+			<div class="spec-card">
+				<div class="spec-header">
+					<div class="spec-icon">💻</div>
+					<h3>動作環境・ソフトウェア仕様</h3>
+				</div>
+				<dl class="spec-list">
+					<dt>対応OS</dt>
+					<dd>
+						Windows 10 (バージョン 1809 / 17763 以降) または Windows 11 (64-bit)
+					</dd>
+					<dt>アーキテクチャ</dt>
+					<dd>x64 (64-bit)</dd>
+					<dt>技術基盤</dt>
+					<dd>.NET 10.0 / WinUI 3 (Windows App SDK)</dd>
+					<dt>ランタイム</dt>
+					<dd>
+						不要（自己完結型パッケージのため事前インストール不要）
+					</dd>
+					<dt>ライセンス</dt>
+					<dd>オープンソース（無料）</dd>
+					<dt>最新バージョン</dt>
+					<dd>Ver 2026.09</dd>
+					<dt>開発元</dt>
+					<dd>stellorbit</dd>
+				</dl>
+			</div>
+
+			<!-- Download Channels Grid -->
+			<div class="download-channels-grid">
+				<!-- Channel 1: GitHub Releases (Installer / Portable) -->
+				<div class="download-channel-card download-channel-card--featured">
+					<div class="channel-badge">おすすめ</div>
+					<div class="channel-icon">📦</div>
+					<h3>GitHub Releases（直接配布）</h3>
+					<p class="channel-desc">
+						Releases ページより、環境やお好みに応じて <strong>インストーラー版（EXE）</strong> または <strong>ポータブル版（ZIP）</strong> をダウンロードいただけます。
+					</p>
+					<ul class="channel-file-list">
+						<li>
+							<span class="file-type-badge">EXE</span>
+							<code>ChordLaunchpad_v2026.09_Setup.exe</code>
+							<span class="file-note">（ウィザード形式・管理者権限不要）</span>
+						</li>
+						<li>
+							<span class="file-type-badge">ZIP</span>
+							<code>ChordLaunchpad_v2026.09_Portable_win-x64.zip</code>
+							<span class="file-note">（展開して即起動・USB持ち運び可）</span>
+						</li>
+					</ul>
+					<div class="channel-btn-group">
+						<a
+							href="https://github.com/stellorbit/ChordLaunchpad-Ver.2.0/releases/latest"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="lp-btn lp-btn--primary lp-btn--full"
+						>
+							GitHub Releases からダウンロード
+						</a>
+						<a
+							href="https://github.com/stellorbit/ChordLaunchpad-Ver.2.0"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="lp-btn lp-btn--outline lp-btn--full"
+						>
+							ソースコード（GitHub）を見る
+						</a>
+					</div>
+				</div>
+
+				<!-- Channel 2: Microsoft Store -->
+				<div class="download-channel-card">
+					<div class="channel-badge channel-badge--sub">公式ストア</div>
+					<div class="channel-icon">🏬</div>
+					<h3>Microsoft Store</h3>
+					<p class="channel-desc">
+						Windows 標準の Microsoft Store から自動更新付きで安全にインストールいただけます。
+					</p>
+					<div class="channel-bottom-box">
+						<a
+							href="https://apps.microsoft.com/detail/9MXX63FMGK4S?referrer=appbadge&mode=full"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="ms-store-card-btn"
+						>
+							<img
+								src="https://get.microsoft.com/images/ja%20dark.svg"
+								alt="Microsoft Store から入手"
+								width="170"
+								height="56"
+							/>
+						</a>
+					</div>
+				</div>
+
+				<!-- Channel 3: winget -->
+				<div class="download-channel-card">
+					<div class="channel-badge channel-badge--sub">コマンドライン</div>
+					<div class="channel-icon">⚡</div>
+					<h3>winget インストール</h3>
+					<p class="channel-desc">
+						Windows ターミナルまたは PowerShell からワンコマンドでインストール・アップデートが可能です。
+					</p>
+					<div class="channel-bottom-box">
+						<div class="code-terminal-box">
+							<code>winget install Stellorbit.ChordLaunchpad</code>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Generative AI Notice -->
+		<section class="lp-section">
+			<div class="lp-disclaimer-box">
+				<div class="disclaimer-header">
+					<span class="disclaimer-badge">AI Statement</span>
+					<h3>生成AI使用表明</h3>
+				</div>
+				<div class="disclaimer-content">
+					<p>
+						当アプリケーション「ChordLaunchpad」は、<strong
+							>Gemini 3.8 Flash</strong
+						> を使用し、設計・コード生成・動作検証を行って制作されたものです。<br
+						/>
+						ご質問やフィードバック、機能要望・不具合報告は、GitHubリポジトリのIssuesへお気軽にお寄せください。
+					</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- Back Link Navigation -->
+		<div class="lp-back-nav">
+			<a href="/tools" class="back-link"> ← 作成ツール類一覧へ戻る </a>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	/* UD Font Priority */
+	:global(body) {
+		font-family:
+			'BIZ UDPGothic', 'BIZ UDPゴシック', 'Noto Sans JP', 'Hiragino Sans',
+			'Yu Gothic', sans-serif;
+	}
+
+	/* Breadcrumb */
+	.breadcrumb-nav {
+		margin-bottom: 1.5rem;
+		font-size: 0.88rem;
+	}
+
+	.breadcrumb-list {
+		display: flex;
+		align-items: center;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		gap: 0.5rem;
+		color: var(--muted);
+	}
+
+	.breadcrumb-list a {
+		color: var(--accent);
+		text-decoration: none;
+		transition: color 0.15s ease;
+	}
+
+	.breadcrumb-list a:hover {
+		color: var(--accent-deep);
+		text-decoration: underline;
+	}
+
+	.breadcrumb-list .separator {
+		color: var(--line);
+		user-select: none;
+	}
+
+	/* Hero Section */
+	.lp-hero-panel {
+		background:
+			linear-gradient(
+				135deg,
+				rgba(255, 255, 255, 0.95),
+				rgba(255, 250, 244, 0.85)
+			),
+			radial-gradient(
+				circle at top right,
+				rgba(176, 106, 67, 0.12),
+				transparent 45%
+			);
+		border: 1px solid var(--line);
+		border-radius: 28px;
+		padding: 2.75rem 2.25rem;
+		box-shadow: var(--shadow-soft);
+		margin-bottom: 3.5rem;
+		text-align: center;
+	}
+
+	.hero-header-badges {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 0.6rem;
+		margin-bottom: 1.25rem;
+		flex-wrap: wrap;
+	}
+
+	.lp-badge {
+		padding: 0.25rem 0.75rem;
+		border-radius: 999px;
+		font-size: 0.78rem;
+		font-weight: 700;
+		letter-spacing: 0.04em;
+	}
+
+	.lp-badge--primary {
+		background: rgba(176, 106, 67, 0.14);
+		color: var(--accent-deep);
+		border: 1px solid rgba(176, 106, 67, 0.25);
+	}
+
+	.lp-badge--soft {
+		background: rgba(94, 74, 58, 0.08);
+		color: var(--ink-soft);
+	}
+
+	.lp-badge--tech {
+		background: rgba(110, 64, 160, 0.1);
+		color: #5a2e8c;
+		border: 1px solid rgba(110, 64, 160, 0.2);
+	}
+
+	.lp-badge--accent {
+		background: #b06a43;
+		color: #ffffff;
+	}
+
+	.lp-title {
+		font-size: clamp(2rem, 5vw, 3.4rem);
+		font-weight: 800;
+		color: var(--ink-strong);
+		margin: 0 0 0.15rem;
+		letter-spacing: -0.02em;
+		line-height: 1.15;
+		overflow-wrap: break-word;
+		word-break: break-word;
+		font-family:
+			'Times New Roman', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+	}
+
+	.lp-version-sub {
+		margin: 0 0 0.6rem;
+		font-size: 1.15rem;
+		font-weight: 700;
+		color: var(--muted);
+		letter-spacing: 0.05em;
+	}
+
+	.lp-tagline {
+		font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+		font-weight: 700;
+		color: var(--accent-deep);
+		margin: 0 0 1.25rem;
+		line-height: 1.45;
+	}
+
+	.lp-lead {
+		max-width: 780px;
+		margin: 0 auto 2rem;
+		font-size: 1.02rem;
+		color: var(--ink-soft);
+		line-height: 1.8;
+		overflow-wrap: break-word;
+	}
+
+	.lp-cta-group {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 1rem;
+		margin-bottom: 0.75rem;
+		flex-wrap: wrap;
+	}
+
+	.ms-store-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		transition: transform 0.2s ease;
+	}
+
+	.ms-store-btn:hover {
+		transform: translateY(-2px);
+	}
+
+	.ms-store-badge-img {
+		height: 48px;
+		width: auto;
+		display: block;
+	}
+
+	.lp-subnote {
+		margin: 0 0 2.5rem;
+		font-size: 0.85rem;
+		color: var(--muted);
+	}
+
+	/* Buttons */
+	.lp-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		padding: 0.85rem 1.6rem;
+		border-radius: 14px;
+		font-size: 0.98rem;
+		font-weight: 700;
+		text-decoration: none;
+		transition: all 0.2s ease;
+		cursor: pointer;
+	}
+
+	.lp-btn--primary {
+		background: var(--accent);
+		color: #ffffff;
+		box-shadow: 0 6px 16px rgba(176, 106, 67, 0.32);
+	}
+
+	.lp-btn--primary:hover {
+		background: var(--accent-deep);
+		transform: translateY(-2px);
+		box-shadow: 0 8px 22px rgba(176, 106, 67, 0.4);
+	}
+
+	.lp-btn--outline {
+		background: #ffffff;
+		border: 1px solid var(--line);
+		color: var(--ink-strong);
+		box-shadow: var(--shadow-soft);
+	}
+
+	.lp-btn--outline:hover {
+		border-color: var(--accent);
+		color: var(--accent);
+		transform: translateY(-2px);
+	}
+
+	.lp-btn--full {
+		width: 100%;
+	}
+
+	.btn-icon {
+		flex-shrink: 0;
+	}
+
+	/* Screenshot Frame */
+	.lp-screenshot-wrapper {
+		margin-top: 1rem;
+	}
+
+	.lp-window-frame {
+		max-width: 960px;
+		margin: 0 auto;
+		background: #ffffff;
+		border-radius: 16px;
+		border: 1px solid var(--line);
+		box-shadow: 0 20px 48px rgba(45, 27, 17, 0.12);
+		overflow: hidden;
+	}
+
+	.window-bar {
+		display: flex;
+		align-items: center;
+		background: #f7f1e8;
+		padding: 0.65rem 1rem;
+		border-bottom: 1px solid var(--line);
+		gap: 0.45rem;
+	}
+
+	.window-dot {
+		width: 11px;
+		height: 11px;
+		border-radius: 50%;
+		display: inline-block;
+	}
+
+	.dot-red {
+		background: #e06c75;
+	}
+	.dot-yellow {
+		background: #e5c07b;
+	}
+	.dot-green {
+		background: #98c379;
+	}
+
+	.window-title {
+		margin-left: 0.75rem;
+		font-size: 0.8rem;
+		color: var(--ink-soft);
+		font-weight: 600;
+	}
+
+	.lp-screenshot-img {
+		display: block;
+		width: 100%;
+		height: auto;
+		border: none;
+	}
+
+	.screenshot-caption {
+		margin-top: 0.85rem;
+		font-size: 0.85rem;
+		color: var(--muted);
+	}
+
+	/* Release Highlights Box */
+	.release-note-box {
+		background: #ffffff;
+		border: 1px solid var(--line);
+		border-left: 5px solid var(--accent);
+		border-radius: 20px;
+		padding: 2rem 2.25rem;
+		box-shadow: var(--shadow-soft);
+	}
+
+	.release-note-header {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		margin-bottom: 1.5rem;
+		flex-wrap: wrap;
+	}
+
+	.release-tag {
+		padding: 0.25rem 0.65rem;
+		border-radius: 6px;
+		background: var(--accent);
+		color: #ffffff;
+		font-size: 0.75rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	.release-note-header h2 {
+		margin: 0;
+		font-size: 1.4rem;
+		color: var(--ink-strong);
+	}
+
+	.release-features-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+		gap: 1.5rem;
+	}
+
+	.release-feature-item h4 {
+		margin: 0 0 0.4rem;
+		font-size: 1.02rem;
+		color: var(--ink-strong);
+	}
+
+	.release-feature-item p {
+		margin: 0;
+		font-size: 0.88rem;
+		color: var(--ink-soft);
+		line-height: 1.65;
+	}
+
+	/* Section Commons */
+	.lp-section {
+		margin-bottom: 3.5rem;
+	}
+
+	.section-heading {
+		text-align: center;
+		max-width: 700px;
+		margin: 0 auto 2.25rem;
+	}
+
+	.section-heading .eyebrow {
+		font-size: 0.82rem;
+		font-weight: 700;
+		color: var(--accent);
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		margin-bottom: 0.35rem;
+	}
+
+	.section-heading h2 {
+		font-size: clamp(1.6rem, 3.2vw, 2.1rem);
+		color: var(--ink-strong);
+		margin: 0 0 0.75rem;
+		line-height: 1.3;
+	}
+
+	.section-lead {
+		font-size: 0.98rem;
+		color: var(--ink-soft);
+		line-height: 1.7;
+		margin: 0;
+	}
+
+	/* Features Grid */
+	.features-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 1.5rem;
+	}
+
+	.feature-card {
+		background: rgba(255, 255, 255, 0.88);
+		border: 1px solid var(--line);
+		border-radius: 20px;
+		padding: 1.85rem;
+		display: flex;
+		flex-direction: column;
+		box-shadow: var(--shadow-soft);
+		transition:
+			transform 0.2s ease,
+			box-shadow 0.2s ease;
+	}
+
+	.feature-card:hover {
+		transform: translateY(-3px);
+		box-shadow: var(--shadow);
+	}
+
+	.feature-icon-box {
+		width: 48px;
+		height: 48px;
+		border-radius: 14px;
+		background: rgba(176, 106, 67, 0.1);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1.5rem;
+		margin-bottom: 1.15rem;
+	}
+
+	.feature-card h3 {
+		font-size: 1.22rem;
+		color: var(--ink-strong);
+		margin: 0 0 0.75rem;
+		line-height: 1.35;
+	}
+
+	.feature-card p {
+		font-size: 0.92rem;
+		color: var(--ink-soft);
+		line-height: 1.7;
+		margin: 0 0 1.25rem;
+	}
+
+	.feature-example-box {
+		margin-top: auto;
+		background: #fdfaf6;
+		border: 1px solid var(--line);
+		border-radius: 10px;
+		padding: 0.65rem 0.85rem;
+		font-size: 0.84rem;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+	}
+
+	.example-label {
+		color: var(--muted);
+		font-weight: 700;
+		font-size: 0.75rem;
+	}
+
+	.example-arrow {
+		color: var(--accent);
+	}
+
+	.feature-tags {
+		margin-top: auto;
+		display: flex;
+		gap: 0.4rem;
+		flex-wrap: wrap;
+	}
+
+	.feature-tag {
+		padding: 0.2rem 0.55rem;
+		border-radius: 6px;
+		background: rgba(176, 106, 67, 0.08);
+		color: var(--accent-deep);
+		font-size: 0.78rem;
+		font-weight: 700;
+	}
+
+	/* Download Grid */
+	.download-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+		gap: 1.5rem;
+	}
+
+	.download-card {
+		background: #ffffff;
+		border: 1px solid var(--line);
+		border-radius: 20px;
+		padding: 1.85rem;
+		display: flex;
+		flex-direction: column;
+		box-shadow: var(--shadow-soft);
+		position: relative;
+		transition:
+			transform 0.2s ease,
+			box-shadow 0.2s ease;
+	}
+
+	.download-card:hover {
+		transform: translateY(-3px);
+		box-shadow: var(--shadow);
+	}
+
+	.download-card--featured {
+		border-color: var(--accent);
+		background: linear-gradient(180deg, #ffffff 0%, #fdfaf6 100%);
+	}
+
+	.download-badge {
+		position: absolute;
+		top: 1rem;
+		right: 1rem;
+		padding: 0.2rem 0.55rem;
+		border-radius: 6px;
+		font-size: 0.72rem;
+		font-weight: 700;
+	/* Spec Card (Integrated) */
+	.spec-card {
+		background: #ffffff;
+		border: 1px solid var(--line);
+		border-radius: 24px;
+		padding: 2.25rem;
+		box-shadow: var(--shadow-soft);
+	}
+
+	.spec-header {
+		display: flex;
+		align-items: center;
+		gap: 0.65rem;
+		margin-bottom: 1.25rem;
+	}
+
+	.spec-icon {
+		font-size: 1.5rem;
+	}
+
+	.spec-header h3 {
+		margin: 0;
+		font-size: 1.3rem;
+		color: var(--ink-strong);
+	}
+
+	.spec-list {
+		display: grid;
+		grid-template-columns: 140px 1fr;
+		gap: 0.75rem 1.25rem;
+		margin: 0;
+		font-size: 0.92rem;
+	}
+
+	.spec-list dt {
+		color: var(--muted);
+		font-weight: 700;
+	}
+
+	.spec-list dd {
+		margin: 0;
+		color: var(--ink-strong);
+	}
+
+	/* Download Channels Grid */
+	.download-channels-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 1.5rem;
+		margin-top: 1.75rem;
+	}
+
+	.download-channel-card {
+		background: #ffffff;
+		border: 1px solid var(--line);
+		border-radius: 20px;
+		padding: 1.85rem;
+		display: flex;
+		flex-direction: column;
+		box-shadow: var(--shadow-soft);
+		position: relative;
+		transition:
+			transform 0.2s ease,
+			box-shadow 0.2s ease;
+	}
+
+	.download-channel-card:hover {
+		transform: translateY(-3px);
+		box-shadow: var(--shadow);
+	}
+
+	.download-channel-card--featured {
+		border-color: var(--accent);
+		background: linear-gradient(180deg, #ffffff 0%, #fdfaf6 100%);
+	}
+
+	.channel-badge {
+		position: absolute;
+		top: 1rem;
+		right: 1rem;
+		padding: 0.2rem 0.55rem;
+		border-radius: 6px;
+		font-size: 0.72rem;
+		font-weight: 700;
+		background: var(--accent);
+		color: #ffffff;
+	}
+
+	.channel-badge--sub {
+		background: rgba(94, 74, 58, 0.08);
+		color: var(--ink-soft);
+	}
+
+	.channel-icon {
+		font-size: 1.8rem;
+		margin-bottom: 0.85rem;
+	}
+
+	.download-channel-card h3 {
+		margin: 0 0 0.5rem;
+		font-size: 1.18rem;
+		color: var(--ink-strong);
+	}
+
+	.channel-desc {
+		font-size: 0.88rem;
+		color: var(--ink-soft);
+		line-height: 1.65;
+		margin: 0 0 1.25rem;
+	}
+
+	.channel-file-list {
+		list-style: none;
+		padding: 0;
+		margin: 0 0 1.25rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.channel-file-list li {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		flex-wrap: wrap;
+		font-size: 0.82rem;
+	}
+
+	.file-type-badge {
+		padding: 0.15rem 0.45rem;
+		border-radius: 4px;
+		font-size: 0.72rem;
+		font-weight: 700;
+		background: rgba(176, 106, 67, 0.14);
+		color: var(--accent-deep);
+	}
+
+	.file-note {
+		color: var(--muted);
+		font-size: 0.78rem;
+	}
+
+	.channel-btn-group {
+		margin-top: auto;
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+	}
+
+	.channel-bottom-box {
+		margin-top: auto;
+	}
+
+	.code-terminal-box {
+		background: #f7f1e8;
+		border: 1px solid var(--line);
+		border-radius: 10px;
+		padding: 0.75rem;
+		overflow-x: auto;
+	}
+
+	.code-terminal-box code {
+		font-size: 0.82rem;
+		background: transparent;
+		color: var(--ink-strong);
+		padding: 0;
+	}
+
+	.ms-store-card-btn {
+		display: inline-block;
+		text-align: center;
+		transition: transform 0.2s ease;
+	}
+
+	.ms-store-card-btn:hover {
+		transform: translateY(-2px);
+	}
+
+	/* Disclaimer Box */
+	.lp-disclaimer-box {
+		background: #ffffff;
+		border: 1px solid var(--line);
+		border-left: 4px solid var(--accent);
+		border-radius: 18px;
+		padding: 1.5rem 1.75rem;
+		box-shadow: var(--shadow-soft);
+	}
+
+	.disclaimer-header {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		margin-bottom: 0.85rem;
+	}
+
+	.disclaimer-badge {
+		padding: 0.2rem 0.6rem;
+		border-radius: 6px;
+		background: rgba(176, 106, 67, 0.12);
+		color: var(--accent-deep);
+		font-size: 0.75rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	.disclaimer-header h3 {
+		margin: 0;
+		font-size: 1.15rem;
+		color: var(--ink-strong);
+	}
+
+	.disclaimer-content p {
+		margin: 0;
+		font-size: 0.92rem;
+		color: var(--ink-soft);
+		line-height: 1.75;
+	}
+
+	/* Back Link */
+	.lp-back-nav {
+		text-align: center;
+		margin-top: 2rem;
+	}
+
+	.back-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		color: var(--ink-soft);
+		font-size: 0.95rem;
+		font-weight: 700;
+		text-decoration: none;
+		padding: 0.6rem 1.25rem;
+		border-radius: 12px;
+		border: 1px solid var(--line);
+		background: rgba(255, 255, 255, 0.8);
+		transition: all 0.2s ease;
+	}
+
+	.back-link:hover {
+		color: var(--accent);
+		border-color: var(--accent);
+		background: #ffffff;
+		transform: translateX(-3px);
+	}
+
+	/* Responsive */
+	@media (max-width: 900px) {
+		.download-channels-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 768px) {
+		.features-grid,
+		.reference-tables-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 600px) {
+		.lp-hero-panel {
+			padding: 2rem 1.15rem;
+			border-radius: 20px;
+		}
+
+		.lp-cta-group {
+			flex-direction: column;
+			gap: 0.75rem;
+			width: 100%;
+		}
+
+		.lp-btn {
+			width: 100%;
+			box-sizing: border-box;
+		}
+
+		.ms-store-btn {
+			width: 100%;
+		}
+
+		.release-note-box {
+			padding: 1.5rem 1.15rem;
+			border-radius: 16px;
+		}
+
+		.release-features-grid,
+		.features-grid,
+		.download-channels-grid,
+		.reference-tables-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.feature-card,
+		.download-channel-card,
+		.ref-card {
+			padding: 1.35rem 1.15rem;
+			border-radius: 16px;
+		}
+
+		.spec-card {
+			padding: 1.5rem 1.15rem;
+			border-radius: 18px;
+		}
+
+		.spec-list {
+			grid-template-columns: 1fr;
+			gap: 0.25rem;
+		}
+
+		.spec-list dt {
+			margin-top: 0.5rem;
+		}
+
+		.lp-disclaimer-box {
+			padding: 1.25rem 1.15rem;
+			border-radius: 16px;
+		}
+	}
+</style>

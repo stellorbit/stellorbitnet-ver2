@@ -3,8 +3,27 @@ import { chromium } from 'playwright';
 import path from 'node:path';
 import fs from 'node:fs/promises';
 
-const ARTIFACT_DIR = 'C:/Users/猛攻型ことねP/.gemini/antigravity-ide/brain/accf3c80-c12a-4722-b19f-1f502c45c9a6';
+const isWin = process.platform === 'win32';
+const defaultArtifactDir = isWin
+  ? 'C:/Users/猛攻型ことねP/.gemini/antigravity-ide/brain/accf3c80-c12a-4722-b19f-1f502c45c9a6'
+  : '/mnt/c/Users/猛攻型ことねP/.gemini/antigravity-ide/brain/accf3c80-c12a-4722-b19f-1f502c45c9a6';
+const ARTIFACT_DIR = process.env.ARTIFACT_DIR || defaultArtifactDir;
 const LOCAL_SCREENSHOT_DIR = path.join(process.cwd(), 'scripts', 'screenshots');
+
+async function safeSaveScreenshot(page, filename) {
+  const localPath = path.join(LOCAL_SCREENSHOT_DIR, filename);
+  await page.screenshot({ path: localPath, fullPage: true });
+  console.log(`📸 スクリーンショット保存 (ローカル): ${localPath}`);
+
+  try {
+    await fs.mkdir(ARTIFACT_DIR, { recursive: true });
+    const artifactPath = path.join(ARTIFACT_DIR, filename);
+    await page.screenshot({ path: artifactPath, fullPage: true });
+    console.log(`📸 スクリーンショット保存 (アーティファクト): ${artifactPath}`);
+  } catch (err) {
+    console.log(`⚠️ アーティファクトディレクトリへの保存スキップ: ${err.message}`);
+  }
+}
 
 async function main() {
   console.log('🚀 Playwright Chromium を起動中...');
@@ -18,7 +37,8 @@ async function main() {
   await fs.mkdir(LOCAL_SCREENSHOT_DIR, { recursive: true });
 
   console.log('🌐 http://localhost:8322 にアクセス中...');
-  await page.goto('http://localhost:8322', { waitUntil: 'networkidle' });
+  await page.goto('http://localhost:8322', { waitUntil: 'domcontentloaded' });
+  await page.waitForSelector('.brand', { timeout: 10000 });
 
   // 1. タイトルとヘッダーの検証
   const title = await page.title();
@@ -34,11 +54,7 @@ async function main() {
   }
 
   // スクリーンショット1: CMSトップページ
-  const screenshot1Artifact = path.join(ARTIFACT_DIR, 'cms_top_page.png');
-  const screenshot1Local = path.join(LOCAL_SCREENSHOT_DIR, 'cms_top_page.png');
-  await page.screenshot({ path: screenshot1Artifact, fullPage: true });
-  await page.screenshot({ path: screenshot1Local, fullPage: true });
-  console.log('📸 CMSトップページのスクリーンショットを保存:', screenshot1Artifact);
+  await safeSaveScreenshot(page, 'cms_top_page.png');
 
   // 2. 記事執筆エディタ画面 (スタンドアロン/ポップアップモード) の検証
   // 最初の一覧から最初の記事のslugを取得
@@ -47,7 +63,8 @@ async function main() {
   console.log(`🌐 記事 [${slug}] のエディタ画面を検証中...`);
 
   const editorUrl = `http://localhost:8322/?editor=${encodeURIComponent(slug)}`;
-  await page.goto(editorUrl, { waitUntil: 'networkidle' });
+  await page.goto(editorUrl, { waitUntil: 'domcontentloaded' });
+  await page.waitForSelector('#tb-format-select', { timeout: 10000 });
   await page.waitForTimeout(1000);
 
   // ツールバーボタンの存在確認
@@ -213,11 +230,7 @@ async function main() {
   if (formatVal !== 'p') throw new Error('Ctrl+0 による段落変換が動作していません');
 
   // スクリーンショット2: 執筆エディタ画面 (ブログカード + X埋め込み配置後)
-  const screenshot2Artifact = path.join(ARTIFACT_DIR, 'cms_editor_embed_test.png');
-  const screenshot2Local = path.join(LOCAL_SCREENSHOT_DIR, 'cms_editor_embed_test.png');
-  await page.screenshot({ path: screenshot2Artifact, fullPage: true });
-  await page.screenshot({ path: screenshot2Local, fullPage: true });
-  console.log('📸 エディタ画面のスクリーンショットを保存:', screenshot2Artifact);
+  await safeSaveScreenshot(page, 'cms_editor_embed_test.png');
 
   await browser.close();
   console.log('🎉 全てのPlaywright検証項目が正常にパスしました！');

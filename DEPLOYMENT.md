@@ -31,24 +31,26 @@ Cloudflare Pages ダッシュボードの対象プロジェクト設定にて、
 
 ### 1. 初回認証
 
-PowerShell:
-
+**PowerShell (Windows):**
 ```powershell
 pnpm exec wrangler login
 ```
-
-非対話環境や CI で実行する場合は、API トークンを環境変数に設定してください。
-
+非対話環境や CI の場合:
 ```powershell
 setx CLOUDFLARE_API_TOKEN "your-cloudflare-api-token"
+setx CLOUDFLARE_PAGES_PROJECT_NAME "stellorbitnet-ver2"
+setx CLOUDFLARE_PAGES_BRANCH "main"
 ```
 
-このリポジトリは Cloudflare Pages の `stellorbitnet-ver2` を既定の deploy 先として使います。
-プロジェクト名やブランチ名を変更する場合は環境変数で指定します。
-
-```powershell
-setx CLOUDFLARE_PAGES_PROJECT_NAME "your-pages-project-name"
-setx CLOUDFLARE_PAGES_BRANCH "main"
+**Bash (WSL / Linux):**
+```bash
+pnpm exec wrangler login
+```
+非対話環境や CI の場合:
+```bash
+export CLOUDFLARE_API_TOKEN="your-cloudflare-api-token"
+export CLOUDFLARE_PAGES_PROJECT_NAME="stellorbitnet-ver2"
+export CLOUDFLARE_PAGES_BRANCH="main"
 ```
 
 ### 2. 通常のデプロイ

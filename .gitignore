@@ -26,4 +26,15 @@ pnpm-debug.log*
 # local dev cms tools
 scripts/dev-cms.*
 scripts/screenshots/
+cms-gui.log
+
+# wsl migration scripts & docs
+scripts/sync-to-wsl.ps1
+scripts/wsl-run.ps1
+docs/wsl3_migration_plan.md
+C:/
+
+# tauri build artifacts
+src-tauri/target/
+
 

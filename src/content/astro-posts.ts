@@ -284,6 +284,18 @@ export const astroPosts: AstroPostMeta[] = [
 		  { depth: 2, slug: "neglect-of-users", text: "最後の一押し：４ヵ月にわたって繰り広げられた「ユーザー軽視」の集大成" },
 		  { depth: 2, slug: "conclusion", text: "まとめ：発売初期から今回までの所感" }
 		],
+	},
+	{
+		slug: "cloudflare-worker",
+		title: "Cloudflare Worker移行テスト記事＋格闘の記録。",
+		description: "これまでローカルでやっていた記事執筆を出先でもできるようリモートで設定しようとしたら色々地獄を見た、というテスト記事兼奮闘記。",
+		pubDate: new Date("2026-10-08"),
+		tags: ["Cloudflare Worker"],
+		categories: ["サイト運営", "雑記"],
+		draft: true,
+		headings: [
+			{ depth: 2, slug: 'intro', text: '本文' },
+		],
 	}
 ];
 

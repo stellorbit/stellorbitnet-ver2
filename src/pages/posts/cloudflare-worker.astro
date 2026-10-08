@@ -1,0 +1,21 @@
+---
+import ArticleBody from '../../articles/cloudflare-worker.astro';
+import { getAstroPost } from '../../content/astro-posts';
+import BlogPost from '../../layouts/BlogPost.astro';
+
+const post = getAstroPost('cloudflare-worker');
+
+if (!post) {
+	throw new Error('Astro post metadata not found: cloudflare-worker');
+}
+---
+
+<BlogPost
+	title={post.title}
+	description={post.description}
+	pubDate={post.pubDate}
+	updatedDate={post.updatedDate}
+	headings={post.headings}
+>
+	<ArticleBody />
+</BlogPost>

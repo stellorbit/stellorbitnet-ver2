@@ -292,7 +292,6 @@ export const astroPosts: AstroPostMeta[] = [
 		pubDate: new Date("2026-10-08"),
 		tags: ["Cloudflare Worker"],
 		categories: ["サイト運営", "雑記"],
-		draft: true,
 		headings: [
 			{ depth: 2, slug: 'intro', text: '本文' },
 		],

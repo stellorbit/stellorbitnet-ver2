@@ -9,6 +9,10 @@ import rehypeSlug from 'rehype-slug';
 export default defineConfig({
   site: 'https://stellorbit.net',
 
+  build: {
+    inlineStylesheets: 'always',
+  },
+
   markdown: {
     rehypePlugins: [rehypeSlug],
   },

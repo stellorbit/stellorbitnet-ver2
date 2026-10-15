@@ -10,12 +10,23 @@ export interface Props {
 }
 
 const { title, description = SITE_DESCRIPTION } = Astro.props;
+
+// JSON-LD: WebSite
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: SITE_TITLE,
+  url: Astro.site?.href ?? 'https://stellorbit.net',
+  description: SITE_DESCRIPTION,
+  inLanguage: 'ja',
+};
 ---
 
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <BaseHead title={`${title} | ${SITE_TITLE}`} description={description} />
+  <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
 </head>
 <body>
   <Header />

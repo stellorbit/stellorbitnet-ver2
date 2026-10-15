@@ -293,7 +293,9 @@ export const astroPosts: AstroPostMeta[] = [
 		tags: ["Cloudflare Worker"],
 		categories: ["サイト運営", "雑記"],
 		headings: [
-			{ depth: 2, slug: 'intro', text: '本文' },
+		  { depth: 2, slug: "intro", text: "Cloudflare Workerへ移行しました。" },
+		  { depth: 2, slug: "ai任せでも大変だった移行作業", text: "AI任せでも大変だった移行作業" },
+		  { depth: 3, slug: "cloudflare-workerでの設定方法がまだ広まっていない", text: "Cloudflare Workerでの設定方法がまだ広まっていない？" }
 		],
 	}
 ];

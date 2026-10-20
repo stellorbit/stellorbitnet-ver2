@@ -297,6 +297,18 @@ export const astroPosts: AstroPostMeta[] = [
 		  { depth: 2, slug: "ai任せでも大変だった移行作業", text: "AI任せでも大変だった移行作業" },
 		  { depth: 3, slug: "cloudflare-workerでの設定方法がまだ広まっていない", text: "Cloudflare Workerでの設定方法がまだ広まっていない？" }
 		],
+	},
+	{
+		slug: "pc-vs-ps5",
+		title: "【不毛な戦い】ゲーミングPC vs PS5の戦い、そもそも「比較対象」が違う。",
+		description: "またもバトルクエストSNSことXで開戦した「ゲーミングPC vs PS5」の戦い。もうええて。",
+		pubDate: new Date("2026-10-20"),
+		tags: ["PS5", "ゲーミングPC", "自作PC", "BTO"],
+		categories: ["PC/IT", "ゲーム"],
+		draft: true,
+		headings: [
+			{ depth: 2, slug: 'intro', text: '本文' },
+		],
 	}
 ];
 

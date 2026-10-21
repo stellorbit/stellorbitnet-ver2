@@ -305,7 +305,6 @@ export const astroPosts: AstroPostMeta[] = [
 		pubDate: new Date("2026-10-20"),
 		tags: ["PS5", "ゲーミングPC", "自作PC", "BTO"],
 		categories: ["PC/IT", "ゲーム"],
-		draft: true,
 		headings: [
 			{ depth: 2, slug: 'intro', text: '本文' },
 		],

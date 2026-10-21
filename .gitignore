@@ -38,3 +38,7 @@ C:/
 src-tauri/target/
 
 
+
+# backups
+*.old
+.backups/

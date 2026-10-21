@@ -306,7 +306,7 @@ export const astroPosts: AstroPostMeta[] = [
 		tags: ["PS5", "ゲーミングPC", "自作PC", "BTO"],
 		categories: ["PC/IT", "ゲーム"],
 		headings: [
-			{ depth: 2, slug: 'intro', text: '本文' },
+		  { depth: 2, slug: "intro", text: "不毛な戦いは観測する限り5日は続いている。" }
 		],
 	}
 ];

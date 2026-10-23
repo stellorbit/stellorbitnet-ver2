@@ -16,7 +16,7 @@ export const astroPosts: AstroPostMeta[] = [
     slug: 'nodejs-security-measures',
     title: 'Node.jsの問題と、当サイトにおける脆弱性対策について',
     description:
-      'Node.jsで公表されたセキュリティ上の問題（脆弱性）の概要と、当サイト（Stellorbit）および関連サービスで実施した4つの多層防御対策・セキュリティ監査結果について、専門用語を抑えてわかりやすく解説します。',
+      'Node.jsで公表されたセキュリティ上の問題（脆弱性）の概要と、当サイトおよび関連サービスで実施した4つの多層防御対策・セキュリティ監査結果について、専門用語を抑えてわかりやすく解説します。',
     pubDate: new Date('2026-10-23T15:00:00+09:00'),
     tags: ['Node.js', 'セキュリティ', 'Web開発', 'Cloudflare', '保守'],
     categories: ['PC/IT'],
@@ -26,7 +26,7 @@ export const astroPosts: AstroPostMeta[] = [
       { depth: 2, slug: "what-is-vulnerability", text: "専門用語なしでわかる！Node.jsの脆弱性とは？" },
       { depth: 3, slug: "why-news", text: "なぜ世界中でニュースになったのか？" },
       { depth: 3, slug: "backdoors-and-packages", text: "「裏口」や「偽の荷物」が持ち込まれる危険性" },
-      { depth: 2, slug: "measures", text: "当サイト（Stellorbit）で実施した具体的な4つの対策" },
+      { depth: 2, slug: "measures", text: "当サイトで実施した具体的な4つの対策" },
       { depth: 3, slug: "measure-1", text: "1. 常に最新の安全基準へ：Node.js 26系へのアップデート" },
       { depth: 3, slug: "measure-2", text: "2. 勝手なプログラム実行を許さない：pnpm v12の厳格な防御設定" },
       { depth: 3, slug: "measure-3", text: "3. クラウド配信環境（Cloudflare）との連動最適化" },

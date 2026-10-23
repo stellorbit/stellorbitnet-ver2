@@ -67,18 +67,5 @@
     "sharp@0.35.4": true,
     "workerd@1.20260730.1": true,
     "workerd@1.20260911.1": true
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "sharp",
-      "workerd"
-    ],
-    "overrides": {
-      "brace-expansion": ">=5.0.12",
-      "smol-toml": ">=1.9.0",
-      "source-map-js": ">=1.2.2",
-      "fast-uri": ">=3.1.8"
-    }
   }
 }

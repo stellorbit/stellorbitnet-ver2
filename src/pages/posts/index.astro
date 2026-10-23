@@ -18,7 +18,10 @@ const posts = await getListedPosts();
 			<div class="post-list">
 				{posts.map((post) => (
 					<a class="post-card" href={post.link}>
-						<p class="card-meta">{post.pubDate.toLocaleDateString('ja-JP')}</p>
+						<div class="card-meta-row">
+							<p class="card-meta">{post.pubDate.toLocaleDateString('ja-JP')}</p>
+							{post.isAiGenerated && <span class="badge-ai">AI生成</span>}
+						</div>
 						<h2>{post.title}</h2>
 						<p>{post.description}</p>
 						{post.tags.length > 0 && (

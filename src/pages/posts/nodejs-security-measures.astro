@@ -1,0 +1,24 @@
+---
+import ArticleBody from '../../articles/nodejs-security-measures.astro';
+import { getAstroPost } from '../../content/astro-posts';
+import BlogPost from '../../layouts/BlogPost.astro';
+import thumbnail from '../../assets/post-thumbnails/nodejs-security-measures.webp';
+
+const post = getAstroPost('nodejs-security-measures');
+
+if (!post) {
+	throw new Error('Astro post metadata not found: nodejs-security-measures');
+}
+---
+
+<BlogPost
+	title={post.title}
+	description={post.description}
+	pubDate={post.pubDate}
+	updatedDate={post.updatedDate}
+	headings={post.headings}
+	heroImage={thumbnail}
+	isAiGenerated={post.isAiGenerated}
+>
+	<ArticleBody />
+</BlogPost>

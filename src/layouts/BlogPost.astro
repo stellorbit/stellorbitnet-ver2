@@ -17,6 +17,7 @@ interface Props {
   updatedDate?: Date;
   heroImage?: ImageMetadata;
   headings?: { depth: number; slug: string; text: string }[];
+  isAiGenerated?: boolean;
 }
 
 const {
@@ -26,6 +27,7 @@ const {
   updatedDate,
   heroImage,
   headings = [],
+  isAiGenerated = false,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -122,6 +124,7 @@ const breadcrumbSchema = {
                   </div>
                 )
               }
+              {isAiGenerated && <span class="badge-ai">AI生成記事</span>}
             </div>
             <h1>{title}</h1>
             <p>{description}</p>

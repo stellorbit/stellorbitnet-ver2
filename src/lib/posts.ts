@@ -10,6 +10,7 @@ export interface ListedPost {
   tags: string[];
   categories: string[];
   link: string;
+  isAiGenerated?: boolean;
 }
 
 export async function getListedPosts(): Promise<ListedPost[]> {
@@ -23,6 +24,7 @@ export async function getListedPosts(): Promise<ListedPost[]> {
     tags: post.data.tags,
     categories: post.data.categories,
     link: `/posts/${post.id}/`,
+    isAiGenerated: false,
   }));
 
   const normalizedAstroPosts = astroPosts
@@ -36,6 +38,7 @@ export async function getListedPosts(): Promise<ListedPost[]> {
       tags: post.tags,
       categories: post.categories,
       link: `/posts/${post.slug}/`,
+      isAiGenerated: post.isAiGenerated ?? false,
     }));
 
   return [...normalizedMdxPosts, ...normalizedAstroPosts].sort(

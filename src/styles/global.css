@@ -622,3 +622,26 @@ hr {
 }
 
 
+
+/* AI generated badge & card meta row */
+.card-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.badge-ai {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.15rem 0.55rem;
+  border-radius: 9999px;
+  background: rgba(14, 116, 144, 0.08);
+  color: #0e7490;
+  border: 1px solid rgba(14, 116, 144, 0.25);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  line-height: 1.2;
+}

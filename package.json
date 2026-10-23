@@ -33,7 +33,6 @@
     "format:check": "prettier --check .",
     "test:cms": "node ./scripts/verify-cms-playwright.mjs"
   },
-  "packageManager": "pnpm@12",
   "dependencies": {
     "@astrojs/mdx": "^7.0.8",
     "@astrojs/rss": "^4.0.19",

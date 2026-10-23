@@ -3,7 +3,8 @@
   "type": "module",
   "version": "0.0.1",
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=26",
+    "pnpm": ">=12"
   },
   "scripts": {
     "dev": "astro dev",
@@ -32,7 +33,7 @@
     "format:check": "prettier --check .",
     "test:cms": "node ./scripts/verify-cms-playwright.mjs"
   },
-  "packageManager": "pnpm@10.34.5",
+  "packageManager": "pnpm@12",
   "dependencies": {
     "@astrojs/mdx": "^7.0.8",
     "@astrojs/rss": "^4.0.19",

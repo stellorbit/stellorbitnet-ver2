@@ -1,4 +1,4 @@
-<p id="intro">「すてらびっと」こと猛攻型ことねP（a.k.a. ひうが）です。名前いっぱいあるな。</p><p id="intro">数日前からXでちょこちょこ言及していますが、</p><p id="intro">現在配布している<b>「ChordLaunchpad」を、根本から作り直すことにしました。</b></p><p>そして<b>名称を「ChordLaunch」に少しだけ変えます。<br><br></b></p><p>まずはそれに至った理由。</p><p>そして、現在正式リリースに向けて取り組んでいること、起動の高速化のための構造変更のお話、機能の充実や使いやすさの向上の取り組み、今後実装予定の機能などをお話します。<br><br>なお、現在プレリリース版をGitHubに上げています。皆様、ぜひお使いの上、ご意見などがありましたらご自由にどうぞ。<br>
+<p id="intro">「すてらびっと」こと猛攻型ことねP（a.k.a. ひうが）です。名前いっぱいあるな。<br>最近主軸で使うAIを<b>GeminiからClaudeに乗り換えてみました。</b>今のところスムース。smooth。いい感じ。</p><p id="intro">さて、数日前からXでちょこちょこ言及していますが、</p><p id="intro">現在配布している<b>「ChordLaunchpad」を、根本から作り直すことにしました。</b></p><p>そして<b>名称を「ChordLaunch」に少しだけ変えます。<br><br></b></p><p>まずはそれに至った理由。</p><p>そして、起動の高速化のための構造変更のお話、機能の充実や使いやすさの向上の取り組みなどをお伝えします。<br><br>なお、現在プレリリース版をGitHubに上げています。皆様、ぜひお使いの上、ご意見などがありましたらご自由にどうぞ。<br>
 </p><div class="blog-card-wrapper">
   <a href="https://github.com/stellorbit/ChordLaunch/releases/tag/v26.11-Pre2" target="_blank" rel="noopener noreferrer" class="blog-card">
     <div class="blog-card-body">
@@ -31,7 +31,13 @@ ChordLaunch-v26.11-Pre-setup.e...</div>
   <img src="/images/posts/chordlaunchpad-rebuild/image-265623.webp" alt="" loading="lazy">
   <figcaption contenteditable="true" class="article-image-caption" data-placeholder="キャプションを入力（任意）">基本的な入力を左に、工夫やテンプレートは右に配置。</figcaption>
 </figure>
-旧版では左側は「テキストボックス」のみで、基本的なダイアトニックコードを打つには右に行く必要がありました。</span></h4><p>今回はそれを改善し、左側に<b>テキスト入力とドラッグ・ダブルクリックで入力できるパレットを配備。</b></p><p>少し捻る手を探したい方向けの機能は右側に置きました。</p><p>・・・次候補は左に置いたほうが良い？</p><p><br></p><h4>休符・小節を跨いだ配置に対応</h4><p>
+旧版では左側は「テキストボックス」のみで、基本的なダイアトニックコードを打つには右に行く必要がありました。</span></h4><p>今回はそれを改善し、左側に<b>テキスト入力とドラッグ・ダブルクリックで入力できるパレットを配備。</b></p><p>少し捻る手を探したい方向けの機能は右側に置きました。</p><p>・・・次候補は左に置いたほうが良い？<br><br></p><h3></h3><h4>コードパレットを使いやすく</h4><p><br></p><p>
+<figure class="article-image-figure" style="opacity: 1; transition: opacity 0.3s;">
+  <img src="/images/posts/chordlaunchpad-rebuild/image-424786.webp" alt="" loading="lazy">
+  <figcaption contenteditable="true" class="article-image-caption" data-placeholder="キャプションを入力（任意）">左が新版。大きく見やすく使いやすく。</figcaption>
+</figure>
+<span style="font-weight: normal;">コードのドラッグがしづらい小型の円形から、</span>大きな角形サイズになり、見やすく・使いやすく<span style="font-weight: normal;">なりました。</span></p><p></p><p><span style="font-weight: normal;"></span></p>
+更に、<b>ダブルクリックの入力にも対応。</b><p></p><p><br></p><h4>休符・小節を跨いだ配置に対応</h4><p>
 
 </p><p><br></p>
 <p></p><p>
@@ -39,4 +45,4 @@ ChordLaunch-v26.11-Pre-setup.e...</div>
   <img src="/images/posts/chordlaunchpad-rebuild/image-806052.webp" alt="" loading="lazy">
   <figcaption contenteditable="true" class="article-image-caption" data-placeholder="キャプションを入力（任意）">前よりもっと動かせるように。自由度が増しました。</figcaption>
 </figure>
-<p>旧版では左詰めだったのが、<b>空白部分を休符として置くことが可能になりました。<br>「空ける」というより「休符が作られる」構造になっています。</b></p><p></p><p><br></p>
+<p>旧版では左詰めだったのが、<b>空白部分を休符として置くことが可能になりました。<br>「空ける」というより「休符が作られる」構造になっています。</b></p><h2><b>もっと語りたいところはあったが、書く前に手を動かしてきます。</b></h2><p>他にも、<b>分数コードなんかを打てる</b>ようになったり、<br><b>カスタムのコードを作れる</b>ようになったりと小回りが効く仕様になったんですが・・・</p><p><br></p><p><b>いかんせんまだ不具合が多いんです。</b><br><br>新版を色々いじりながらこの記事を書いてるんですが、以下の不具合や不便な点が見つかりました。<br><br></p><ul><li>シンコペーションの状態からずらすと<b>小節バーと分割されたコードが出現する</b></li><li>パートごとの編集機能の未成熟さ</li><li><b>一部コードへの対応不十分</b></li><li><b>コードカード（ピアノロールの上のコード部分）の解放ができない</b>（カスタムコードが上書きされる）<br><br></li></ul><p>まだまだ叩けば埃が出る仕様です。<br>まだまだアピールするには早かったですね。<br><br>今回の記事は早めに切り上げて、不具合修正に取り掛かります。</p><p>皆さんも興味があったら是非使ってみて<b>粗捜ししてみてください。<br></b></p><p>それでは。</p><p></p><p></p>

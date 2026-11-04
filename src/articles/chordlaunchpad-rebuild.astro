@@ -1,3 +1,42 @@
-<h2 id="intro">本文</h2>
+<p id="intro">「すてらびっと」こと猛攻型ことねP（a.k.a. ひうが）です。名前いっぱいあるな。</p><p id="intro">数日前からXでちょこちょこ言及していますが、</p><p id="intro">現在配布している<b>「ChordLaunchpad」を、根本から作り直すことにしました。</b></p><p>そして<b>名称を「ChordLaunch」に少しだけ変えます。<br><br></b></p><p>まずはそれに至った理由。</p><p>そして、現在正式リリースに向けて取り組んでいること、起動の高速化のための構造変更のお話、機能の充実や使いやすさの向上の取り組み、今後実装予定の機能などをお話します。<br><br>なお、現在プレリリース版をGitHubに上げています。皆様、ぜひお使いの上、ご意見などがありましたらご自由にどうぞ。<br>
+</p><div class="blog-card-wrapper">
+  <a href="https://github.com/stellorbit/ChordLaunch/releases/tag/v26.11-Pre2" target="_blank" rel="noopener noreferrer" class="blog-card">
+    <div class="blog-card-body">
+      <div class="blog-card-title">Release ChordLaunch v26.11-Pre2 · stellorbit/ChordLaunch</div>
+      <div class="blog-card-description">ChordLaunch v26.11-Pre2（プレリリース）
+ChordLaunchpad の後継となる、Windows 向けコード進行演奏・音楽理論支援アプリです。アプリ内のバージョン表記は v26.11-Pre です。
 
-<p>【お知らせ】現在、ChordLaunchpadの後継アプリを作成中です。 の本文を書き始めます。</p>
+ChordLaunch-v26.11-Pre-portable.zip: 展開してすぐ使えるポータブル版
+ChordLaunch-v26.11-Pre-setup.e...</div>
+      <div class="blog-card-footer">
+        <span class="blog-card-domain">🔗 github.com</span>
+      </div>
+    </div>
+    <div class="blog-card-thumbnail">
+      <img src="https://opengraph.githubassets.com/84dc62120e2955e85959b1775157bbe524ced6d8de5e7e25515f9fa364db938e/stellorbit/ChordLaunch/releases/tag/v26.11-Pre2" alt="" loading="lazy"></div></a></div><p></p><h2>ChordLaunchpadが思ったより使いづらかった。</h2>
+
+<p>まずは、作り直すに至った理由を話していきます。</p><h3>起動時の重さ ～ 新しいものが正義とは限らない</h3><p>まず、ChordLaunchpadは制作当初から、<b>C#/WinUI</b>の組み合わせで作っています。<br>C#はともかくとして、「WinUI」ってのは何かと言うと。</p><p><b>「現在Windows11で古いものからの置き換えがコレで進んでる」</b>やつです。<br>スタートメニューやらエクスプローラー、あと「ファイル名を指定して実行」のウィンドウも将来的にこれに取って代わられます。</p><p><b>「そんなにいいモノなのか？取り入れてみよう」</b>って土台に取り入れて作られたのが、現在のChordLaunchpadです。</p><p>ただ、実際のところは<b>そんなに軽さに貢献しなかった</b>というオチです。<br><br>実測値は後述します。今作り直してるやつと比べると<b>4倍近く遅いです。</b></p><h3>実際に本腰を入れて使うと融通が効かない</h3><p>例えば、コード譜面をどっかから拾ってくるでも、イチから作るでもしてみるとします。</p><p>そうすると、なんか<b>思ったとおりに動かなかったりするんです。</b></p><p><br></p><ul><li>コードとコードの間に<b>空白（休符）を作れない</b></li><li>sus2とかsus4とかadd9とか<b>直打ちじゃないと対応できない</b></li><li><b>分数コードにも対応できない</b></li><li>右ペインが<b>なんかゴチャゴチャしてる</b></li></ul><p></p><p><span style="color: rgb(15, 23, 42); font-weight: 700;"></span><!--EndFragment--></p><figure class="article-image-figure" style="font-weight: bold; opacity: 1; transition: opacity 0.3s;">
+  <img src="/images/posts/chordlaunchpad-rebuild/image-020687.webp" alt="" loading="lazy">
+  <figcaption contenteditable="true" class="article-image-caption" data-placeholder="キャプションを入力（任意）">スクロールバーが2本あってゴチャついてる</figcaption>
+</figure>
+<p style="font-weight: bold;"><br></p>
+<p><!--StartFragment--><span style="font-weight: 400;">タイムライン内で移動するときに</span><span style="color: rgb(15, 23, 42);"><b>「タイムラインに追加」って出てくる</b>わ、</span><!--EndFragment--></p><p><span style="color: rgb(15, 23, 42);">ドラッグしたら<b>問答無用で1小節貼り付け</b>だわ・・・<br><br>ほんと、<b>作るだけ作って自分で検証しないことの罪の重さを感じました。<br>ちょっと触っただけのユーザーの皆様にお詫び申し上げます。</b></span></p><p><span style="color: rgb(15, 23, 42);"><b>（多分これじゃちょっと触って終わりだと思うので・・・）</b></span></p><p><span style="color: rgb(15, 23, 42);"><b><br></b></span></p><h2><span style="color: rgb(15, 23, 42);">根本から作り直しの理由</span></h2><p>まあこうやって色々あるわけですが、今回根本から作り直すに至ったのにはちゃーんと理由があります。</p><p><br></p><p></p><h3>意外と面倒なWinUI</h3><p><b><br>実はこのWinUIというやつは、自分でUIをアレンジするのが困難</b>だったりします。</p><p><br></p><p><span style="color: rgb(15, 23, 42);">昔は20万だか30万だかした、Microsoft製の</span><span style="color: rgb(15, 23, 42); font-weight: 700;">プログラムを一貫して作るソフト</span><span style="color: rgb(15, 23, 42); font-weight: 700;">「Visual Studio」というものがあります。</span><!--EndFragment--></p><!--StartFragment--><!--EndFragment--><!--StartFragment--><!--EndFragment--><p>現在は<b>非営利・個人なら無料で、ガッツリ儲けたり法人作ってやったるぞ</b>ってしない限りお金はかからなくなりました。</p><p>まあそれは置いといて、このソフトは結構<b>直感的にボタンやらラベルやらを置く機能があります。</b></p><p>置いたあとが結構面倒だったりするんですが、<b>ガワをまず作ることができるんです。</b></p><p>Visual Studioでアプリを作る方法の解説動画は、<a href="https://skills.yourlearning.ibm.com" target="_blank" rel="noopener noreferrer" style="font-weight: bold;">IBM SkillsBuild</a>を経由して<b>udemy</b>に行くと、<b>「WPF」</b>というのを使って軽いアプリを作る動画があります。</p><p></p><aside class="callout callout-note"><strong class="callout-title">💡 Tips</strong><p>※IBM SkillsBuildのアカウントはGoogleアカウントとかで比較的簡単に作れますが、udemyへのアクセスはちょっと探す必要が有ります。</p></aside><p>それを見ながら触ることがありますが、本当に<b>ボタンやら入力欄やらをぽんぽん置いて、それを動かすためのコードを書く</b>、みたいな感じです。</p><p>機能させるためのコードを書くのは、今どきはAIで書かせることができます。<br></p><p></p><p><b><br></b></p><p><b>ただし、このWinUIはそれができません。</b></p><p>HTMLとかCSSみたいな感じで、ボタンやテキストボックスを置くために<b>コードを書きます。</b></p><p><b>そうしたらウィンドウ内に反映される仕組み</b>になっています。</p><p>思い通りに文字が配置されなくて、手動でどうにかしようとしたらコレにぶち当たって、<br><b>「めんどくせえ・・・」と天を仰ぎました。</b></p><p><b>今後勉強して触るにしても面倒なものは避けよう、</b>という判断です。</p><p><br></p><h3>古め×新しめで究極の高速化</h3><p><br>今回の後継版は、C#/WinUIから<b>「C++20, Direct2D/DirectWrite, WASAPI, Win32」</b>という構成になってます。</p><p>自分でもよくわかっていません。ただ<b>AIに勧められて採用しました。「こっちだと爆速だよ」って。</b></p><p><b><br></b>WASAPIは音声周りなのであまり関係ない（現行版にも採用してたやつ）ですが、<br><b>「C++20,Direct2D/DirectWrite,Win32」</b>の組み合わせです。<br>C++のバージョンは最新として、<b>「Win32」は本当に昔っから使われているヤツです。</b></p><p>最古は<b>1993年のビジネス向けOSであるWindows NT 3.1、</b><br>家庭向けOSでは<b>Windows 95(1995年)から現在に至るまで使われ続けています。<br><br></b>そして、<b>「Direct2D/DirectWrite」</b>は、昔からあるものかと思いきや、<b>Windows Vistaや7の世代から使われ始めた</b>ものだそうです。</p><p><br>この<b>「古い仕組みと新しい仕組みの融合」</b>により<b>内部の動きやウィンドウの描画が高速化</b>され、<br>公称での起動時間が<b>50ms未満</b>・RAM消費量が<b>20MB未満</b>まで高速化・低負荷化されました。<br>ちなみに実測すると、以下のとおりです。</p><p>※起動時間はClaudeに計測指示をし、5回起動した最小～最大値。時間は<b>ウィンドウが出てくるまで。</b><br>RAM使用量は<b>手動起動後の使用量をタスクマネージャーで確認。</b></p><p>プロセス生成時間<b>（起動し始めまで）</b>はClaude計測。<br></p><div class="table-wrapper">ChordLaunchpad vs ChordLaunch(New) 起動時間・起動時RAM使用量<br><table><thead><tr><th><br></th><th>旧ChordLaunchpad</th><th>新ChordLaunch</th></tr></thead><tbody><tr><td>起動時間</td><td>0.9秒～1.3秒(900-1300ms)</td><td><b>0.2～0.3秒(200-300ms)</b></td></tr><tr><td>RAM使用量</td><td>57.5MB</td><td><b>12.4 MB</b></td></tr><tr><td>プロセス生成時間</td><td>90～220ms</td><td><b>初回248ms、以降40ms</b></td></tr></tbody></table></div><p></p><p>音楽のBPMで喩えると、旧ChordLaunchpadはだいたい<b>60BPM程度</b>と見ていいです。<br>対して新ChordLaunchは<b>200BPM、最速で252BPM</b>という<b>音ゲーマー御用達みたいな速さ</b>です。</p><p>こうして例えてみると凄まじいものがありますね。</p><p><br></p><h3>ざっと言うと？</h3><p>元々が重い上に不具合が多すぎるから<b>いっそのこと軽量化して機能も見直そう</b>という動機です。</p><p><br></p><h2>機能の充実・使いやすさの追求を徹底的に</h2><p>さて、ここからはプレビュー版で使える機能、かつ強化ポイントを紹介します。</p><h3>使いやすさの向上</h3><p>まずは使いやすさに通じる部分の見直しから。</p><h4>「ダッシュボード」の新設</h4><p>
+<figure class="article-image-figure" style="opacity: 1; transition: opacity 0.3s;">
+  <img src="/images/posts/chordlaunchpad-rebuild/image-802432.webp" alt="" loading="lazy">
+  <figcaption contenteditable="true" class="article-image-caption" data-placeholder="キャプションを入力（任意）">起動時のダッシュボード。もっとコンパクトにする予定です。</figcaption></figure></p><p>
+</p><p><br></p>
+旧版は起動時は何もない状態で起動し、ファイルもいちいち開かなきゃいけませんでした。<p></p><p>
+この<b>「ダッシュボード」</b>を新設したことで、<b>これまで着手したプロジェクトに引き続きとりかかるのが簡単になりました。</b></p><p><b><br></b></p><h4><span style="font-weight: 400;">直感的に触る部分を左に、アレンジやテンプレは右に。<br><br>
+<figure class="article-image-figure" style="opacity: 1; transition: opacity 0.3s;">
+  <img src="/images/posts/chordlaunchpad-rebuild/image-265623.webp" alt="" loading="lazy">
+  <figcaption contenteditable="true" class="article-image-caption" data-placeholder="キャプションを入力（任意）">基本的な入力を左に、工夫やテンプレートは右に配置。</figcaption>
+</figure>
+旧版では左側は「テキストボックス」のみで、基本的なダイアトニックコードを打つには右に行く必要がありました。</span></h4><p>今回はそれを改善し、左側に<b>テキスト入力とドラッグ・ダブルクリックで入力できるパレットを配備。</b></p><p>少し捻る手を探したい方向けの機能は右側に置きました。</p><p>・・・次候補は左に置いたほうが良い？</p><p><br></p><h4>休符・小節を跨いだ配置に対応</h4><p>
+
+</p><p><br></p>
+<p></p><p>
+</p><figure class="article-image-figure" style="opacity: 1; transition: opacity 0.3s;">
+  <img src="/images/posts/chordlaunchpad-rebuild/image-806052.webp" alt="" loading="lazy">
+  <figcaption contenteditable="true" class="article-image-caption" data-placeholder="キャプションを入力（任意）">前よりもっと動かせるように。自由度が増しました。</figcaption>
+</figure>
+<p>旧版では左詰めだったのが、<b>空白部分を休符として置くことが可能になりました。<br>「空ける」というより「休符が作られる」構造になっています。</b></p><p></p><p><br></p>

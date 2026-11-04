@@ -367,9 +367,8 @@ export const astroPosts: AstroPostMeta[] = [
 		title: "【お知らせ】現在、ChordLaunchpadの後継アプリを作成中です。",
 		description: "現在、GitHub及びMicrosoftストアにて公開中の音楽制作支援ツール「ChordLaunchpad」について、不具合や使いにくさ、実行の遅さなどが出ていました。そのため、C#/WinUI3からC++をベースに作り直すことにしました。",
 		pubDate: new Date("2026-11-04"),
-		tags: ["ChordLaunchpad", "ChordLaunch"],
-		categories: ["自作ツール", "ChordLaunch"],
-		draft: true,
+		tags: ["ChordLaunchpad","ChordLaunch"],
+		categories: ["自作ツール","ChordLaunch"],
 		headings: [
 			{ depth: 2, slug: 'intro', text: '本文' },
 		],

@@ -13,6 +13,25 @@ export interface AstroPostMeta {
 
 export const astroPosts: AstroPostMeta[] = [
   {
+    slug: 'claude-migration-test',
+    title: '運用環境をAntigravityからClaudeへ移行しました',
+    description:
+      '開発・運用環境をAntigravity（Gemini）からClaude（Claude Code）へ移行しました。変更した内容と変更していない内容、移行後の運用フローをまとめた、AI生成のテスト記事です。',
+    pubDate: new Date('2026-11-04T12:00:00+09:00'),
+    tags: ['Claude', 'Antigravity', '運用', 'AI生成'],
+    categories: ['PC/IT'],
+    isAiGenerated: true,
+    headings: [
+      { depth: 2, slug: "intro", text: "はじめに：運用環境をClaudeへ移行しました" },
+      { depth: 2, slug: "background", text: "移行の背景" },
+      { depth: 2, slug: "what-changed", text: "変更した内容" },
+      { depth: 2, slug: "unchanged", text: "変更していないもの" },
+      { depth: 2, slug: "workflow", text: "移行後の運用フロー" },
+      { depth: 2, slug: "notice", text: "注意事項" },
+      { depth: 2, slug: "conclusion", text: "まとめ" }
+    ],
+  },
+  {
     slug: 'nodejs-security-measures',
     title: 'Node.jsの問題と、当サイトにおける脆弱性対策について',
     description:

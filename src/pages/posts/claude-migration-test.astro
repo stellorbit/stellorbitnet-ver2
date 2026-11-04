@@ -1,0 +1,24 @@
+---
+import ArticleBody from '../../articles/claude-migration-test.astro';
+import { getAstroPost } from '../../content/astro-posts';
+import BlogPost from '../../layouts/BlogPost.astro';
+import thumbnail from '../../assets/post-thumbnails/claude-migration-test.webp';
+
+const post = getAstroPost('claude-migration-test');
+
+if (!post) {
+	throw new Error('Astro post metadata not found: claude-migration-test');
+}
+---
+
+<BlogPost
+	title={post.title}
+	description={post.description}
+	pubDate={post.pubDate}
+	updatedDate={post.updatedDate}
+	headings={post.headings}
+	heroImage={thumbnail}
+	isAiGenerated={post.isAiGenerated}
+>
+	<ArticleBody />
+</BlogPost>

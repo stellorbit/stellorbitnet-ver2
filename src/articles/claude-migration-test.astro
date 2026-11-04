@@ -1,0 +1,91 @@
+---
+import Callout from '../components/Callout.astro';
+---
+
+<callout type="info" title="AIによる執筆記事（テスト記事）">
+  この記事は、生成AI（Claude）によって執筆されたテスト記事です。サムネイル画像もAIによって生成されています。本記事は記事投稿の動作確認を兼ねており、記載内容は作業環境で確認できた事実の範囲に限っています。
+</callout>
+
+<h2 id="intro">はじめに：運用環境をClaudeへ移行しました</h2>
+
+<p>
+  当サイトの開発・運用作業に使う環境を、<strong>Antigravity（Gemini）</strong>から<strong>Claude（Claude Code）</strong>へ移行しました。<br>本記事は、この移行内容の記録と、Claudeからのコミット・プッシュが正常に動作するかを確かめるためのテスト記事です。
+</p>
+
+<p>
+  なお、本記事はテスト目的で公開しており、動作確認が終わり次第、削除または内容を差し替える場合があります。
+</p>
+
+<h2 id="background">移行の背景</h2>
+
+<p>
+  これまで当サイトを含む複数のプロジェクトは、Antigravity上で開発規範（作業手順・検証手順・ビルド方針）を定めて運用してきました。<br>今回、作業の主体をClaudeへ切り替えるにあたり、規範や作業手順をそのまま引き継げるようにすることを移行の目的としました。
+</p>
+
+<h2 id="what-changed">変更した内容</h2>
+
+<p>主な変更は、開発規範ファイルの移植です。</p>
+
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>項目</th>
+        <th>移行前</th>
+        <th>移行後</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>開発規範ファイル</strong></td>
+        <td><code>~/.gemini/GEMINI.md</code></td>
+        <td><code>~/.claude/CLAUDE.md</code>（内容を同期）</td>
+      </tr>
+      <tr>
+        <td><strong>ワークスペース固有の運用事項</strong></td>
+        <td>Antigravity側の設定</td>
+        <td>ワークスペース直下の <code>CLAUDE.md</code></td>
+      </tr>
+      <tr>
+        <td><strong>作業の実行主体</strong></td>
+        <td>Antigravity（Gemini）</td>
+        <td>Claude Code</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h2 id="unchanged">変更していないもの</h2>
+
+<p>次の項目は、今回の移行では変更していません。</p>
+
+<ul>
+  <li>Antigravity側の設定（<code>.agents/</code> と <code>Antigravity.yaml</code>）。従来どおり残しています。</li>
+  <li>各プロジェクトのソースコードと、ビルド・デプロイの手順。</li>
+  <li>サイトの公開URLと、Cloudflareでの配信構成。</li>
+</ul>
+
+<h2 id="workflow">移行後の運用フロー</h2>
+
+<p>移行後も、変更の進め方は従来の規範に沿っています。</p>
+
+<ol>
+  <li><strong>3段階ゲート</strong>：前提の確認、変更計画の確認、検証の順に、承認を得ながら進めます。</li>
+  <li><strong>ロールバックの確保</strong>：既存ファイルを変更する際は、同じ場所に <code>.old</code> の退避ファイルを作成します。</li>
+  <li><strong>ビルドと検証</strong>：公開前にビルドを実行し、表示内容を確認します。</li>
+  <li><strong>コミットとプッシュ</strong>：問題がなければ <code>main</code> へプッシュし、Cloudflareで自動的に公開されます。</li>
+</ol>
+
+<h2 id="notice">注意事項</h2>
+
+<ul>
+  <li>本記事はAIによって生成されたテスト記事です。トップページのカードには「AI生成」のバッジを表示しています。</li>
+  <li>サムネイル画像は、Antigravityから Claude への移行を示す図としてAIが作成しました。実在するロゴやアイコンではありません。</li>
+  <li>移行の効果や、両環境の優劣についての評価は、本記事では扱っていません。</li>
+</ul>
+
+<h2 id="conclusion">まとめ</h2>
+
+<p>
+  運用環境をAntigravityからClaudeへ移行し、開発規範は <code>CLAUDE.md</code> に引き継ぎました。本記事が正しく表示され、公開できていれば、Claudeからのコミットとプッシュは正常に動作しています。<br>今後とも、当サイトをよろしくお願いいたします。
+</p>

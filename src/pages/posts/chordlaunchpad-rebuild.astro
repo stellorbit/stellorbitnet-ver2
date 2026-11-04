@@ -1,0 +1,24 @@
+---
+import ArticleBody from '../../articles/chordlaunchpad-rebuild.astro';
+import thumbnail from '../../assets/post-thumbnails/chordlaunchpad-rebuild.webp';
+import { getAstroPost } from '../../content/astro-posts';
+import BlogPost from '../../layouts/BlogPost.astro';
+
+const post = getAstroPost('chordlaunchpad-rebuild');
+
+if (!post) {
+	throw new Error('Astro post metadata not found: chordlaunchpad-rebuild');
+}
+---
+
+<BlogPost
+	title={post.title}
+	description={post.description}
+	pubDate={post.pubDate}
+	updatedDate={post.updatedDate}
+	heroImage={thumbnail}
+	headings={post.headings}
+	isAiGenerated={post.isAiGenerated}
+>
+	<ArticleBody />
+</BlogPost>

@@ -375,11 +375,11 @@ export const astroPosts: AstroPostMeta[] = [
 	},
 	{
 		slug: "holojang-initial-impression",
-		title: "「ホロじゃん」は色々なゲームのいいとこ取り",
+		title: "【初日レビュー】「ホロじゃん」は色々なゲームのいいとこ取り。",
 		description: "「ホロじゃん」こと「ホロライブ麻雀」の初日レビュー。雀魂や麻雀一番街、ほか麻雀ゲームから様々な利点を取り、更に動きや機能を洗練させた麻雀ゲームという印象。",
 		pubDate: new Date("2026-11-25"),
-		tags: ["ホロじゃん", "雀魂", "麻雀一番街", "天鳳", "MJ"],
-		categories: ["ゲーム", "レビュー", "麻雀"],
+		tags: ["ホロじゃん","雀魂","麻雀一番街","天鳳","MJ"],
+		categories: ["ゲーム","レビュー","麻雀"],
 		draft: true,
 		headings: [
 			{ depth: 2, slug: 'intro', text: '本文' },

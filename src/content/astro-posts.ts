@@ -380,7 +380,11 @@ export const astroPosts: AstroPostMeta[] = [
 		categories: ["ゲーム","レビュー","麻雀"],
 		draft: true,
 		headings: [
-		  { depth: 2, slug: "intro", text: "前から期待していた「ホロじゃん」、自身の誕生日についにリリース。" }
+		  { depth: 2, slug: "intro", text: "前から期待していた「ホロじゃん」、自身の誕生日についにリリース。" },
+		  { depth: 2, slug: "他社ゲームとのコラボを経て-自社ipでリリースする凄さ", text: "他社ゲームとのコラボを経て、自社IPでリリースする凄さ。" },
+		  { depth: 2, slug: "全てのゲームのいいとこ取りにプラスアルファな対局テンポとアシスト", text: "全てのゲームのいいとこ取りにプラスアルファな対局テンポとアシスト" },
+		  { depth: 3, slug: "アシスト機能の代表例", text: "アシスト機能の代表例" },
+		  { depth: 3, slug: "設定項目", text: "設定項目" }
 		],
 	}
 ];

@@ -126,7 +126,7 @@ function replaceHeadings(entry, headings) {
     : '      ';
   const replacement = formatHeadings(headings, baseIndent);
 
-  const headingsBlock = /^[ \t]*headings:\s*\[[\s\S]*?^[ \t]*\],?/m;
+  const headingsBlock = /^[ \t]*headings:\s*\[(?:\],?|[\s\S]*?^[ \t]*\],?)/m;
   if (headingsBlock.test(entry)) {
     return entry.replace(headingsBlock, replacement);
   }

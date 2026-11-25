@@ -369,9 +369,7 @@ export const astroPosts: AstroPostMeta[] = [
 		pubDate: new Date("2026-11-04"),
 		tags: ["ChordLaunchpad","ChordLaunch"],
 		categories: ["自作ツール","ChordLaunch"],
-		headings: [
-			{ depth: 2, slug: 'intro', text: '本文' },
-		],
+		headings: [],
 	},
 	{
 		slug: "holojang-initial-impression",
@@ -382,7 +380,7 @@ export const astroPosts: AstroPostMeta[] = [
 		categories: ["ゲーム","レビュー","麻雀"],
 		draft: true,
 		headings: [
-			{ depth: 2, slug: 'intro', text: '本文' },
+		  { depth: 2, slug: "intro", text: "前から期待していた「ホロじゃん」、自身の誕生日についにリリース。" }
 		],
 	}
 ];

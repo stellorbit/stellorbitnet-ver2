@@ -1,4 +1,3 @@
-import { getCollection } from 'astro:content';
 import { astroPosts } from '../content/astro-posts';
 
 export interface ListedPost {
@@ -14,20 +13,7 @@ export interface ListedPost {
 }
 
 export async function getListedPosts(): Promise<ListedPost[]> {
-  const mdxPosts = await getCollection('blog', ({ data }) => !data.draft);
-  const normalizedMdxPosts = mdxPosts.map((post) => ({
-    slug: post.id,
-    title: post.data.title,
-    description: post.data.description,
-    pubDate: post.data.pubDate,
-    updatedDate: post.data.updatedDate,
-    tags: post.data.tags,
-    categories: post.data.categories,
-    link: `/posts/${post.id}/`,
-    isAiGenerated: false,
-  }));
-
-  const normalizedAstroPosts = astroPosts
+  return astroPosts
     .filter((post) => !post.draft)
     .map((post) => ({
       slug: post.slug,
@@ -39,9 +25,6 @@ export async function getListedPosts(): Promise<ListedPost[]> {
       categories: post.categories,
       link: `/posts/${post.slug}/`,
       isAiGenerated: post.isAiGenerated ?? false,
-    }));
-
-  return [...normalizedMdxPosts, ...normalizedAstroPosts].sort(
-    (a, b) => b.pubDate.valueOf() - a.pubDate.valueOf()
-  );
+    }))
+    .sort((a, b) => b.pubDate.valueOf() - a.pubDate.valueOf());
 }

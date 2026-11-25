@@ -1,0 +1,24 @@
+---
+import ArticleBody from '../../articles/holojang-initial-impression.astro';
+import thumbnail from '../../assets/post-thumbnails/holojang-initial-impression.webp';
+import { getAstroPost } from '../../content/astro-posts';
+import BlogPost from '../../layouts/BlogPost.astro';
+
+const post = getAstroPost('holojang-initial-impression');
+
+if (!post) {
+	throw new Error('Astro post metadata not found: holojang-initial-impression');
+}
+---
+
+<BlogPost
+	title={post.title}
+	description={post.description}
+	pubDate={post.pubDate}
+	updatedDate={post.updatedDate}
+	heroImage={thumbnail}
+	headings={post.headings}
+	isAiGenerated={post.isAiGenerated}
+>
+	<ArticleBody />
+</BlogPost>

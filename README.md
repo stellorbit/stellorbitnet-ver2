@@ -51,9 +51,6 @@ All commands are run from the root of the project, from a terminal:
 | `npm run build`           | Build your production site to `./dist/`          |
 | `npm run preview`         | Preview your build locally, before deploying     |
 | `pnpm run cms`            | Starts browser-based CMS at `localhost:8322`     |
-| `pnpm run cms:app`        | Launches standalone desktop GUI CMS (0s start)   |
-| `pnpm run cms:app:rebuild`| Rebuilds the desktop GUI binary (Cargo)          |
-| `pnpm run cms:app:build`  | Builds standalone desktop GUI CMS installer/exe  |
 
 ## Credit
 
